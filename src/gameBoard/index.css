@@ -1,0 +1,15 @@
+.block {
+    fill: #000
+}
+
+.tile {
+    fill: #fff
+}
+
+.selected {
+    fill: #ffd700;
+}
+
+.highlighted {
+    fill: #0ff;
+}
