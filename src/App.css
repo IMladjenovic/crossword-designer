@@ -1,15 +1,8 @@
-.GameBoard {
-    /*width: 500px*/
-}
-
 .no-outline-on-focus:focus {
     outline: none;
 }
 
-.clueNumber {
-    font-size: 0.3em;
-}
-
-.selectedClue {
-    background-color: #0ff;
+.titleBox {
+    /*background-color: #13b713;*/
+    /*padding: 10px 5%;*/
 }

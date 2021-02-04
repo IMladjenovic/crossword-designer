@@ -1,15 +1,59 @@
 .block {
-    fill: #000
+    /*fill: #e27d60;*/
+    fill: #e8a87c;
 }
 
 .tile {
-    fill: #fff
+    fill: none;
+    stroke: none;
+    pointer-events: visible;
 }
 
+.gameBoardBackground {
+    z-index: -100;
+    fill: #fafafa;
+    stroke: none;
+}
+
+.gameWon .gameBoardBackground, .gameWon .selected {
+    fill: #85dcb0;
+    transition: fill 3s;
+    /*transition-timing-function: ease-in-out;*/
+}
+
+/*@keyframes gameWonAnimation {*/
+/*    from {fill: #fafafa;}*/
+/*    to {fill: #c38d9e;}*/
+/*}*/
+
 .selected {
-    fill: #ffd700;
+    fill: #c38d9e;
 }
 
 .highlighted {
-    fill: #0ff;
+    fill: #85dcb0;
+}
+
+svg {
+    max-height: 600px;
+}
+
+.clueNumber {
+    font-size: 0.8em;
+}
+
+.selectedClue {
+    background-color: #85dcb0;
+}
+
+.guess {
+    font-size: 1.8em;
+}
+
+.grid {
+    stroke: #e27d60
+}
+
+text {
+    cursor: default;
 }
