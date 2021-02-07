@@ -21,6 +21,10 @@
     /*transition-timing-function: ease-in-out;*/
 }
 
+.finishMessagePixel {
+    fill: #c38d9e;
+}
+
 /*@keyframes gameWonAnimation {*/
 /*    from {fill: #fafafa;}*/
 /*    to {fill: #c38d9e;}*/

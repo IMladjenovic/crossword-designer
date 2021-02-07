@@ -5,7 +5,7 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from '@material-ui/core/styles';
-import {Container} from "@material-ui/core";
+import data from './gameBoard/save-game.json';
 
 const useStyles = makeStyles({
     root: {
@@ -42,7 +42,7 @@ function App() {
                     <Box my={4} className={classes.root}>
                         <Box className={classes.test1}>
                             <Typography variant="h4" component="div" >
-                                Crossword Designer!
+                                {data.title}
                             </Typography>
                         </Box>
                     </Box>

@@ -4,6 +4,7 @@ export const ALPHABET =
 export const ALPHABET_LOWER = ALPHABET.map(letter => letter.toLocaleLowerCase())
 export const HORIZONTAL = 'HORIZONTAL';
 export const VERTICAL = 'VERTICAL';
+export const DIRECTIONS = [HORIZONTAL, VERTICAL];
 export const ARROW_LEFT = 'ArrowLeft';
 export const ARROW_RIGHT = 'ArrowRight';
 export const ARROW_UP = 'ArrowUp';
