@@ -1,11 +1,11 @@
 import './App.css';
 import React from "react";
-import GameBoard from "./gameBoard";
+import GameBoard from "./GameBoard";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from '@material-ui/core/styles';
-import data from './gameBoard/save-game.json';
+import data from './GameBoard/save-game.json';
 
 const useStyles = makeStyles({
     root: {
