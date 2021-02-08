@@ -1,4 +1,4 @@
-export const TILE_SIZE = 33;
+// export const TILE_SIZE = 33;
 export const ALPHABET =
     ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 export const ALPHABET_LOWER = ALPHABET.map(letter => letter.toLocaleLowerCase())
@@ -24,3 +24,4 @@ export const TILE_RIGHT = ({x, y}, amount = 1) => ({x: x + amount, y});
 export const TILE_ABOVE = ({x, y}, amount = 1) => ({x, y: y - amount});
 export const TILE_BELOW = ({x, y}, amount = 1) => ({x, y: y + amount});
 export const DELETE_KEYS = ['Delete', 'Backspace', ' '];
+export const CLUE_COLUMN_TITLE = { HORIZONTAL: 'Across', VERTICAL: 'Down' }

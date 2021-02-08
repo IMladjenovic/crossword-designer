@@ -25,11 +25,6 @@
     fill: #c38d9e;
 }
 
-/*@keyframes gameWonAnimation {*/
-/*    from {fill: #fafafa;}*/
-/*    to {fill: #c38d9e;}*/
-/*}*/
-
 .selected {
     fill: #c38d9e;
 }
@@ -38,9 +33,9 @@
     fill: #85dcb0;
 }
 
-svg {
-    max-height: 600px;
-}
+/*svg {*/
+/*    max-height: 600px;*/
+/*}*/
 
 .clueNumber {
     font-size: 0.8em;
@@ -48,6 +43,11 @@ svg {
 
 .selectedClue {
     background-color: #85dcb0;
+}
+
+.secondaryClue {
+    background-color: #85dcb0;
+    opacity: 10%;
 }
 
 .guess {
@@ -62,6 +62,41 @@ text {
     cursor: default;
 }
 
-.testing {
-    background-color: #85dcb0;
+::-webkit-scrollbar {
+    width: 10px;
 }
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    /*background: #888;*/
+    background: #41b3ac;
+    /*background: #e8a87c;*/
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/*!* Track *!*/
+/*::-webkit-scrollbar-track {*/
+/*    background: #bfebd5;*/
+/*}*/
+
+/*!* Handle *!*/
+/*::-webkit-scrollbar-thumb {*/
+/*    background: #85dcb0;*/
+/*    !*background: #e8a87c;*!*/
+/*    !*background: #41b3ac;*!*/
+/*}*/
+
+/*!* Handle on hover *!*/
+/*::-webkit-scrollbar-thumb:hover {*/
+/*    background: #555;*/
+/*}*/
+

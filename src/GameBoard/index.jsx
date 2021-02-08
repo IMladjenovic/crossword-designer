@@ -17,14 +17,13 @@ import clone from 'lodash/clone';
 import cloneDeep from 'lodash/cloneDeep';
 import difference from 'lodash/difference';
 import throttle from 'lodash/throttle';
-import forEach from 'lodash/forEach';
 
 import data from './save-game.json';
 
 import { fonts, renderPixels } from 'js-pixel-fonts';
 
 import {
-    TILE_SIZE,
+    // TILE_SIZE,
     ALPHABET,
     ALPHABET_LOWER,
     DIRECTIONS,
@@ -42,17 +41,26 @@ import {
     TILE_LEFT,
 } from './constants'
 
-
+const TILE_SIZE = (window.screen.height - (350)) / data.gameBoard.length;
+// const TILE_SIZE = 20;
+console.log(TILE_SIZE);
 const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    selectedClue: {
-        backgroundColor: '#85dcb0'
-    },
-    snackbar: {
-        backgroundColor: '#41b3ac'
-    }
+    root: { flexGrow: 1 },
+    selectedClue: { backgroundColor: '#85dcb0' },
+    snackbar: { backgroundColor: '#41b3ac' },
+    block: { /*fill: #e27d60;*/ fill: '#e8a87c' },
+    tile: { fill: 'none', stroke: 'none', pointerEvents: 'visible' },
+    gameBoardBackground: { fill: '#fafafa', stroke: 'none' },
+    // gameWon .gameBoardBackground, .gameWon .selected {
+    gameWon: { fill: '#85dcb0', transition: 'fill 3s' },
+    finishMessagePixel: { fill: '#c38d9e' },
+    selected: { fill: '#c38d9e' },
+    highlighted: { fill: '#85dcb0' },
+    svg: { maxHeight: '600px '},
+    clueNumber: { fontSize: '0.8em' },
+    guess: { fontSize: '1.8em' },
+    grid: { stroke: '#e27d60' },
+    text: { cursor: 'default' }
 }));
 
 const grid = nTiles => {
@@ -65,7 +73,6 @@ const grid = nTiles => {
     return grid;
 }
 
-
 const Cell = ({ tileContent, x: _x, y: _y, className, onClick, finishMessagePixel, ...other }) => {
     const x = _x * TILE_SIZE;
     const y = _y * TILE_SIZE;
@@ -76,6 +83,7 @@ const Cell = ({ tileContent, x: _x, y: _y, className, onClick, finishMessagePixe
                 y={y}
                 height={TILE_SIZE}
                 width={TILE_SIZE}
+                // style={}
                 className={finishMessagePixel ? "finishMessagePixel" : className}
                 onClick={onClick}
                 {...other}
@@ -99,13 +107,16 @@ const Block = (props) => {
 }
 
 const GameBoard = () => {
+    const numberOfTiles = useRef(data.gameBoard.length)
     const [tileBoard, setTileBoard] = useState(data.gameBoard);
     const [clues, setClues] = useState(data.clues);
+    const themeClues = useRef({ HORIZONTAL: {}, VERTICAL: {}, tiles: [] });
     const [selectedTile, setSelectedTile] = useState({ x: null, y: null });
     const [highlightedTiles, setHighlightedTiles] = useState([]);
     const direction = useRef(DEFAULT_DIRECTION);
     const [timestamp, setTimestamp] = useState(Date.now());
     const [selectedClue, setSelectedClue] = useState(null);
+    const [secondaryClue, setSecondaryClue] = useState(null);
     const totalNumberOfBoardLetters = useRef(0);
     const horizontalList = useRef();
     const verticalList = useRef();
@@ -119,11 +130,9 @@ const GameBoard = () => {
 
     const getTileBoardItem = ({x , y}) => tileBoard[y][x];
 
-    const handleListItemClick = (clueTile, id, d) => {
-        setSelectedClue(id);
-        setSelectedTile(clueTile);
+    const handleClueClick = (clueTile, id, d) => {
         direction.current = d;
-        setHighlightedTiles(highlightTiles(clueTile, d));
+        activateTile(clueTile, d)
     };
 
     const handleCloseIncorrectGuessNumber = (event, reason) => {
@@ -182,24 +191,38 @@ const GameBoard = () => {
                     if(isTile(TILE_BELOW(tile))) {
                         updateClueNumber(newClueNumber, newTileBoard, tile);
                         const vClue = clues.VERTICAL[cluesWithTileRef.VERTICAL.length];
+
                         vClue.tile = tile;
                         vClue.id = clueId(VERTICAL, clueNumber);
                         vClue.clueNumber = clueNumber;
                         vClue.highlights = [];
-                        cluesWithTileRef.VERTICAL.push(vClue);
+                        if(vClue.theme) {
+                            themeClues.current[VERTICAL][vClue.id] = true;
+                            themeClues.current.tiles.push(tile);
+                        }
+
                         vClue.highlights.push(tile);
                         newTileBoard[y][x].clueNumberLink =
                             { ...newTileBoard[y][x].clueNumberLink, VERTICAL: clueId(VERTICAL, clueNumber) };
+                        cluesWithTileRef.VERTICAL.push(vClue);
                     }
                 } else {
                     const tileAbove = newTileBoard[tileAboveCoords.y][tileAboveCoords.x];
                     newTileBoard[y][x].clueNumberLink =
                         { ...newTileBoard[y][x].clueNumberLink, VERTICAL: tileAbove.clueNumberLink.VERTICAL };
+                    if(tileAbove.theme) {
+                        themeClues.current[VERTICAL][tileAbove.id] = true;
+                        themeClues.current.tiles.push(tile);
+                    }
                     const previousVertClueHighlightChain = cluesWithTileRef.VERTICAL.find(clue => clue.highlights.find(
                         highlightedTile => highlightedTile.x === tileAboveCoords.x &&
                             highlightedTile.y === tileAboveCoords.y
                     ))
                     previousVertClueHighlightChain.highlights.push(tile)
+                    if(previousVertClueHighlightChain.theme) {
+                        themeClues.current[VERTICAL][previousVertClueHighlightChain.id] = true;
+                        themeClues.current.tiles.push(tile);
+                    }
                 }
 
                 const tileLeftCoords = TILE_LEFT(tile);
@@ -211,6 +234,10 @@ const GameBoard = () => {
                         const vClue = clues.HORIZONTAL[cluesWithTileRef.HORIZONTAL.length];
                         vClue.tile = tile;
                         vClue.id = clueId(HORIZONTAL, clueNumber);
+                        if(vClue.theme) {
+                            themeClues.current[HORIZONTAL][vClue.id] = true;
+                            themeClues.current.tiles.push(tile);
+                        }
                         vClue.clueNumber = clueNumber;
                         vClue.highlights = [];
                         cluesWithTileRef.HORIZONTAL.push(vClue);
@@ -222,11 +249,19 @@ const GameBoard = () => {
                     const tileLeft = newTileBoard[tileLeftCoords.y][tileLeftCoords.x];
                     newTileBoard[y][x].clueNumberLink =
                         { ...newTileBoard[y][x].clueNumberLink, HORIZONTAL: tileLeft.clueNumberLink.HORIZONTAL };
+                    if(tileLeft.theme) {
+                        themeClues.current[HORIZONTAL][tileLeft.id] = true;
+                        themeClues.current.tiles.push(tile);
+                    }
                     const previousVertClueHighlightChain = cluesWithTileRef.HORIZONTAL.find(clue => clue.highlights.find(
                         highlightedTile => highlightedTile.x === tileLeftCoords.x &&
                             highlightedTile.y === tileLeftCoords.y
                     ))
                     previousVertClueHighlightChain.highlights.push(tile);
+                    if(previousVertClueHighlightChain.theme) {
+                        themeClues.current[HORIZONTAL][previousVertClueHighlightChain.id] = true;
+                        themeClues.current.tiles.push(tile);
+                    }
                 }
             })
         });
@@ -251,19 +286,14 @@ const GameBoard = () => {
                         if(!getTileBoardItem(nextTile).clueNumberLink[tileDirection]) {
                             tileDirection = direction.current;
                         }
-                        setSelectedTile(nextTile);
                         direction.current = tileDirection;
-                        setHighlightedTiles(highlightTiles(nextTile, tileDirection))
-                        setSelectedClue(getTileBoardItem(nextTile).clueNumberLink[tileDirection])
-                        focusSelectedClue(clues[tileDirection].findIndex(c => c.id === getTileBoardItem(nextTile).clueNumberLink[tileDirection]), tileDirection)
+                        activateTile(nextTile, tileDirection);
                         return;
                     }
                 }
             } else {
-                setHighlightedTiles(highlightTiles(selectedTile, pressedDirection))
                 direction.current = pressedDirection;
-                focusSelectedClue(clues[pressedDirection].findIndex(c => c.id === getTileBoardItem(selectedTile).clueNumberLink[pressedDirection]), pressedDirection)
-                setSelectedClue(tileBoard[selectedTile.y][selectedTile.x].clueNumberLink[pressedDirection])
+                activateTile(selectedTile, pressedDirection, { selectTile: false});
             }
         } else {
             if(arrowKeyMapping) {
@@ -271,17 +301,15 @@ const GameBoard = () => {
                 for(let i = 1; _isLocationOnBoard(nextTile); i++) {
                     nextTile = arrowKeyMapping(selectedTile, i);
                     if(isTile(nextTile)) {
-                        setSelectedTile(nextTile);
+                        let options = { selectClue: false, highlightTiles: false, focusClue: false }
                         if(i !== 1) {
-                            let forceNewDirection = pressedDirection;
-                            if(!getTileBoardItem(nextTile).clueNumberLink[pressedDirection]) {
-                                forceNewDirection = Object.keys(tileBoard[nextTile.y][nextTile.x].clueNumberLink)[0];
+                            options = {};
+                            if(!getTileClue(nextTile, pressedDirection)) {
+                                pressedDirection = Object.keys(tileBoard[nextTile.y][nextTile.x].clueNumberLink)[0];
                             }
-                            direction.current = forceNewDirection;
-                            setSelectedClue(getTileBoardItem(nextTile).clueNumberLink[forceNewDirection])
-                            focusSelectedClue(clues[forceNewDirection].findIndex(c => c.id === getTileBoardItem(nextTile).clueNumberLink[forceNewDirection]), forceNewDirection)
-                            setHighlightedTiles(highlightTiles(nextTile, forceNewDirection))
+                            direction.current = pressedDirection;
                         }
+                        activateTile(nextTile, pressedDirection, options)
                         return;
                     }
                 }
@@ -464,8 +492,8 @@ const GameBoard = () => {
         await writableStream.close();
     }
 
-    const highlightTiles = (selected, d = direction) =>
-        clues[d].find(clue => clue.id === getTileBoardItem(selected).clueNumberLink[d]).highlights;
+    const getTileHighlights = (tile, d = direction) =>
+        clues[d].find(clue => clue.id === getTileClue(tile, d)).highlights;
 
     const getOppositeDirection = direction => {
         if(DIRECTIONS.includes(direction)) {
@@ -490,23 +518,70 @@ const GameBoard = () => {
                     finishMessagePixel={getTileBoardItem(tile).finishMessagePixel === 1}
                     onClick={e => {
                         e.preventDefault();
-                        setSelectedTile(tile);
-                        setHighlightedTiles(highlightTiles(tile, directionForTile))
                         if(directionForTile !== direction.current) {
                             direction.current = directionForTile;
                         }
-                        setSelectedClue(tileBoard[y][x].clueNumberLink[directionForTile])
-                        focusSelectedClue(clues[directionForTile].findIndex(c => c.id === tileBoard[y][x].clueNumberLink[directionForTile]), directionForTile)
+                        activateTile(tile, directionForTile)
                     }}
                 /> : <Block {...tile} finishMessagePixel={getTileBoardItem(tile).finishMessagePixel === 1} />
         )
     }
 
+    const getTileClue = (tile, direction) => getTileBoardItem(tile).clueNumberLink[direction];
+
+    const activateTile = (
+        tile,
+        direction,
+        {
+            selectClue = true,
+            highlightTiles = true,
+            selectTile = true,
+            focusClue = true
+        } = {}
+    ) => {
+        if(highlightTiles) {
+            let highlightTiles = [];
+            if(themeClues.current[direction][getTileClue(tile, direction)]) {
+                highlightTiles.push(...themeClues.current.tiles);
+            }
+            highlightTiles.push(...getTileHighlights(tile, direction));
+            setHighlightedTiles(highlightTiles)
+        }
+        if(selectTile) {
+            setSelectedTile(tile);
+        }
+        if(selectClue) {
+            setSelectedClue(getTileClue(tile, direction))
+            // const secondaryClue = getTileClue(tile, getOppositeDirection(direction));
+            // if(secondaryClue) {
+                setSecondaryClue(getTileClue(tile, getOppositeDirection(direction)));
+            // } else {
+            //     setSecondaryClue(null);
+            // }
+        }
+        if(focusClue) {
+            focusSelectedClue(clues[direction].findIndex(c => c.id === getTileClue(tile, direction)), direction)
+            const oppositeDirection = getOppositeDirection(direction);
+            if(oppositeDirection) {
+                focusSelectedClue(clues[oppositeDirection].findIndex(c => c.id === getTileClue(tile, oppositeDirection)), oppositeDirection)
+            }
+        }
+    }
+
     const focusSelectedClue = (index, direction) => {
+        let scrollType = 'center';
+        if(index > 5 && index < 11) {
+            index = index - 3;
+            scrollType = 'start'
+        }
+        if(index > numberOfTiles - 11 && index < numberOfTiles - 5) {
+            index = index + 3;
+            scrollType = 'end'
+        }
         if(direction === HORIZONTAL) {
-            horizontalList.current.scrollToItem(index, "center");
+            horizontalList.current.scrollToItem(index, scrollType);
         } else {
-            verticalList.current.scrollToItem(index, "center");
+            verticalList.current.scrollToItem(index, scrollType);
         }
     }
 
@@ -525,17 +600,19 @@ const GameBoard = () => {
     const clueRowWithDirection = direction => ({ index: i, style }) => {
         const clue = clues[direction][i];
         const selected = selectedClue === clue.id;
+        const secondary = secondaryClue === clue.id;
         return (
             <ListItem
                 style={{
                     ...style,
-                    ...(selected ? { backgroundColor: '#85dcb0' } : {}),
+                    ...(selected ? { backgroundColor: '#85dcb0' } :
+                        secondary ? { backgroundColor: '#85dcb0', opacity: '50%' } : {})
                 }}
                 key={clue.id}
                 id={clue.id}
                 button
                 selected={selected}
-                onClick={() => handleListItemClick(clue.tile, clue.id, direction)}
+                onClick={() => handleClueClick(clue.tile, clue.id, direction)}
             >
                 <ListItemIcon>
                     <div>{clue.clueNumber} </div>
@@ -545,13 +622,26 @@ const GameBoard = () => {
         )
     }
 
+    const ClueColumn = ({ direction, customRef }) =>
+        <div>
+            <span style={{ fontSize: '1.5em' }}>Across</span>
+            <FixedSizeList style={{ margin: '0 5px', lineHeight: '1' }} ref={customRef} height={gameBoardSize} itemSize={gameBoardSize / 10} itemCount={clues[direction].length}>
+                {clueRowWithDirection(direction)}
+            </FixedSizeList>
+        </div>
+
     const gameBoardSize = tileBoard.length * TILE_SIZE;
 
     return (
         <div className={classes.root}>
             <Grid container spacing={0}>
                 <Grid item xs={6} className={gameWon ? 'gameWon' : ''}>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox={`-1 -1 ${gameBoardSize + 2} ${gameBoardSize + 2}`} >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox={`-1 -1 ${gameBoardSize + 2}
+                        ${gameBoardSize + 2}`}
+                        style={{ maxHeight: gameBoardSize, margin: '1.5em 20px 20px 20px' }}
+                    >
                         <rect className='gameBoardBackground' x='-1' y='-1' width={gameBoardSize + 2} height={gameBoardSize + 2} />
                         <g>
                             {tileBoard.map((row, y) =>
@@ -564,25 +654,23 @@ const GameBoard = () => {
                     </svg>
                 </Grid>
                 <Grid item xs={3}>
-                    Across
-                    <FixedSizeList ref={horizontalList} height={414} itemSize={46} itemCount={clues.HORIZONTAL.length}>
-                        {clueRowWithDirection(HORIZONTAL)}
-                    </FixedSizeList>
+                    <ClueColumn direction={HORIZONTAL} customRef={horizontalList} />
                 </Grid>
                 <Grid item xs={3}>
-                    Down
-                    <FixedSizeList ref={verticalList} height={414} itemSize={46} itemCount={clues.VERTICAL.length}>
-                        {clueRowWithDirection(VERTICAL)}
-                    </FixedSizeList>
+                    <ClueColumn direction={VERTICAL} customRef={verticalList} />
                 </Grid>
-                <Button variant="contained" onClick={() => saveGame()}>Save</Button>
+                <Button
+                    style={{ backgroundColor: '#85dcb0' }}
+                    variant="contained"
+                    onClick={() => saveGame()}
+                >Save</Button>
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',
                         horizontal: 'center',
                     }}
                     open={incorrectGuessNumberOpen}
-                    autoHideDuration={6000}
+                    autoHideDuration={30 * 1000}
                     onClose={handleCloseIncorrectGuessNumber}
                     message={numberOfIncorrectGuessesText()}
                     ContentProps={{
