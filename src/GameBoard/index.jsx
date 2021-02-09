@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback, memo } from 'react'
 import useKeypress from 'react-use-keypress'
 
 import './index.css';
 import Grid from '@material-ui/core/Grid';
-import { FixedSizeList } from 'react-window';
+import { FixedSizeList, areEqual } from 'react-window';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import memoize from 'memoize-one';
 
 import clone from 'lodash/clone';
 import cloneDeep from 'lodash/cloneDeep';
@@ -35,6 +36,7 @@ import {
     VERTICAL_ARROW_KEYS,
     DELETE_KEYS,
     ARROW_KEY_MAPPINGS,
+    CLUE_COLUMN_TITLE,
     TILE_ABOVE,
     TILE_BELOW,
     TILE_RIGHT,
@@ -106,7 +108,7 @@ const Block = (props) => {
     )
 }
 
-const GameBoard = () => {
+const GameBoard = ({ data, leaveGame }) => {
     const numberOfTiles = useRef(data.gameBoard.length)
     const [tileBoard, setTileBoard] = useState(data.gameBoard);
     const [clues, setClues] = useState(data.clues);
@@ -277,6 +279,10 @@ const GameBoard = () => {
     const arrowKeyPressInDirection = (pressedDirection, key) => {
         const arrowKeyMapping = ARROW_KEY_MAPPINGS[key];
 
+        if(selectedTile.x === null || selectedTile.y) {
+            console.log("Issue with selected tile", selectedTile)
+        }
+
         if(direction.current !== pressedDirection) {
             let nextTile = arrowKeyMapping(selectedTile)
             if(!getTileBoardItem(selectedTile).clueNumberLink[pressedDirection]) {
@@ -293,7 +299,7 @@ const GameBoard = () => {
                 }
             } else {
                 direction.current = pressedDirection;
-                activateTile(selectedTile, pressedDirection, { selectTile: false});
+                activateTile(selectedTile, pressedDirection, { selectTile: false });
             }
         } else {
             if(arrowKeyMapping) {
@@ -301,7 +307,7 @@ const GameBoard = () => {
                 for(let i = 1; _isLocationOnBoard(nextTile); i++) {
                     nextTile = arrowKeyMapping(selectedTile, i);
                     if(isTile(nextTile)) {
-                        let options = { selectClue: false, highlightTiles: false, focusClue: false }
+                        let options = { highlightTiles: false, selectedClue: false }
                         if(i !== 1) {
                             options = {};
                             if(!getTileClue(nextTile, pressedDirection)) {
@@ -400,7 +406,6 @@ const GameBoard = () => {
         }
         if(key.length === 1 && key.match(/[a-z]/i)) {
             letterKeyPres(key);
-            checkBoardAnswersCorrect()
             return;
         }
         if(DELETE_KEYS.includes(key)) {
@@ -503,30 +508,6 @@ const GameBoard = () => {
         }
     }
 
-    const placeTile = (tileContent, x, y) => {
-        const tile = { key: `${x}${y}`, tileContent, y, x};
-        const directionForTile = getTileBoardItem(tile).clueNumberLink ?
-                getTileBoardItem(tile).clueNumberLink[direction.current] ?
-                    direction.current : getOppositeDirection(direction.current)
-                : DEFAULT_DIRECTION;
-        return (
-            tileContent.answer ?
-                <Tile
-                    {...tile}
-                    selected={selectedTile.x === x && selectedTile.y === y}
-                    highlighted={!!highlightedTiles.find(hTile => hTile.x === x && hTile.y === y )}
-                    finishMessagePixel={getTileBoardItem(tile).finishMessagePixel === 1}
-                    onClick={e => {
-                        e.preventDefault();
-                        if(directionForTile !== direction.current) {
-                            direction.current = directionForTile;
-                        }
-                        activateTile(tile, directionForTile)
-                    }}
-                /> : <Block {...tile} finishMessagePixel={getTileBoardItem(tile).finishMessagePixel === 1} />
-        )
-    }
-
     const getTileClue = (tile, direction) => getTileBoardItem(tile).clueNumberLink[direction];
 
     const activateTile = (
@@ -536,9 +517,12 @@ const GameBoard = () => {
             selectClue = true,
             highlightTiles = true,
             selectTile = true,
-            focusClue = true
+            focusClue = true,
+            selectSecondaryClue = true
         } = {}
     ) => {
+        console.log("------------")
+        horizontalList.current.scrollToItem(17, "center");
         if(highlightTiles) {
             let highlightTiles = [];
             if(themeClues.current[direction][getTileClue(tile, direction)]) {
@@ -552,36 +536,44 @@ const GameBoard = () => {
         }
         if(selectClue) {
             setSelectedClue(getTileClue(tile, direction))
-            // const secondaryClue = getTileClue(tile, getOppositeDirection(direction));
-            // if(secondaryClue) {
-                setSecondaryClue(getTileClue(tile, getOppositeDirection(direction)));
-            // } else {
-            //     setSecondaryClue(null);
-            // }
+        }
+        if(selectSecondaryClue) {
+            setSecondaryClue(getTileClue(tile, getOppositeDirection(direction)));
         }
         if(focusClue) {
-            focusSelectedClue(clues[direction].findIndex(c => c.id === getTileClue(tile, direction)), direction)
+            console.log("direction", direction)
+            const primaryClueId = getTileClue(tile, direction);
+            const primaryClueIndex = clues[direction].findIndex(c => c.id === primaryClueId);
+            console.log("primary", primaryClueIndex);
+            if(primaryClueIndex >= 0) {
+                focusSelectedClue(clues[direction].findIndex(c => c.id === primaryClueId), direction);
+            }
+
             const oppositeDirection = getOppositeDirection(direction);
-            if(oppositeDirection) {
-                focusSelectedClue(clues[oppositeDirection].findIndex(c => c.id === getTileClue(tile, oppositeDirection)), oppositeDirection)
+            const secondaryClueId = getTileClue(tile, oppositeDirection);
+            const secondaryClueIndex = clues[oppositeDirection].findIndex(c => c.id === secondaryClueId);
+            console.log("secondary", primaryClueIndex);
+            if(secondaryClueIndex >= 0) {
+                focusSelectedClue(secondaryClueIndex, oppositeDirection)
             }
         }
     }
 
     const focusSelectedClue = (index, direction) => {
         let scrollType = 'center';
-        if(index > 5 && index < 11) {
-            index = index - 3;
-            scrollType = 'start'
-        }
-        if(index > numberOfTiles - 11 && index < numberOfTiles - 5) {
-            index = index + 3;
-            scrollType = 'end'
-        }
+        // console.log("index", index );
+        // if(index > 3 && index < (numberOfTiles.current - 3)) {
+        //     index = index - 3;
+        //     scrollType = 'start'
+        //     console.log("index", index);
+        // }
+        console.log("index + 1", index + 1)
         if(direction === HORIZONTAL) {
-            horizontalList.current.scrollToItem(index, scrollType);
+            // setTimeout(() => horizontalList.current.scrollToItem(index, scrollType), 0);
+            horizontalList.current.scrollToItem(index + 1, scrollType)
         } else {
-            verticalList.current.scrollToItem(index, scrollType);
+            // setTimeout(() => verticalList.current.scrollToItem(index, scrollType), 0);
+            verticalList.current.scrollToItem(index + 1, scrollType)
         }
     }
 
@@ -597,45 +589,110 @@ const GameBoard = () => {
 
     const clueId = (direction, i) => `${direction}${i}`;
 
-    const clueRowWithDirection = direction => ({ index: i, style }) => {
-        const clue = clues[direction][i];
-        const selected = selectedClue === clue.id;
-        const secondary = secondaryClue === clue.id;
+    const placeTile = (tileContent, x, y) => {
+        const tile = { key: `${x}${y}`, tileContent, y, x};
+        const directionForTile = getTileBoardItem(tile).clueNumberLink ?
+            getTileBoardItem(tile).clueNumberLink[direction.current] ?
+                direction.current : getOppositeDirection(direction.current)
+            : DEFAULT_DIRECTION;
         return (
-            <ListItem
-                style={{
-                    ...style,
-                    ...(selected ? { backgroundColor: '#85dcb0' } :
-                        secondary ? { backgroundColor: '#85dcb0', opacity: '50%' } : {})
-                }}
-                key={clue.id}
-                id={clue.id}
-                button
-                selected={selected}
-                onClick={() => handleClueClick(clue.tile, clue.id, direction)}
-            >
-                <ListItemIcon>
-                    <div>{clue.clueNumber} </div>
-                </ListItemIcon>
-                <ListItemText primary={clue.clue} />
-            </ListItem>
+            tileContent.answer ?
+                <Tile
+                    {...tile}
+                    selected={selectedTile.x === x && selectedTile.y === y}
+                    highlighted={!!highlightedTiles.find(hTile => hTile.x === x && hTile.y === y )}
+                    finishMessagePixel={getTileBoardItem(tile).finishMessagePixel === 1}
+                    onClick={e => {
+                        // e.preventDefault();
+                        if(directionForTile !== direction.current) {
+                            direction.current = directionForTile;
+                        }
+                        activateTile(tile, directionForTile)
+                    }}
+                /> : <Block {...tile} finishMessagePixel={getTileBoardItem(tile).finishMessagePixel === 1} />
         )
     }
 
-    const ClueColumn = ({ direction, customRef }) =>
+    const clueRowWithDirection = direction => memo(({ data, index: i, style }) => {
+        const { clues, selectedClue, secondaryClue } = data;
+        // console.log("data", data)
+        // console.log(clues)
+        if(clues) {
+
+            const clue = clues[i];
+            const selected = selectedClue === clue.id;
+            const secondary = secondaryClue === clue.id;
+            return (
+                <ListItem
+                    style={{
+                        ...style,
+                        ...(selected ? { backgroundColor: '#85dcb0' } :
+                            secondary ? { backgroundColor: '#85dcb0', opacity: '50%' } : {})
+                    }}
+                    key={clue.id}
+                    id={clue.id}
+                    button
+                    selected={selected}
+                    onClick={() => handleClueClick(clue.tile, clue.id, direction)}
+                >
+                    <ListItemIcon>
+                        <div>{clue.clueNumber}</div>
+                    </ListItemIcon>
+                    <ListItemText primary={clue.clue} />
+                </ListItem>
+            )
+        } else {
+            return (
+                <ListItem>{i}</ListItem>
+            )
+        }
+    }, areEqual)
+
+    const ClueColumn = ({ direction, customRef, itemData }) =>
         <div>
-            <span style={{ fontSize: '1.5em' }}>Across</span>
-            <FixedSizeList style={{ margin: '0 5px', lineHeight: '1' }} ref={customRef} height={gameBoardSize} itemSize={gameBoardSize / 10} itemCount={clues[direction].length}>
+            <span style={{ fontSize: '1.5em' }}>{CLUE_COLUMN_TITLE[direction]}</span>
+            <FixedSizeList style={{ margin: '0 5px', lineHeight: '1' }} itemData={itemData} ref={customRef} height={gameBoardSize} itemSize={gameBoardSize / 10} itemCount={clues[direction].length}>
                 {clueRowWithDirection(direction)}
             </FixedSizeList>
         </div>
 
     const gameBoardSize = tileBoard.length * TILE_SIZE;
 
+    const saveAndLeave = async () => {
+        try {
+            await saveGame();
+            await leaveGame();
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+    const createItemData = memoize((clues, selectedClue, secondaryClue) => ({
+        clues,
+        selectedClue,
+        secondaryClue
+    }));
+
     return (
         <div className={classes.root}>
             <Grid container spacing={0}>
-                <Grid item xs={6} className={gameWon ? 'gameWon' : ''}>
+                <Grid container item spacing={0} justify="flex-end">
+                    <Grid item>
+                        <Button
+                            style={{ backgroundColor: '#85dcb0' }}
+                            variant="contained"
+                            onClick={() => saveGame()}
+                        >Save</Button>
+                    </Grid>
+                    <Grid item>
+                        <Button
+                            style={{ backgroundColor: '#41b3ac', margin: '0 20px', color: 'white' }}
+                            variant="contained"
+                            onClick={() => saveAndLeave()}
+                        >Save & Leave</Button>
+                    </Grid>
+                </Grid>
+                <Grid item xs={12} sm={6} className={gameWon ? 'gameWon' : ''}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox={`-1 -1 ${gameBoardSize + 2}
@@ -653,17 +710,20 @@ const GameBoard = () => {
                         </g>
                     </svg>
                 </Grid>
-                <Grid item xs={3}>
-                    <ClueColumn direction={HORIZONTAL} customRef={horizontalList} />
+                <Grid item xs={12} sm={3}>
+                    {/*<ClueColumn direction={HORIZONTAL} customRef={horizontalList} itemData={clues[HORIZONTAL]} />*/}
+                    <span style={{ fontSize: '1.5em' }}>{CLUE_COLUMN_TITLE[HORIZONTAL]}</span>
+                    <FixedSizeList style={{ margin: '0 5px', lineHeight: '1' }} ref={horizontalList} itemData={createItemData(clues[HORIZONTAL], selectedClue, secondaryClue)}  height={gameBoardSize} itemSize={gameBoardSize / 10} itemCount={clues[HORIZONTAL].length}>
+                        {clueRowWithDirection(HORIZONTAL)}
+                    </FixedSizeList>
                 </Grid>
-                <Grid item xs={3}>
-                    <ClueColumn direction={VERTICAL} customRef={verticalList} />
+                <Grid item xs={12} sm={3}>
+                    {/*<ClueColumn direction={VERTICAL} customRef={verticalList} itemData={clues[VERTICAL]} />*/}
+                    <span style={{ fontSize: '1.5em' }}>{CLUE_COLUMN_TITLE[VERTICAL]}</span>
+                    <FixedSizeList style={{ margin: '0 5px', lineHeight: '1' }} ref={verticalList} itemData={createItemData(clues[VERTICAL], selectedClue, secondaryClue)} height={gameBoardSize} itemSize={gameBoardSize / 10} itemCount={clues[VERTICAL].length}>
+                        {clueRowWithDirection(VERTICAL)}
+                    </FixedSizeList>
                 </Grid>
-                <Button
-                    style={{ backgroundColor: '#85dcb0' }}
-                    variant="contained"
-                    onClick={() => saveGame()}
-                >Save</Button>
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',

@@ -1,11 +1,11 @@
 import './App.css';
-import React from "react";
+import React, {useState} from "react";
 import GameBoard from "./GameBoard";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from '@material-ui/core/styles';
-import data from './GameBoard/save-game.json';
+import LoadGame from './LoadGame';
 
 const useStyles = makeStyles({
     root: {
@@ -28,21 +28,25 @@ const useStyles = makeStyles({
     borderGradient: {
         background: 'linear-gradient(45deg, #e8a87c 30%, #e8a87c 90%)',
         margin: 0,
-        marginBottom: 32,
+        marginBottom: 10,
         padding: "5px"
     }
 });
 
 function App() {
     const classes = useStyles();
+    const [crosswordData, setCrosswordData] = useState(null);
+    const leaveGame = () => {
+        setCrosswordData(null);
+    }
     return (
         <div className="App" >
-            <Grid container spacing={0}>
+            <Grid container spacing={0} style={{ minHeight: '100vh', marginBottom: '-20px' }} >
                 <Grid item xs={12} >
                     <Box my={4} className={classes.root}>
                         <Box className={classes.test1}>
                             <Typography variant="h4" component="div" >
-                                {data.title}
+                                { crosswordData === null ? 'Load a crossword game' : crosswordData.title }
                             </Typography>
                         </Box>
                     </Box>
@@ -50,7 +54,10 @@ function App() {
                     </Box>
                 </Grid>
                 <Grid item xs={12} >
-                    <GameBoard />
+                    {crosswordData ?
+                        <GameBoard data={crosswordData} leaveGame={leaveGame} /> :
+                        <LoadGame setCrosswordData={setCrosswordData} />
+                    }
                 </Grid>
             </Grid>
         </div>
