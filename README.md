@@ -1,5 +1,9 @@
 ## Run the app
 
+### `npm install`
+
+Download necessary npm packages. (Install node js if you haven't already: https://nodejs.org/en/)
+
 ### `yarn start`
 
 Runs the app in the development mode.\
