@@ -3,7 +3,7 @@ import useKeypress from 'react-use-keypress'
 
 import './index.css';
 import Grid from '@material-ui/core/Grid';
-import { FixedSizeList, areEqual } from 'react-window';
+import { VariableSizeList, areEqual } from 'react-window';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -18,13 +18,11 @@ import clone from 'lodash/clone';
 import cloneDeep from 'lodash/cloneDeep';
 import difference from 'lodash/difference';
 import throttle from 'lodash/throttle';
-
-import data from './save-game.json';
+import debounce from 'lodash/debounce';
 
 import { fonts, renderPixels } from 'js-pixel-fonts';
 
 import {
-    // TILE_SIZE,
     ALPHABET,
     ALPHABET_LOWER,
     DIRECTIONS,
@@ -34,7 +32,10 @@ import {
     ALL_DIRECTIONAL_KEYS,
     HORIZONTAL_ARROW_KEYS,
     VERTICAL_ARROW_KEYS,
-    DELETE_KEYS,
+    CLEAR_LETTER_KEYS,
+    DELETE_KEY,
+    SPACE_KEY,
+    BACKSPACE_KEY,
     ARROW_KEY_MAPPINGS,
     CLUE_COLUMN_TITLE,
     TILE_ABOVE,
@@ -42,10 +43,11 @@ import {
     TILE_RIGHT,
     TILE_LEFT,
 } from './constants'
+import {pickerOpts} from "../LoadGame";
 
-const TILE_SIZE = (window.screen.height - (350)) / data.gameBoard.length;
-// const TILE_SIZE = 20;
-console.log(TILE_SIZE);
+const RENDER_DEBOUNCE_LENGTH = 200;
+const RENDER_DEBOUNCE_OPTIONS = { leading: false, trailing: true };
+
 const useStyles = makeStyles((theme) => ({
     root: { flexGrow: 1 },
     selectedClue: { backgroundColor: '#85dcb0' },
@@ -65,33 +67,70 @@ const useStyles = makeStyles((theme) => ({
     text: { cursor: 'default' }
 }));
 
-const grid = nTiles => {
+const grid = (nTiles, tileSize) => {
     let grid = '';
-    const lineLength = (nTiles * TILE_SIZE) + 0.5;
+    const lineLength = (nTiles * tileSize) + 0.5;
     for(let i = 0; i < nTiles + 1; i++) {
-        const lineStart = (i * TILE_SIZE);
+        const lineStart = (i * tileSize);
         grid = `${grid} M0.00,${lineStart} l${lineLength},0.00 M${lineStart},0.00 l0.00,${lineLength} `;
     }
     return grid;
 }
 
-const Cell = ({ tileContent, x: _x, y: _y, className, onClick, finishMessagePixel, ...other }) => {
-    const x = _x * TILE_SIZE;
-    const y = _y * TILE_SIZE;
+const normal = 4;
+const wider = 5;
+const letterAdjustments = {
+    "I": 2.5,
+    "G": wider,
+    "H": wider,
+    "N": wider,
+    "M": 7,
+    "W": 8,
+    "R": wider,
+    "U": wider,
+    "O": wider,
+    "Q": wider,
+    "Y": wider,
+    "C": wider
+}
+const letterAdjust = letter => {
+    const letterAdjustAmount = letterAdjustments[letter];
+    return letterAdjustAmount ? letterAdjustAmount : normal;
+};
+
+const Cell = ({
+              tileContent,
+              x: _x,
+              y: _y,
+              className,
+              onClick,
+              finishMessagePixel,
+              tileSize,
+              clueNumberXOffset,
+              clueNumberYOffset,
+              clueNumberFontSize,
+              guessXOffsetFunc,
+              guessYOffset,
+              guessFontSize,
+              ...other
+            }) => {
+    const x = _x * tileSize;
+    const y = _y * tileSize;
+    // console.log(clueNumberYOffset)
     return (
         <g>
             <rect
                 x={x}
                 y={y}
-                height={TILE_SIZE}
-                width={TILE_SIZE}
+                height={tileSize}
+                width={tileSize}
                 // style={}
                 className={finishMessagePixel ? "finishMessagePixel" : className}
                 onClick={onClick}
                 {...other}
             />
-            <text x={x + 1.5} y={y + 10}  className='clueNumber' onClick={onClick}>{tileContent.clueNumber || ''}</text>
-            <text x={x + (TILE_SIZE / 4)} y={y + (7 * (TILE_SIZE / 8))} className='guess' onClick={onClick}>{tileContent.guess}</text>
+            <text x={x + clueNumberXOffset} y={y + clueNumberYOffset} style={{ fontSize: clueNumberFontSize }}  className='clueNumber' onClick={onClick}>{tileContent.clueNumber || ''}</text>
+            <text x={x + guessXOffsetFunc(tileContent.guess)} y={y + guessYOffset} style={{ fontSize: guessFontSize }} className='guess' onClick={onClick}>{tileContent.guess}</text>
         </g>
     )
 }
@@ -109,8 +148,19 @@ const Block = (props) => {
 }
 
 const GameBoard = ({ data, leaveGame }) => {
-    const numberOfTiles = useRef(data.gameBoard.length)
     const [tileBoard, setTileBoard] = useState(data.gameBoard);
+    const TILE_SIZE = useRef(data.tileSize).current;
+    const tilePositionConfig = useRef({
+        clueNumberXOffset: data.clueNumberXOffset ? data.clueNumberXOffset : 1.3,
+        clueNumberYOffset: (data.tileSize/3.9) + (data.clueNumberYOffset ? data.clueNumberYOffset : 0),
+        clueNumberFontSize: data.clueNumberFontSize ? data.clueNumberFontSize : "0.65em",
+        guessXOffsetFunc: letter => (data.tileSize / letterAdjust(letter)) + (data.guessXOffset ? data.guessXOffset : 0),
+        guessYOffset:  (7 * (data.tileSize / 8)) + (data.guessYOffset ? data.guessYOffset : 0),
+        guessFontSize: data.guessFontSize ? data.guessFontSize : "1.8em"
+    })
+
+    const gameBoardSize = useRef(tileBoard.length * data.tileSize).current;
+    const clueLineCharacterLimit = useRef(data.clueLineCharacterLimit ? data.clueLineCharacterLimit : 60);
     const [clues, setClues] = useState(data.clues);
     const themeClues = useRef({ HORIZONTAL: {}, VERTICAL: {}, tiles: [] });
     const [selectedTile, setSelectedTile] = useState({ x: null, y: null });
@@ -124,8 +174,13 @@ const GameBoard = ({ data, leaveGame }) => {
     const verticalList = useRef();
     const [gameWon, setGameWon] = useState(false);
     const [incorrectGuessNumberOpen, setIncorrectGuessNumberOpen] = useState(false);
-    const throttledIncorrectGuessNumberOpen = useRef(throttle(() => setIncorrectGuessNumberOpen(true), 15000, { leading: true, trailing: true })).current;
+    const throttledIncorrectGuessNumberOpen = useRef(throttle(() => setIncorrectGuessNumberOpen(true), 15000, { leading: true, trailing: false })).current;
     const incorrectGuesses = useRef(0);
+    const selectedClueDebounce = useRef(debounce(value => setSelectedClue(value), RENDER_DEBOUNCE_LENGTH, RENDER_DEBOUNCE_OPTIONS)).current;
+    const secondaryClueDebounce = useRef(debounce(value => setSecondaryClue(value), RENDER_DEBOUNCE_LENGTH, RENDER_DEBOUNCE_OPTIONS)).current;
+    const focusClueDebounce = useRef(debounce((clueIndex, direction, ref) => focusClue(clueIndex, direction, ref), RENDER_DEBOUNCE_LENGTH, RENDER_DEBOUNCE_OPTIONS)).current;
+    const focusSecondaryClueDebounce = useRef(debounce((clueIndex, direction, ref) => focusClue(clueIndex, direction, ref), RENDER_DEBOUNCE_LENGTH, RENDER_DEBOUNCE_OPTIONS)).current;
+    const previousKeyWasDelete = useRef(false);
 
     // finished game config
     const preventKeyPress = useRef(false);
@@ -279,7 +334,7 @@ const GameBoard = ({ data, leaveGame }) => {
     const arrowKeyPressInDirection = (pressedDirection, key) => {
         const arrowKeyMapping = ARROW_KEY_MAPPINGS[key];
 
-        if(selectedTile.x === null || selectedTile.y) {
+        if(selectedTile.x === null || selectedTile.y === null) {
             console.log("Issue with selected tile", selectedTile)
         }
 
@@ -290,7 +345,7 @@ const GameBoard = ({ data, leaveGame }) => {
                     if(isTile(nextTile)) {
                         let tileDirection = pressedDirection;
                         if(!getTileBoardItem(nextTile).clueNumberLink[tileDirection]) {
-                            tileDirection = direction.current;
+                            tileDirection = getOppositeDirection(pressedDirection);
                         }
                         direction.current = tileDirection;
                         activateTile(nextTile, tileDirection);
@@ -344,10 +399,9 @@ const GameBoard = ({ data, leaveGame }) => {
         if(numberOfGuesses === totalNumberOfBoardLetters.current) {
             checkBoardAnswersCorrect();
         }
-
     }
 
-    const moveSelectorOneSpaceInDirection = () => {
+    const moveSelectorOneSpaceInDirection = (reverse = 1) => {
             const clueId = getTileBoardItem(selectedTile).clueNumberLink[direction.current];
             const clue = clues[direction.current].find(c => c.id === clueId);
             const numberOfLettersInAnswer = clue.highlights.length;
@@ -355,37 +409,84 @@ const GameBoard = ({ data, leaveGame }) => {
             const startingPos = direction.current === HORIZONTAL ? clue.tile.x : clue.tile.y;
             let foundEmptyTileInAnswer = false;
             for(let i = 0; i < numberOfLettersInAnswer; i++) {
-                const index = ((i + numberOfLettersInAnswer + indexOfSelectedTileInAnswer + 1) % numberOfLettersInAnswer) + startingPos;
+                const index = (((i * reverse) + numberOfLettersInAnswer + indexOfSelectedTileInAnswer + 1) % numberOfLettersInAnswer) + startingPos;
                 const hSuggestedClue = { x: index, y: selectedTile.y };
                 const vSuggestedClue = { x: selectedTile.x, y: index };
                 if(direction.current === HORIZONTAL && isTile(hSuggestedClue) && !getTileBoardItem(hSuggestedClue).guess) {
-                    setSelectedTile(hSuggestedClue)
+                    activateTile(hSuggestedClue, HORIZONTAL, { highlightTiles: false, selectClue: false })
                     foundEmptyTileInAnswer = true;
                     return;
                 } else if(direction.current === VERTICAL && isTile(vSuggestedClue) && !getTileBoardItem(vSuggestedClue).guess) {
-                    setSelectedTile(vSuggestedClue)
+                    activateTile(vSuggestedClue, VERTICAL, { highlightTiles: false, selectClue: false })
                     foundEmptyTileInAnswer = true;
                     return;
                 }
             }
             if(!foundEmptyTileInAnswer) {
                 if(direction.current === HORIZONTAL && isTile(TILE_RIGHT(selectedTile))) {
-                    setSelectedTile(TILE_RIGHT(selectedTile))
+                    activateTile(TILE_RIGHT(selectedTile), HORIZONTAL, { highlightTiles: false, selectClue: false })
                 } else if(direction.current === VERTICAL && isTile(TILE_BELOW(selectedTile))) {
-                    setSelectedTile(TILE_BELOW(selectedTile))
+                    activateTile(TILE_BELOW(selectedTile), VERTICAL, { highlightTiles: false, selectClue: false })
                 } else {
                     setTimestamp(Date.now()); // force rerender
                 }
             }
     }
 
-    const deleteLetter = key => {
-        if(key === ' ') {
-            moveSelectorOneSpaceInDirection();
-        }
+    const removeGuessFromTile = selectedTile => {
         getTileBoardItem(selectedTile).guess = '';
         setTileBoard(tileBoard);
-        setTimestamp(Date.now()); // force rerender
+        // setTimestamp(Date.now()); // force rerender
+    }
+
+    const clearLetterKey = key => {
+        if(key === SPACE_KEY) {
+            const shouldOnlySingleSpaceMove = getTileBoardItem(selectedTile).guess !== '' || previousKeyWasDelete.current === true;
+            if(direction.current === HORIZONTAL && shouldOnlySingleSpaceMove) {
+                previousKeyWasDelete.current = true;
+                removeGuessFromTile(selectedTile);
+                if(isTile(TILE_RIGHT(selectedTile))) {
+                    setSelectedTile(TILE_RIGHT(selectedTile))
+                } else {
+                    const clueId = getTileBoardItem(selectedTile).clueNumberLink[direction.current];
+                    const clue = clues[HORIZONTAL].find(c => c.id === clueId);
+                    const beginningClue = clue.highlights[0];
+                    setSelectedTile(beginningClue)
+                }
+            } else if(direction.current === VERTICAL && shouldOnlySingleSpaceMove) {
+                previousKeyWasDelete.current = true;
+                removeGuessFromTile(selectedTile);
+                if(isTile(TILE_BELOW(selectedTile))) {
+                    setSelectedTile(TILE_BELOW(selectedTile))
+                } else {
+                    const clueId = getTileBoardItem(selectedTile).clueNumberLink[direction.current];
+                    const clue = clues[VERTICAL].find(c => c.id === clueId);
+                    const beginningClue = clue.highlights[0];
+                    setSelectedTile(beginningClue)
+                }
+            } else {
+                // setTimestamp(Date.now()); // force rerender
+                moveSelectorOneSpaceInDirection();
+            }
+        } else if(key === BACKSPACE_KEY) {
+            if(getTileBoardItem(selectedTile).guess !== '') {
+                removeGuessFromTile(selectedTile);
+                setTimestamp(Date.now())
+            } else if(direction.current === HORIZONTAL && isTile(TILE_LEFT(selectedTile))) {
+                removeGuessFromTile(TILE_LEFT(selectedTile));
+                previousKeyWasDelete.current = true;
+                setSelectedTile(TILE_LEFT(selectedTile))
+            } else if(direction.current === VERTICAL && isTile(TILE_ABOVE(selectedTile))) {
+                removeGuessFromTile(TILE_ABOVE(selectedTile));
+                previousKeyWasDelete.current = true;
+                setSelectedTile(TILE_ABOVE(selectedTile))
+            }
+            removeGuessFromTile(selectedTile);
+            setTimestamp(Date.now())
+        } else if(key === DELETE_KEY) {
+            removeGuessFromTile(selectedTile);
+            setTimestamp(Date.now())
+        }
     }
 
     useKeypress([
@@ -393,24 +494,25 @@ const GameBoard = ({ data, leaveGame }) => {
         ...HORIZONTAL_ARROW_KEYS,
         ...ALPHABET,
         ...ALPHABET_LOWER,
-        ...DELETE_KEYS
+        ...CLEAR_LETTER_KEYS
     ], ({ key }) => {
         if(preventKeyPress.current || gameWon) {
             return;
         }
         preventKeyPress.current = true;
-        setTimeout(() => preventKeyPress.current = false, 15);
+        setTimeout(() => preventKeyPress.current = false, 10);
         if([...ALL_DIRECTIONAL_KEYS].includes(key)) {
             arrowKeyPress(key);
+            previousKeyWasDelete.current = false;
             return;
         }
         if(key.length === 1 && key.match(/[a-z]/i)) {
             letterKeyPres(key);
+            previousKeyWasDelete.current = false;
             return;
         }
-        if(DELETE_KEYS.includes(key)) {
-            deleteLetter(key);
-            return;
+        if(CLEAR_LETTER_KEYS.includes(key)) {
+            clearLetterKey(key);
         }
     });
 
@@ -421,7 +523,7 @@ const GameBoard = ({ data, leaveGame }) => {
 
         let countIncorrectGuesses = 0;
         tileBoard.forEach((row, y) => row.forEach((tile, x) => {
-            if (tile.guess !== data.gameBoard[y][x].answer) {
+            if (!data.gameBoard[y][x].blank && tile.guess !== data.gameBoard[y][x].answer.toUpperCase()) {
                 countIncorrectGuesses++;
             }
         }))
@@ -439,7 +541,7 @@ const GameBoard = ({ data, leaveGame }) => {
 
         // config
         const startDelay = 3000;
-        const messageSpeed = 250;
+        const messageSpeed = 175;
         const finishMessagePixels = renderPixels(data.gameFinishedMessage, fonts.sevenPlus);
 
         const pixelHeight = finishMessagePixels.length;
@@ -484,7 +586,7 @@ const GameBoard = ({ data, leaveGame }) => {
         const jsonSave = JSON.stringify(data);
 
         // create a new handle
-        const newHandle = await window.showSaveFilePicker();
+        const newHandle = await window.showSaveFilePicker(pickerOpts);
 
         // create a FileSystemWritableFileStream to write to
         const writableStream = await newHandle.createWritable();
@@ -521,8 +623,9 @@ const GameBoard = ({ data, leaveGame }) => {
             selectSecondaryClue = true
         } = {}
     ) => {
-        console.log("------------")
-        horizontalList.current.scrollToItem(17, "center");
+        if(selectTile) {
+            setSelectedTile(tile);
+        }
         if(highlightTiles) {
             let highlightTiles = [];
             if(themeClues.current[direction][getTileClue(tile, direction)]) {
@@ -531,94 +634,77 @@ const GameBoard = ({ data, leaveGame }) => {
             highlightTiles.push(...getTileHighlights(tile, direction));
             setHighlightedTiles(highlightTiles)
         }
-        if(selectTile) {
-            setSelectedTile(tile);
-        }
         if(selectClue) {
-            setSelectedClue(getTileClue(tile, direction))
+            selectedClueDebounce(getTileClue(tile, direction));
         }
         if(selectSecondaryClue) {
-            setSecondaryClue(getTileClue(tile, getOppositeDirection(direction)));
+            secondaryClueDebounce(getTileClue(tile, getOppositeDirection(direction)));
         }
         if(focusClue) {
-            console.log("direction", direction)
             const primaryClueId = getTileClue(tile, direction);
             const primaryClueIndex = clues[direction].findIndex(c => c.id === primaryClueId);
-            console.log("primary", primaryClueIndex);
             if(primaryClueIndex >= 0) {
-                focusSelectedClue(clues[direction].findIndex(c => c.id === primaryClueId), direction);
+                focusClueDebounce(primaryClueIndex, direction, getRefForListByDirection(direction))
             }
 
             const oppositeDirection = getOppositeDirection(direction);
             const secondaryClueId = getTileClue(tile, oppositeDirection);
             const secondaryClueIndex = clues[oppositeDirection].findIndex(c => c.id === secondaryClueId);
-            console.log("secondary", primaryClueIndex);
             if(secondaryClueIndex >= 0) {
-                focusSelectedClue(secondaryClueIndex, oppositeDirection)
+                focusSecondaryClueDebounce(secondaryClueIndex, oppositeDirection, getRefForListByDirection(oppositeDirection));
             }
         }
     }
 
-    const focusSelectedClue = (index, direction) => {
-        let scrollType = 'center';
-        // console.log("index", index );
-        // if(index > 3 && index < (numberOfTiles.current - 3)) {
-        //     index = index - 3;
-        //     scrollType = 'start'
-        //     console.log("index", index);
-        // }
-        console.log("index + 1", index + 1)
-        if(direction === HORIZONTAL) {
-            // setTimeout(() => horizontalList.current.scrollToItem(index, scrollType), 0);
-            horizontalList.current.scrollToItem(index + 1, scrollType)
-        } else {
-            // setTimeout(() => verticalList.current.scrollToItem(index, scrollType), 0);
-            verticalList.current.scrollToItem(index + 1, scrollType)
-        }
+    const getRefForListByDirection = direction => direction === HORIZONTAL ? horizontalList.current : verticalList.current
+
+    const focusClue = (index, direction, ref) => {
+        ref.scrollToItem(index, "center")
     }
 
     const numberOfIncorrectGuessesText = () => {
-        if(incorrectGuesses.current > 10) {
-            return "You have more than 10 incorrect letters";
-        } else if(incorrectGuesses.current > 5) {
-            return "You have more than 5 incorrect letters";
+        if(incorrectGuesses.current > 1) {
+            return `You have ${incorrectGuesses.current} incorrect letters`;
         } else {
-            return "You have 5 or less incorrect letters!"
+            return "You have 1 incorrect letter!"
         }
     }
 
     const clueId = (direction, i) => `${direction}${i}`;
 
     const placeTile = (tileContent, x, y) => {
-        const tile = { key: `${x}${y}`, tileContent, y, x};
-        const directionForTile = getTileBoardItem(tile).clueNumberLink ?
-            getTileBoardItem(tile).clueNumberLink[direction.current] ?
+        const tileProps = {
+            key: `${x}${y}`,
+            tileContent,
+            y,
+            x,
+            finishMessagePixel: getTileBoardItem({ x, y }).finishMessagePixel === 1,
+            tileSize: TILE_SIZE
+        };
+        const directionForTile = getTileBoardItem(tileProps).clueNumberLink ?
+            getTileBoardItem(tileProps).clueNumberLink[direction.current] ?
                 direction.current : getOppositeDirection(direction.current)
             : DEFAULT_DIRECTION;
         return (
             tileContent.answer ?
                 <Tile
-                    {...tile}
+                    {...tileProps}
+                    {...tilePositionConfig.current}
                     selected={selectedTile.x === x && selectedTile.y === y}
                     highlighted={!!highlightedTiles.find(hTile => hTile.x === x && hTile.y === y )}
-                    finishMessagePixel={getTileBoardItem(tile).finishMessagePixel === 1}
-                    onClick={e => {
-                        // e.preventDefault();
+                    onClick={() => {
                         if(directionForTile !== direction.current) {
                             direction.current = directionForTile;
                         }
-                        activateTile(tile, directionForTile)
+                        activateTile(tileProps, directionForTile)
                     }}
-                /> : <Block {...tile} finishMessagePixel={getTileBoardItem(tile).finishMessagePixel === 1} />
+                /> : <Block {...tileProps} {...tilePositionConfig.current} />
         )
     }
 
     const clueRowWithDirection = direction => memo(({ data, index: i, style }) => {
         const { clues, selectedClue, secondaryClue } = data;
-        // console.log("data", data)
-        // console.log(clues)
         if(clues) {
-
             const clue = clues[i];
             const selected = selectedClue === clue.id;
             const secondary = secondaryClue === clue.id;
@@ -648,16 +734,6 @@ const GameBoard = ({ data, leaveGame }) => {
         }
     }, areEqual)
 
-    const ClueColumn = ({ direction, customRef, itemData }) =>
-        <div>
-            <span style={{ fontSize: '1.5em' }}>{CLUE_COLUMN_TITLE[direction]}</span>
-            <FixedSizeList style={{ margin: '0 5px', lineHeight: '1' }} itemData={itemData} ref={customRef} height={gameBoardSize} itemSize={gameBoardSize / 10} itemCount={clues[direction].length}>
-                {clueRowWithDirection(direction)}
-            </FixedSizeList>
-        </div>
-
-    const gameBoardSize = tileBoard.length * TILE_SIZE;
-
     const saveAndLeave = async () => {
         try {
             await saveGame();
@@ -673,20 +749,26 @@ const GameBoard = ({ data, leaveGame }) => {
         secondaryClue
     }));
 
+    const getItemSize = direction => index => {
+        // const size = clues[direction][index].clue.length > 60 ? 2 : 1;
+        const multiple = Math.ceil(clues[direction][index].clue.length / clueLineCharacterLimit.current);
+        return multiple * (gameBoardSize / 10);
+    }
+
     return (
         <div className={classes.root}>
             <Grid container spacing={0}>
                 <Grid container item spacing={0} justify="flex-end">
                     <Grid item>
                         <Button
-                            style={{ backgroundColor: '#85dcb0' }}
+                            style={{ backgroundColor: '#85dcb0', margin: '5px 20px 5px 20px' }}
                             variant="contained"
                             onClick={() => saveGame()}
                         >Save</Button>
                     </Grid>
                     <Grid item>
                         <Button
-                            style={{ backgroundColor: '#41b3ac', margin: '0 20px', color: 'white' }}
+                            style={{ backgroundColor: '#41b3ac', margin: '5px 20px 5px 20px', color: 'white' }}
                             variant="contained"
                             onClick={() => saveAndLeave()}
                         >Save & Leave</Button>
@@ -706,23 +788,21 @@ const GameBoard = ({ data, leaveGame }) => {
                             )}
                         </g>
                         <g>
-                            <path d={grid(tileBoard.length)} className="grid" vectorEffect="non-scaling-stroke" />
+                            <path d={grid(tileBoard.length, TILE_SIZE)} className="grid" vectorEffect="non-scaling-stroke" />
                         </g>
                     </svg>
                 </Grid>
                 <Grid item xs={12} sm={3}>
-                    {/*<ClueColumn direction={HORIZONTAL} customRef={horizontalList} itemData={clues[HORIZONTAL]} />*/}
                     <span style={{ fontSize: '1.5em' }}>{CLUE_COLUMN_TITLE[HORIZONTAL]}</span>
-                    <FixedSizeList style={{ margin: '0 5px', lineHeight: '1' }} ref={horizontalList} itemData={createItemData(clues[HORIZONTAL], selectedClue, secondaryClue)}  height={gameBoardSize} itemSize={gameBoardSize / 10} itemCount={clues[HORIZONTAL].length}>
+                    <VariableSizeList itemSize={getItemSize(HORIZONTAL)} style={{ margin: '0 5px' }} ref={horizontalList} itemData={createItemData(clues[HORIZONTAL], selectedClue, secondaryClue)}  height={gameBoardSize} itemCount={clues[HORIZONTAL].length}>
                         {clueRowWithDirection(HORIZONTAL)}
-                    </FixedSizeList>
+                    </VariableSizeList>
                 </Grid>
                 <Grid item xs={12} sm={3}>
-                    {/*<ClueColumn direction={VERTICAL} customRef={verticalList} itemData={clues[VERTICAL]} />*/}
                     <span style={{ fontSize: '1.5em' }}>{CLUE_COLUMN_TITLE[VERTICAL]}</span>
-                    <FixedSizeList style={{ margin: '0 5px', lineHeight: '1' }} ref={verticalList} itemData={createItemData(clues[VERTICAL], selectedClue, secondaryClue)} height={gameBoardSize} itemSize={gameBoardSize / 10} itemCount={clues[VERTICAL].length}>
+                    <VariableSizeList itemSize={getItemSize(VERTICAL)} style={{ margin: '0 5px' }} ref={verticalList} itemData={createItemData(clues[VERTICAL], selectedClue, secondaryClue)} height={gameBoardSize} itemCount={clues[VERTICAL].length}>
                         {clueRowWithDirection(VERTICAL)}
-                    </FixedSizeList>
+                    </VariableSizeList>
                 </Grid>
                 <Snackbar
                     anchorOrigin={{
