@@ -1,8 +1,11 @@
+## Install
+
+### Node.js and `npm install`
+
+This application requires node.js: https://nodejs.org/en/.
+Run `npm install` to setup up the project.
+
 ## Run the app
-
-### `npm install`
-
-Download necessary npm packages. (Install node js if you haven't already: https://nodejs.org/en/)
 
 ### `yarn start`
 
