@@ -13,4 +13,5 @@ You will also see any lint errors in the console.
 
 #### Play a game
 
-Press `Play`, navigate to `<Project_root>/src/Game` and open `crossword-template.json`
+Press `Play`, navigate to `<Project_root>/src/Game` and open `crossword-template.json`.\
+When saving a game I would recommend saving to a new .json file as to not overwrite the formatting of `crossword-template.json` which you can experiment with. 
