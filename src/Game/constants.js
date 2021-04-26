@@ -23,5 +23,8 @@ export const TILE_LEFT = ({x, y}, amount= 1) => ({x: x - amount, y});
 export const TILE_RIGHT = ({x, y}, amount = 1) => ({x: x + amount, y});
 export const TILE_ABOVE = ({x, y}, amount = 1) => ({x, y: y - amount});
 export const TILE_BELOW = ({x, y}, amount = 1) => ({x, y: y + amount});
-export const DELETE_KEYS = ['Delete', 'Backspace', ' '];
+export const DELETE_KEY = 'Delete';
+export const SPACE_KEY = ' ';
+export const BACKSPACE_KEY = 'Backspace';
+export const CLEAR_LETTER_KEYS = [DELETE_KEY, SPACE_KEY, BACKSPACE_KEY];
 export const CLUE_COLUMN_TITLE = { HORIZONTAL: 'Across', VERTICAL: 'Down' }

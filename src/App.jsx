@@ -1,11 +1,12 @@
 import './App.css';
-import React, {useState} from "react";
-import GameBoard from "./GameBoard";
+import React, {useState, useEffect} from "react";
+import GameBoard from "./Game";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from '@material-ui/core/styles';
 import LoadGame from './LoadGame';
+import cloneDeep from 'lodash/cloneDeep';
 
 const useStyles = makeStyles({
     root: {
@@ -35,18 +36,42 @@ const useStyles = makeStyles({
 
 function App() {
     const classes = useStyles();
+    const [loadedFileData, setLoadedFileData] = useState(null);
     const [crosswordData, setCrosswordData] = useState(null);
+
+    useEffect(() => {
+        if(loadedFileData === null) {
+            return;
+        }
+
+        const data = cloneDeep(loadedFileData)
+        data.tileSize = (window.screen.height - (350)) / data.crossword.board.length;
+        if(data.gameBoard) {
+            setCrosswordData(data);
+        } else {
+            data.gameBoard = data.crossword.board.map(row => row.map(letter => {
+                return letter !== " " ? { answer: letter, guess: "" } : { blank: "yes" };
+            }));
+            data.clues = {};
+            data.clues.HORIZONTAL =  data.crossword.clues.ACROSS.map(clue => clue)
+            data.clues.VERTICAL =  data.crossword.clues.DOWN.map(clue => clue)
+            setCrosswordData(data);
+        }
+    }, [loadedFileData])
+
     const leaveGame = () => {
+        setLoadedFileData(null);
         setCrosswordData(null);
     }
+
     return (
         <div className="App" >
-            <Grid container spacing={0} style={{ minHeight: '100vh', marginBottom: '-20px' }} >
+            <Grid container spacing={0} style={{ minHeight: crosswordData === null ? '100vh' : '', marginBottom: '-20px' }} >
                 <Grid item xs={12} >
                     <Box my={4} className={classes.root}>
                         <Box className={classes.test1}>
                             <Typography variant="h4" component="div" >
-                                { crosswordData === null ? 'Load a crossword game' : crosswordData.title }
+                                { crosswordData === null ? 'Play a Crossword' : crosswordData.title }
                             </Typography>
                         </Box>
                     </Box>
@@ -56,7 +81,7 @@ function App() {
                 <Grid item xs={12} >
                     {crosswordData ?
                         <GameBoard data={crosswordData} leaveGame={leaveGame} /> :
-                        <LoadGame setCrosswordData={setCrosswordData} />
+                        <LoadGame setLoadedFileData={setLoadedFileData} />
                     }
                 </Grid>
             </Grid>
