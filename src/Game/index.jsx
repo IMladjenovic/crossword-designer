@@ -20,6 +20,8 @@ import difference from 'lodash/difference';
 import throttle from 'lodash/throttle';
 import debounce from 'lodash/debounce';
 
+import * as data1 from './crossword-template.json'
+
 import { fonts, renderPixels } from 'js-pixel-fonts';
 
 import {
@@ -77,27 +79,6 @@ const grid = (nTiles, tileSize) => {
     return grid;
 }
 
-const normal = 4;
-const wider = 5;
-const letterAdjustments = {
-    "I": 2.5,
-    "G": wider,
-    "H": wider,
-    "N": wider,
-    "M": 7,
-    "W": 8,
-    "R": wider,
-    "U": wider,
-    "O": wider,
-    "Q": wider,
-    "Y": wider,
-    "C": wider
-}
-const letterAdjust = letter => {
-    const letterAdjustAmount = letterAdjustments[letter];
-    return letterAdjustAmount ? letterAdjustAmount : normal;
-};
-
 const Cell = ({
               tileContent,
               x: _x,
@@ -116,7 +97,6 @@ const Cell = ({
             }) => {
     const x = _x * tileSize;
     const y = _y * tileSize;
-    // console.log(clueNumberYOffset)
     return (
         <g>
             <rect
@@ -148,20 +128,13 @@ const Block = (props) => {
 }
 
 const GameBoard = ({ data, leaveGame }) => {
-    const [tileBoard, setTileBoard] = useState(data.gameBoard);
+    const [tileBoard, setTileBoard] = useState(data.init.tileBoard);
     const TILE_SIZE = useRef(data.tileSize).current;
-    const tilePositionConfig = useRef({
-        clueNumberXOffset: data.clueNumberXOffset ? data.clueNumberXOffset : 1.3,
-        clueNumberYOffset: (data.tileSize/3.9) + (data.clueNumberYOffset ? data.clueNumberYOffset : 0),
-        clueNumberFontSize: data.clueNumberFontSize ? data.clueNumberFontSize : "0.65em",
-        guessXOffsetFunc: letter => (data.tileSize / letterAdjust(letter)) + (data.guessXOffset ? data.guessXOffset : 0),
-        guessYOffset:  (7 * (data.tileSize / 8)) + (data.guessYOffset ? data.guessYOffset : 0),
-        guessFontSize: data.guessFontSize ? data.guessFontSize : "1.8em"
-    })
+    const tilePositionConfig = useRef(data.tilePositionConfig)
 
     const gameBoardSize = useRef(tileBoard.length * data.tileSize).current;
     const clueLineCharacterLimit = useRef(data.clueLineCharacterLimit ? data.clueLineCharacterLimit : 60);
-    const [clues, setClues] = useState(data.clues);
+    const [clues, setClues] = useState(data.init.cluesWithTileRef);
     const themeClues = useRef({ HORIZONTAL: {}, VERTICAL: {}, tiles: [] });
     const [selectedTile, setSelectedTile] = useState({ x: null, y: null });
     const [highlightedTiles, setHighlightedTiles] = useState([]);
@@ -169,7 +142,7 @@ const GameBoard = ({ data, leaveGame }) => {
     const [timestamp, setTimestamp] = useState(Date.now());
     const [selectedClue, setSelectedClue] = useState(null);
     const [secondaryClue, setSecondaryClue] = useState(null);
-    const totalNumberOfBoardLetters = useRef(0);
+    const totalNumberOfBoardLetters = useRef(data.init.totalNumberOfBoardLetters);
     const horizontalList = useRef();
     const verticalList = useRef();
     const [gameWon, setGameWon] = useState(false);
@@ -201,7 +174,7 @@ const GameBoard = ({ data, leaveGame }) => {
         setTimeout(() => incorrectGuesses.current = 0, 3000);
     };
 
-    const prepareGameFinishedScreen = () => {
+    const loadGlyphs = () => {
         data.customGlyphs.forEach(glyph => {
             const key = Object.keys(glyph)[0];
             fonts.sevenPlus.glyphs[key] = glyph[key];
@@ -209,121 +182,7 @@ const GameBoard = ({ data, leaveGame }) => {
     }
 
     useEffect(() => {
-        prepareGameFinishedScreen();
-        let clueNumber = 0;
-        const cluesWithTileRef = {
-            HORIZONTAL: [],
-            VERTICAL: []
-        }
-
-        if(!clues.HORIZONTAL || !clues.VERTICAL) {
-            return;
-        }
-
-        const updateClueNumber = (newClueNumber, newTileBoard, tile) => {
-            if(clueNumber !== newClueNumber) {
-                return;
-            }
-            clueNumber++;
-            newTileBoard[tile.y][tile.x].clueNumber = clueNumber;
-        }
-
-        const shouldUpdateTotalNumberOfBoardLetters = totalNumberOfBoardLetters.current === 0;
-
-        const newTileBoard = clone(tileBoard);
-        tileBoard.forEach((row, y) => {
-            row.forEach((t, x) => {
-                const newClueNumber = clueNumber;
-                if(t.blank) {
-                    return;
-                }
-                if(shouldUpdateTotalNumberOfBoardLetters) {
-                    totalNumberOfBoardLetters.current++;
-                }
-                const tile = {x, y}
-
-                const tileAboveCoords = TILE_ABOVE(tile);
-
-                if(!isTile(tileAboveCoords)) {
-                    if(isTile(TILE_BELOW(tile))) {
-                        updateClueNumber(newClueNumber, newTileBoard, tile);
-                        const vClue = clues.VERTICAL[cluesWithTileRef.VERTICAL.length];
-
-                        vClue.tile = tile;
-                        vClue.id = clueId(VERTICAL, clueNumber);
-                        vClue.clueNumber = clueNumber;
-                        vClue.highlights = [];
-                        if(vClue.theme) {
-                            themeClues.current[VERTICAL][vClue.id] = true;
-                            themeClues.current.tiles.push(tile);
-                        }
-
-                        vClue.highlights.push(tile);
-                        newTileBoard[y][x].clueNumberLink =
-                            { ...newTileBoard[y][x].clueNumberLink, VERTICAL: clueId(VERTICAL, clueNumber) };
-                        cluesWithTileRef.VERTICAL.push(vClue);
-                    }
-                } else {
-                    const tileAbove = newTileBoard[tileAboveCoords.y][tileAboveCoords.x];
-                    newTileBoard[y][x].clueNumberLink =
-                        { ...newTileBoard[y][x].clueNumberLink, VERTICAL: tileAbove.clueNumberLink.VERTICAL };
-                    if(tileAbove.theme) {
-                        themeClues.current[VERTICAL][tileAbove.id] = true;
-                        themeClues.current.tiles.push(tile);
-                    }
-                    const previousVertClueHighlightChain = cluesWithTileRef.VERTICAL.find(clue => clue.highlights.find(
-                        highlightedTile => highlightedTile.x === tileAboveCoords.x &&
-                            highlightedTile.y === tileAboveCoords.y
-                    ))
-                    previousVertClueHighlightChain.highlights.push(tile)
-                    if(previousVertClueHighlightChain.theme) {
-                        themeClues.current[VERTICAL][previousVertClueHighlightChain.id] = true;
-                        themeClues.current.tiles.push(tile);
-                    }
-                }
-
-                const tileLeftCoords = TILE_LEFT(tile);
-
-
-                if(!isTile(tileLeftCoords)) {
-                    if(isTile(TILE_RIGHT(tile))) {
-                        updateClueNumber(newClueNumber, newTileBoard, tile);
-                        const vClue = clues.HORIZONTAL[cluesWithTileRef.HORIZONTAL.length];
-                        vClue.tile = tile;
-                        vClue.id = clueId(HORIZONTAL, clueNumber);
-                        if(vClue.theme) {
-                            themeClues.current[HORIZONTAL][vClue.id] = true;
-                            themeClues.current.tiles.push(tile);
-                        }
-                        vClue.clueNumber = clueNumber;
-                        vClue.highlights = [];
-                        cluesWithTileRef.HORIZONTAL.push(vClue);
-                        vClue.highlights.push(tile);
-                        newTileBoard[y][x].clueNumberLink =
-                            { ...newTileBoard[y][x].clueNumberLink, HORIZONTAL: clueId(HORIZONTAL, clueNumber) };
-                    }
-                } else {
-                    const tileLeft = newTileBoard[tileLeftCoords.y][tileLeftCoords.x];
-                    newTileBoard[y][x].clueNumberLink =
-                        { ...newTileBoard[y][x].clueNumberLink, HORIZONTAL: tileLeft.clueNumberLink.HORIZONTAL };
-                    if(tileLeft.theme) {
-                        themeClues.current[HORIZONTAL][tileLeft.id] = true;
-                        themeClues.current.tiles.push(tile);
-                    }
-                    const previousVertClueHighlightChain = cluesWithTileRef.HORIZONTAL.find(clue => clue.highlights.find(
-                        highlightedTile => highlightedTile.x === tileLeftCoords.x &&
-                            highlightedTile.y === tileLeftCoords.y
-                    ))
-                    previousVertClueHighlightChain.highlights.push(tile);
-                    if(previousVertClueHighlightChain.theme) {
-                        themeClues.current[HORIZONTAL][previousVertClueHighlightChain.id] = true;
-                        themeClues.current.tiles.push(tile);
-                    }
-                }
-            })
-        });
-        setClues(cluesWithTileRef);
-        setTileBoard(newTileBoard);
+        loadGlyphs();
     }, []);
 
     const classes = useStyles();
