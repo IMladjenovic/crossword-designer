@@ -1,6 +1,5 @@
 import clone from "lodash/clone";
-import {HORIZONTAL, TILE_ABOVE, TILE_BELOW, TILE_LEFT, TILE_RIGHT, VERTICAL} from "./constants";
-import {useRef} from "react";
+import { HORIZONTAL, VERTICAL, TILE_ABOVE, TILE_BELOW, TILE_LEFT, TILE_RIGHT } from "./constants";
 
 // refactoring crossword initialisation
 
@@ -151,7 +150,7 @@ export const initBoard = ({ crossword }) => {
     });
 
     return {
-        tileBoard,
+        board: tileBoard,
         cluesWithTileRef,
         totalNumberOfBoardLetters,
         _isLocationOnBoard,
