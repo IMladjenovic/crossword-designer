@@ -1,5 +1,5 @@
 import clone from "lodash/clone";
-import { HORIZONTAL, VERTICAL, TILE_ABOVE, TILE_BELOW, TILE_LEFT, TILE_RIGHT } from "./constants";
+import { prepTileConfig } from "./utils";
 
 // refactoring crossword initialisation
 
@@ -79,19 +79,6 @@ export const initBoard = ({ crossword }) => {
 
     const newTileBoard = clone(tileBoard);
 
-    const prepTileConfig = {
-        VERTICAL: {
-            DIRECTION: VERTICAL,
-            NEXT_TILE: TILE_BELOW,
-            PREV_TILE: TILE_ABOVE
-        },
-        HORIZONTAL: {
-            DIRECTION: HORIZONTAL,
-            NEXT_TILE: TILE_RIGHT,
-            PREV_TILE: TILE_LEFT
-        }
-    }
-
     const prepareTile = ({ DIRECTION, NEXT_TILE, PREV_TILE }, tile, newClueNumber) => {
         const prevTileCoords = PREV_TILE(tile);
 
@@ -151,7 +138,7 @@ export const initBoard = ({ crossword }) => {
 
     return {
         board: tileBoard,
-        cluesWithTileRef,
+        clues: cluesWithTileRef,
         totalNumberOfBoardLetters,
         _isLocationOnBoard,
         isLocationOnBoard,
