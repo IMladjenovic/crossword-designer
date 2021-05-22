@@ -28,7 +28,6 @@ const arrowKeyPressInDirection = (pressedDirection, key, game, activateTile) => 
                     }
                     game.direction = tileDirection;
                     activateTile(nextTile, tileDirection);
-                    console.log("arrowKeyPress End", Date.now())
                     return;
                 }
             }
@@ -42,16 +41,13 @@ const arrowKeyPressInDirection = (pressedDirection, key, game, activateTile) => 
             for(let i = 1; game._isLocationOnBoard(nextTile); i++) {
                 nextTile = arrowKeyMapping(game.selectedTile, i);
                 if(game.isTile(nextTile)) {
-                    let options = { highlightTiles: false, selectedClue: false }
                     if(i !== 1) {
-                        options = {};
                         if(!game.getTileClue(nextTile, pressedDirection)) {
                             pressedDirection = Object.keys(game.board[nextTile.y][nextTile.x].clueNumberLink)[0];
                         }
                         game.direction = pressedDirection;
                     }
                     activateTile(nextTile, pressedDirection)
-                    console.log("arrowKeyPress End", Date.now())
                     return;
                 }
             }
@@ -60,7 +56,6 @@ const arrowKeyPressInDirection = (pressedDirection, key, game, activateTile) => 
 }
 
 export const arrowKeyPress = (key, game, activateTile) => {
-    console.log("arrowKeyPress", Date.now())
     if(HORIZONTAL_ARROW_KEYS.includes(key)) {
         arrowKeyPressInDirection(HORIZONTAL, key, game, activateTile);
     } else if(VERTICAL_ARROW_KEYS.includes(key)) {
@@ -69,7 +64,6 @@ export const arrowKeyPress = (key, game, activateTile) => {
 }
 
 export const letterKeyPres = (key, game, activateTile, setTimestamp, checkBoardAnswersCorrect) => {
-    console.log("letterKeyPres", Date.now())
     if(!game.isTile(game.selectedTile)) {
         return;
     }
@@ -81,11 +75,9 @@ export const letterKeyPres = (key, game, activateTile, setTimestamp, checkBoardA
     if(numberOfGuesses === game.totalNumberOfBoardLetters) {
         checkBoardAnswersCorrect();
     }
-    console.log("letterKeyPres End", Date.now())
 }
 
 const moveSelectorOneSpaceInDirection = (game, activateTile, setTimestamp, reverse = 1) => {
-    console.log("moveSelectorOneSpaceInDirection", Date.now())
 
     const tileConf = prepTileConfig[game.direction];
     const nxtTile = tileConf.NEXT_TILE(game.selectedTile);
@@ -109,32 +101,24 @@ const moveSelectorOneSpaceInDirection = (game, activateTile, setTimestamp, rever
         const hSuggestedClue = { x: index, y: game.selectedTile.y };
         const vSuggestedClue = { x: game.selectedTile.x, y: index };
         if(game.direction === HORIZONTAL && game.isTile(hSuggestedClue) && !game.getTileBoardItem(hSuggestedClue).guess) {
-            console.log("moveSelectorOneSpaceInDirection Pre-render", Date.now())
             activateTile(hSuggestedClue, HORIZONTAL)
             foundEmptyTileInAnswer = true;
-            console.log("moveSelectorOneSpaceInDirection End", Date.now())
             return;
         } else if(game.direction === VERTICAL && game.isTile(vSuggestedClue) && !game.getTileBoardItem(vSuggestedClue).guess) {
-            console.log("moveSelectorOneSpaceInDirection Pre-render", Date.now())
             activateTile(vSuggestedClue, VERTICAL)
             foundEmptyTileInAnswer = true;
-            console.log("moveSelectorOneSpaceInDirection End", Date.now())
             return;
         }
     }
     if(!foundEmptyTileInAnswer) {
         if(game.direction === HORIZONTAL && game.isTile(TILE_RIGHT(game.selectedTile))) {
-            console.log("moveSelectorOneSpaceInDirection Pre-render", Date.now())
             activateTile(TILE_RIGHT(game.selectedTile), HORIZONTAL)
         } else if(game.direction === VERTICAL && game.isTile(TILE_BELOW(game.selectedTile))) {
-            console.log("moveSelectorOneSpaceInDirection Pre-render", Date.now())
             activateTile(TILE_BELOW(game.selectedTile), VERTICAL)
         } else {
-            console.log("moveSelectorOneSpaceInDirection Pre-render", Date.now())
             setTimestamp(Date.now()); // force rerender
         }
     }
-    console.log("moveSelectorOneSpaceInDirection End", Date.now())
 }
 
 const removeGuessFromTile = (selectedTile, game, setTimestamp) => {
@@ -187,4 +171,22 @@ export const clearLetterKey = (key, game, activateTile, setTimestamp) => {
     } else if(key === DELETE_KEY) {
         removeGuessFromTile(game.selectedTile, game, setTimestamp);
     }
+}
+
+export const tabKeyPress = (shiftKey, game, activateTile) => {
+    const indexModifier = shiftKey ? -1 : 1;
+    let direction = game.direction;
+    let clueIndex = game.clues[direction].findIndex(item => item.id === game.getTileClue()) + indexModifier;
+
+    if (!game.clues[direction][clueIndex]) {
+        direction = getOppositeDirection(direction)
+        if (clueIndex < 0) {
+            clueIndex = game.clues[direction].length - 1;
+        } else {
+            clueIndex = 0;
+        }
+    }
+    // TODO don't just tab to the beginnign of the next clue, make sure it has space or skip it
+    game.direction = direction;
+    activateTile(game.clues[direction][clueIndex].tile, direction);
 }

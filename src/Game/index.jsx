@@ -3,22 +3,16 @@ import useKeypress from 'react-use-keypress'
 
 import './index.css';
 import Grid from '@material-ui/core/Grid';
-import { areEqual } from 'react-window';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import memoize from 'memoize-one';
 import { getOppositeDirection } from "./utils";
-import { arrowKeyPress, clearLetterKey, letterKeyPres } from "./handleInput";
+import { arrowKeyPress, clearLetterKey, letterKeyPres,tabKeyPress } from "./handleInput";
 
 import cloneDeep from 'lodash/cloneDeep';
 import throttle from 'lodash/throttle';
-import debounce from 'lodash/debounce';
 
 import { fonts, renderPixels } from 'js-pixel-fonts';
 
@@ -32,12 +26,10 @@ import {
     HORIZONTAL_ARROW_KEYS,
     VERTICAL_ARROW_KEYS,
     CLEAR_LETTER_KEYS,
-    CLUE_COLUMN_TITLE
+    CLUE_COLUMN_TITLE,
+    TAB
 } from './constants'
 import { pickerOpts } from "../LoadGame";
-
-const RENDER_DEBOUNCE_LENGTH = 200;
-const RENDER_DEBOUNCE_OPTIONS = { leading: false, trailing: true };
 
 const useStyles = makeStyles((theme) => ({
     root: { flexGrow: 1 },
@@ -68,20 +60,32 @@ const grid = (nTiles, tileSize) => {
     return grid;
 }
 
-const Clue = ({ clue, handleClueClick, selected, secondary }) => {
-    return <div
-        style={{
-            ...(selected ? { backgroundColor: '#85dcb0' } :
-                secondary ? { backgroundColor: '#85dcb0', opacity: '50%' } : {}),
-            cursor: 'pointer'
-        }}
-        key={clue.id}
-        id={clue.id}
-        button // TODO is this needed?
-        selected={selected}
-        onClick={() => handleClueClick(clue.tile, clue.id)}>
-        <div style={{ fontWeight: 'bold', marginLeft: '3px' }}>{clue.clueNumber}</div><div>{ clue.clue }</div>
-    </div>
+const Clue = ({ clue, handleClueClick, selected, secondary, setRef }) => {
+    return <li
+            style={{
+                ...(selected ? { backgroundColor: '#85dcb0' } :
+                    secondary ? { backgroundColor: '#85dcb0', opacity: '50%' } : {}),
+                cursor: 'pointer',
+                outline: 'none',
+                display: 'flex',
+                padding: '5px 10px 5px 1px'
+            }}
+            key={clue.id}
+            id={clue.id}
+            button // TODO is this needed?
+            selected={selected}
+            onClick={() => handleClueClick(clue.tile, clue.id)}
+            ref={setRef}
+            tabIndex='-1'>
+        <span style={{ fontWeight: 'bold',
+            textAlign: 'right',
+            minWidth: '24px',
+            width: '24px'
+        }}>{clue.clueNumber}</span>
+        <span style={{
+            marginLeft: '10px'
+        }}>{ clue.clue }</span>
+    </li>
 }
 
 const Cell = ({
@@ -144,9 +148,10 @@ const GameBoard = ({ data, leaveGame }) => {
         highlightedTiles: data.init.clues[DEFAULT_DIRECTION][0].highlights,
         direction: DEFAULT_DIRECTION,
         previousKeyWasDelete: false,
-        getTileClue: () => getTileBoardItem(game.selectedTile).clueNumberLink[game.direction],
-        getSecondaryTileClue: () => getTileBoardItem(game.selectedTile).clueNumberLink[getOppositeDirection(game.direction)]
+        getTileClue: (tile, direction) => getTileBoardItem(tile ? tile : game.selectedTile).clueNumberLink[direction ? direction: game.direction],
+        getSecondaryTileClue: (tile, direction) => getTileBoardItem(tile ? tile : game.selectedTile).clueNumberLink[getOppositeDirection(direction ? direction: game.direction)]
     }).current;
+    const clueRefs = useRef([]).current;
     const TILE_SIZE = useRef(data.tileSize).current;
     const tilePositionConfig = useRef(data.tilePositionConfig)
 
@@ -197,28 +202,31 @@ const GameBoard = ({ data, leaveGame }) => {
         ...HORIZONTAL_ARROW_KEYS,
         ...ALPHABET,
         ...ALPHABET_LOWER,
-        ...CLEAR_LETTER_KEYS
-    ], ({ key }) => {
+        ...CLEAR_LETTER_KEYS,
+        TAB
+    ], ({ key, shiftKey }) => {
         if(preventKeyPress.current || gameWon) {
             return;
         }
-        console.log("useKeypress", Date.now())
-        // preventKeyPress.current = true;
-        // setTimeout(() => preventKeyPress.current = false, 10);
+        console.log(key)
+        preventKeyPress.current = true;
+        setTimeout(() => preventKeyPress.current = false, 1);
         if([...ALL_DIRECTIONAL_KEYS].includes(key)) {
             arrowKeyPress(key, game, activateTile);
             game.previousKeyWasDelete = false;
-            console.log("useKeypress End", Date.now())
             return;
         }
         if(key.length === 1 && key.match(/[a-z]/i)) {
             letterKeyPres(key, game, activateTile, setTimestamp, checkBoardAnswersCorrect);
             game.previousKeyWasDelete = false;
-            console.log("useKeypress End", Date.now())
             return;
         }
         if(CLEAR_LETTER_KEYS.includes(key)) {
             clearLetterKey(key, game, activateTile, setTimestamp);
+            return;
+        }
+        if(TAB === key) {
+            tabKeyPress(shiftKey, game, activateTile);
         }
     });
 
@@ -301,7 +309,8 @@ const GameBoard = ({ data, leaveGame }) => {
 
     const activateTile = (
         tile,
-        direction
+        direction,
+        focusPrimary = true
     ) => {
         game.selectedTile = tile;
 
@@ -313,18 +322,28 @@ const GameBoard = ({ data, leaveGame }) => {
             highlightTiles.push(...getTileHighlights(tile, direction));
             game.highlightedTiles = highlightTiles;
 
+            const secondaryClueId = game.getTileClue(tile, getOppositeDirection(direction));
+            if(secondaryClueId) {
+                console.log(clueRefs)
+                console.log(secondaryClueId)
+                console.log(clueRefs[secondaryClueId])
+                clueRefs[secondaryClueId].focus()
+            }
             const primaryClueId = game.getTileClue(tile, direction);
-            const primaryClueIndex = game.clues[direction].findIndex(c => c.id === primaryClueId);
-            if(primaryClueIndex >= 0) {
-                // focusClueDebounce(primaryClueIndex, direction, getRefForListByDirection(direction))
+            if(focusPrimary && primaryClueId) {
+                clueRefs[primaryClueId].focus()
             }
-
-            const oppositeDirection = getOppositeDirection(direction);
-            const secondaryClueId = game.getTileClue(tile, oppositeDirection);
-            const secondaryClueIndex = game.clues[oppositeDirection].findIndex(c => c.id === secondaryClueId);
-            if(secondaryClueIndex >= 0) {
-                // focusSecondaryClueDebounce(secondaryClueIndex, oppositeDirection, getRefForListByDirection(oppositeDirection));
-            }
+            // const primaryClueIndex = game.clues[direction].findIndex(c => c.id === primaryClueId);
+            // if(primaryClueIndex >= 0) {
+            //     // focusClueDebounce(primaryClueIndex, direction, getRefForListByDirection(direction))
+            // }
+            //
+            // const oppositeDirection = getOppositeDirection(direction);
+            // // const secondaryClueId = game.getTileClue(tile, oppositeDirection);
+            // const secondaryClueIndex = game.clues[oppositeDirection].findIndex(c => c.id === secondaryClueId);
+            // if(secondaryClueIndex >= 0) {
+            //     // focusSecondaryClueDebounce(secondaryClueIndex, oppositeDirection, getRefForListByDirection(oppositeDirection));
+            // }
         }
         setTimestamp(Date.now())
     }
@@ -348,10 +367,19 @@ const GameBoard = ({ data, leaveGame }) => {
             finishMessagePixel: getTileBoardItem({ x, y }).finishMessagePixel === 1,
             tileSize: TILE_SIZE
         };
-        const directionForTile = getTileBoardItem(tileProps).clueNumberLink ?
-            getTileBoardItem(tileProps).clueNumberLink[game.direction] ?
-                game.direction : getOppositeDirection(game.direction)
-            : DEFAULT_DIRECTION;
+
+        const handleTileClick = () => {
+            let oppositeDirection = getOppositeDirection(game.direction);
+            if(
+                // clicking on already selected tile should change direction
+                (game.selectedTile.x ===  x && game.selectedTile.y === y && getTileBoardItem(tileProps).clueNumberLink[oppositeDirection]) ||
+                // moving to tile which does not have current direction should change direction
+                !getTileBoardItem(tileProps).clueNumberLink[game.direction]) {
+                game.direction = oppositeDirection;
+            }
+            activateTile(tileProps, game.direction)
+        }
+
         return (
             tileContent.answer ?
                 <Tile
@@ -359,13 +387,9 @@ const GameBoard = ({ data, leaveGame }) => {
                     {...tilePositionConfig.current}
                     selected={game.selectedTile.x === x && game.selectedTile.y === y}
                     highlighted={!!game.highlightedTiles.find(hTile => hTile.x === x && hTile.y === y )}
-                    onClick={() => {
-                        if(directionForTile !== game.direction) {
-                            game.direction = directionForTile;
-                        }
-                        activateTile(tileProps, directionForTile)
-                    }}
-                /> : <Block {...tileProps} {...tilePositionConfig.current} />
+                    onClick={handleTileClick}
+                    onContextMenu={event => { event.preventDefault(); handleTileClick() }}
+                /> : <Block {...tileProps} {...tilePositionConfig.current} onContextMenu={event => event.preventDefault()} />
         )
     }
 
@@ -387,6 +411,7 @@ const GameBoard = ({ data, leaveGame }) => {
                             style={{ backgroundColor: '#85dcb0', margin: '5px 20px 5px 20px' }}
                             variant="contained"
                             onClick={() => saveGame()}
+                            tabIndex="-1"
                         >Save</Button>
                     </Grid>
                     <Grid item>
@@ -394,6 +419,7 @@ const GameBoard = ({ data, leaveGame }) => {
                             style={{ backgroundColor: '#41b3ac', margin: '5px 20px 5px 20px', color: 'white' }}
                             variant="contained"
                             onClick={() => saveAndLeave()}
+                            tabIndex="-1"
                         >Save & Leave</Button>
                     </Grid>
                 </Grid>
@@ -402,8 +428,10 @@ const GameBoard = ({ data, leaveGame }) => {
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox={`-1 -1 ${gameBoardSize + 2}
                         ${gameBoardSize + 2}`}
-                        style={{ maxHeight: gameBoardSize, margin: '1.5em 20px 20px 20px' }}
-                    >
+                        style={{ maxHeight: gameBoardSize, margin: '1.5em 20px 20px 20px', outline: 'none', userSelect: 'none' }}
+                        tabIndex="0"
+                        onContextMenu={event => { event.preventDefault() }}
+                        >
                         <rect className='gameBoardBackground' x='-1' y='-1' width={gameBoardSize + 2} height={gameBoardSize + 2} />
                         <g>
                             {game.board.map((row, y) =>
@@ -417,29 +445,31 @@ const GameBoard = ({ data, leaveGame }) => {
                 </Grid>
                 <Grid item xs={12} sm={3}>
                     <span style={{ fontSize: '1.5em' }}>{CLUE_COLUMN_TITLE[HORIZONTAL]}</span>
-                    <div style={{ height: `${500}px`, overflowY: 'scroll', marginRight: '10px' }}>
+                    <ol style={{ height: `${500}px`, overflowY: 'scroll', marginRight: '10px', listStyle: 'none' }}>
                         {game.clues[HORIZONTAL].map(clue => {
                             return <Clue
                                 clue={clue}
                                 handleClueClick={(id, tile) => handleClueClick(id, tile, HORIZONTAL)}
                                 selected={clue.id === game.getTileClue()}
                                 secondary={clue.id === game.getSecondaryTileClue()}
+                                setRef={elem => clueRefs[clue.id] = elem}
                             />
                         })}
-                    </div>
+                    </ol>
                 </Grid>
                 <Grid item xs={12} sm={3}>
                     <span style={{ fontSize: '1.5em' }}>{CLUE_COLUMN_TITLE[VERTICAL]}</span>
-                    <div style={{ height: `${500}px`, overflowY: 'scroll', marginRight: '10px' }}>
+                    <ol style={{ height: `${500}px`, overflowY: 'scroll', marginRight: '10px', listStyle: 'none' }}>
                         {game.clues[VERTICAL].map(clue => {
                             return <Clue
                                 clue={clue}
                                 handleClueClick={(id, tile) => handleClueClick(id, tile, VERTICAL)}
                                 selected={clue.id === game.getTileClue()}
                                 secondary={clue.id === game.getSecondaryTileClue()}
+                                setRef={elem => clueRefs[clue.id] = elem}
                             />
                         })}
-                    </div>
+                    </ol>
                 </Grid>
                 <Snackbar
                     anchorOrigin={{
