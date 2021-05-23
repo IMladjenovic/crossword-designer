@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from '@material-ui/core/styles';
 import LoadGame from './LoadGame';
 import cloneDeep from 'lodash/cloneDeep';
+import min from 'lodash/min';
 import { initBoard, tilePositionConfig } from "./Game/initBoard";
 
 const useStyles = makeStyles({
@@ -35,12 +36,10 @@ function App() {
             return;
         }
 
-        const data = cloneDeep(loadedFileData)
-        data.tileSize = (window.screen.height - (350)) / data.crossword.board.length;
+        const data = cloneDeep(loadedFileData);
         if(data.init) {
             setCrosswordData(data);
         } else {
-            console.log("data", data)
             data.init = initBoard(data);
             data.tilePositionConfig = tilePositionConfig(data);
             setCrosswordData(data);

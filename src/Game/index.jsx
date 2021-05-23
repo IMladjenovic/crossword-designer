@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, memo } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import useKeypress from 'react-use-keypress'
 
 import './index.css';
@@ -13,6 +13,7 @@ import { arrowKeyPress, clearLetterKey, letterKeyPres,tabKeyPress } from "./hand
 
 import cloneDeep from 'lodash/cloneDeep';
 import throttle from 'lodash/throttle';
+import min from 'lodash/min';
 
 import { fonts, renderPixels } from 'js-pixel-fonts';
 
@@ -117,8 +118,8 @@ const Cell = ({
                 onClick={onClick}
                 {...other}
             />
-            <text x={x + clueNumberXOffset} y={y + clueNumberYOffset} style={{ fontSize: clueNumberFontSize }}  className='clueNumber' onClick={onClick}>{tileContent.clueNumber || ''}</text>
-            <text x={x + guessXOffsetFunc(tileContent.guess)} y={y + guessYOffset} style={{ fontSize: guessFontSize }} className='guess' onClick={onClick}>{tileContent.guess}</text>
+            <text x={x + 3} y={y + 10} style={{ fontSize: '9' }}  className='clueNumber' onClick={onClick}>{tileContent.clueNumber || ''}</text>
+            <text x={x + 8} y={y + tileSize - 3} style={{ fontSize: '21' }} className='guess' onClick={onClick}>{tileContent.guess}</text>
         </g>
     )
 }
@@ -148,14 +149,14 @@ const GameBoard = ({ data, leaveGame }) => {
         highlightedTiles: data.init.clues[DEFAULT_DIRECTION][0].highlights,
         direction: DEFAULT_DIRECTION,
         previousKeyWasDelete: false,
+        gameBoardSize: min([window.screen.height, window.screen.width, 500]),
+        tileSize: min([window.screen.height, window.screen.width, 500])/data.init.board.length,
         getTileClue: (tile, direction) => getTileBoardItem(tile ? tile : game.selectedTile).clueNumberLink[direction ? direction: game.direction],
         getSecondaryTileClue: (tile, direction) => getTileBoardItem(tile ? tile : game.selectedTile).clueNumberLink[getOppositeDirection(direction ? direction: game.direction)]
     }).current;
     const clueRefs = useRef([]).current;
-    const TILE_SIZE = useRef(data.tileSize).current;
     const tilePositionConfig = useRef(data.tilePositionConfig)
 
-    const gameBoardSize = useRef(data.init.board.length * data.tileSize).current;
     const themeClues = useRef({ HORIZONTAL: {}, VERTICAL: {}, tiles: [] });
     const [timestamp, setTimestamp] = useState(Date.now());
     const horizontalList = useRef();
@@ -193,6 +194,7 @@ const GameBoard = ({ data, leaveGame }) => {
 
     useEffect(() => {
         loadGlyphs();
+        console.log(game)
     }, []);
 
     const classes = useStyles();
@@ -208,7 +210,6 @@ const GameBoard = ({ data, leaveGame }) => {
         if(preventKeyPress.current || gameWon) {
             return;
         }
-        console.log(key)
         preventKeyPress.current = true;
         setTimeout(() => preventKeyPress.current = false, 1);
         if([...ALL_DIRECTIONAL_KEYS].includes(key)) {
@@ -324,9 +325,6 @@ const GameBoard = ({ data, leaveGame }) => {
 
             const secondaryClueId = game.getTileClue(tile, getOppositeDirection(direction));
             if(secondaryClueId) {
-                console.log(clueRefs)
-                console.log(secondaryClueId)
-                console.log(clueRefs[secondaryClueId])
                 clueRefs[secondaryClueId].focus()
             }
             const primaryClueId = game.getTileClue(tile, direction);
@@ -365,7 +363,7 @@ const GameBoard = ({ data, leaveGame }) => {
             y,
             x,
             finishMessagePixel: getTileBoardItem({ x, y }).finishMessagePixel === 1,
-            tileSize: TILE_SIZE
+            tileSize: game.tileSize
         };
 
         const handleTileClick = () => {
@@ -426,20 +424,20 @@ const GameBoard = ({ data, leaveGame }) => {
                 <Grid item xs={12} sm={6} className={gameWon ? 'gameWon' : ''}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        viewBox={`-1 -1 ${gameBoardSize + 2}
-                        ${gameBoardSize + 2}`}
-                        style={{ maxHeight: gameBoardSize, margin: '1.5em 20px 20px 20px', outline: 'none', userSelect: 'none' }}
+                        viewBox={`-1 -1 ${game.gameBoardSize + 2}
+                        ${game.gameBoardSize + 2}`}
+                        style={{ maxWidth: game.gameBoardSize, maxHeight: game.gameBoardSize, outline: 'none', userSelect: 'none' }}
                         tabIndex="0"
                         onContextMenu={event => { event.preventDefault() }}
                         >
-                        <rect className='gameBoardBackground' x='-1' y='-1' width={gameBoardSize + 2} height={gameBoardSize + 2} />
+                        <rect className='gameBoardBackground' x='-1' y='-1' width={game.gameBoardSize + 2} height={game.gameBoardSize + 2} />
                         <g>
                             {game.board.map((row, y) =>
                                 row.map((tile, x) => placeTile(tile, x, y))
                             )}
                         </g>
                         <g>
-                            <path d={grid(game.board.length, TILE_SIZE)} className="grid" vectorEffect="non-scaling-stroke" />
+                            <path d={grid(game.board.length, game.tileSize)} className="grid" vectorEffect="non-scaling-stroke" />
                         </g>
                     </svg>
                 </Grid>
