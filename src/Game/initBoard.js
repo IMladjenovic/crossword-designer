@@ -1,38 +1,6 @@
 import clone from "lodash/clone";
 import { prepTileConfig } from "./utils";
 
-// refactoring crossword initialisation
-
-const normal = 4;
-const wider = 5;
-const letterAdjustments = {
-    "I": 2.5,
-    "G": wider,
-    "H": wider,
-    "N": wider,
-    "M": 7,
-    "W": 8,
-    "R": wider,
-    "U": wider,
-    "O": wider,
-    "Q": wider,
-    "Y": wider,
-    "C": wider
-}
-const letterAdjust = letter => {
-    const letterAdjustAmount = letterAdjustments[letter];
-    return letterAdjustAmount ? letterAdjustAmount : normal;
-};
-
-export const tilePositionConfig = data => ({
-    clueNumberXOffset: data.clueNumberXOffset ? data.clueNumberXOffset : 1.3,
-        clueNumberYOffset: (data.tileSize/3.9) + (data.clueNumberYOffset ? data.clueNumberYOffset : 0),
-        clueNumberFontSize: data.clueNumberFontSize ? data.clueNumberFontSize : "0.65em",
-        guessXOffsetFunc: letter => (data.tileSize / letterAdjust(letter)) + (data.guessXOffset ? data.guessXOffset : 0),
-        guessYOffset:  (7 * (data.tileSize / 8)) + (data.guessYOffset ? data.guessYOffset : 0),
-        guessFontSize: data.guessFontSize ? data.guessFontSize : "1.8em"
-})
-
 const clueId = (direction, i) => `${direction}${i}`;
 
 export const initBoard = ({ crossword }) => {

@@ -2,6 +2,8 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 
+import loadFile from "../LoadGame";
+
 export const pickerOpts = {
     types: [
         {
@@ -15,18 +17,7 @@ export const pickerOpts = {
     multiple: false
 };
 
-const LoadGame = ({ setLoadedFileData }) => {
-
-    const loadFile = async () => {
-        let fileHandle;
-        // open file picker, destructure the one element returned array
-        [fileHandle] = await window.showOpenFilePicker(pickerOpts);
-        const fileData = await fileHandle.getFile();
-        const jsonFile = await fileData.text();
-        const crosswordData = JSON.parse(jsonFile);
-        setLoadedFileData(crosswordData);
-    }
-
+const Landing = ({ setGameData, setDesignGame }) => {
     return (
         <Grid container spacing={0} justify="center" direction="column"
               alignItems="center">
@@ -34,11 +25,16 @@ const LoadGame = ({ setLoadedFileData }) => {
                 <Button
                     style={{ backgroundColor: '#85dcb0' }}
                     variant="contained"
-                    onClick={() => loadFile()}
+                    onClick={() => loadFile(setGameData)}
                 >Play</Button>
+                <Button
+                    style={{ backgroundColor: '#85dcb0' }}
+                    variant="contained"
+                    onClick={() => setDesignGame(true)}
+                >Design</Button>
             </Grid>
         </Grid>
     )
 }
 
-export default LoadGame;
+export default Landing;
