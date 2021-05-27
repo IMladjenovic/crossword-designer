@@ -9,6 +9,7 @@ import Landing from './Landing';
 import { saveGame, saveAndLeave } from "./SaveGame";
 import Button from "@material-ui/core/Button";
 import Design from "./Design";
+import Play from "./Play";
 
 const useStyles = makeStyles({
     root: {
@@ -73,9 +74,9 @@ function App() {
                 </Grid>
                 <Grid item xs={12} >
                     {gameData ?
-                        <GameBoard data={gameData} saveConfig={saveConfig} /> :
+                        <Play gameData={gameData} saveConfig={saveConfig} /> :
                      designGame ?
-                        <Design /> :
+                        <Design saveConfig={saveConfig} /> :
                         <Landing setGameData={setGameData} setDesignGame={setDesignGame} />
                     }
                 </Grid>

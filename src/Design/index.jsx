@@ -1,18 +1,22 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import GameBoard from "../Game";
+import cloneDeep from "lodash/cloneDeep";
 
-import { initBoard } from "../Game/initBoard";
-import data from './empty-game.json';
+import {emptyDesignBoard, emptyTile, block, initDesignBoard} from "../Game/initBoard";
 
 const Design = () => {
-    const [gameData, setGameData] = useState(initBoard(data));
-
-    const [designGame, setDesignGame] = useState(false);
+    const [gameData, setGameData] = useState(emptyDesignBoard);
 
     const saveConfig = useRef({ save: () => console.log("Save error") }).current;
 
+    const toggleTileBlock = (event, tile, game) => {
+        event.preventDefault();
+        const newData = cloneDeep(game);
+        newData.board[tile.y][tile.x] = newData.isTile(tile) ? block() : emptyTile();
+        setGameData(initDesignBoard(newData));
+    }
 
-    return <GameBoard data={gameData} saveConfig={saveConfig} />
+    return <GameBoard game={gameData} saveConfig={saveConfig} rightClick={toggleTileBlock} />
 }
 
 export default Design;

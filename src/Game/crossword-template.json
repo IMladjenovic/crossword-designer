@@ -1,166 +1,5094 @@
 {
-  "title": "Crossword Designer!",
-  "crossword": {
-    "board": [
-      [" ","a","a","a","a","a"," "," ","a","a","a","a","a","a","a","a","a"],
-      ["a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a"],
-      ["a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a"],
-      ["a","a"," ","a","a","a","a","a","a","a","a","a"," ","a","a","a","a"],
-      [" ","a","a","a","a"," "," "," ","a","a","a","a","a","a","a","a","a"],
-      ["a","a","a","a","a","a","a","a","a","a"," ","a","a","a","a","a","a"],
-      ["a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a"],
-      ["a","a","a","a"," "," ","a"," "," ","a","a","a"," ","a"," ","a","a"],
-      ["a","a","a","a"," "," ","a"," "," ","a","a","a","a","a","a","a","a"],
-      [" ","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a"],
-      ["a","a"," ","a","a","a","a","a","a","a","a","a","a","a","a","a","a"],
-      ["a","a","a","a","a"," "," "," ","a","a","a"," ","a","a","a","a","a"],
-      ["a","a"," ","a","a","a","a","a","a","a","a","a","a","a","a","a","a"],
-      ["a"," ","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a"],
-      ["a"," ","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a"],
-      ["a"," ","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a"],
-      ["a","a","a","a","a","a"," "," ","a","a","a","a","a","a"," ","a","a"]
+  "clues": {
+    "HORIZONTAL": [
+      {
+        "clue": "example very very very very very very very very long clue",
+        "tile": {
+          "x": 1,
+          "y": 0
+        },
+        "id": "HORIZONTAL1",
+        "clueNumber": 1,
+        "highlights": [
+          {
+            "x": 1,
+            "y": 0
+          },
+          {
+            "x": 2,
+            "y": 0
+          },
+          {
+            "x": 3,
+            "y": 0
+          },
+          {
+            "x": 4,
+            "y": 0
+          },
+          {
+            "x": 5,
+            "y": 0
+          }
+        ]
+      },
+      {
+        "clue": "example very very very very very very very long clue",
+        "tile": {
+          "x": 8,
+          "y": 0
+        },
+        "id": "HORIZONTAL6",
+        "clueNumber": 6,
+        "highlights": [
+          {
+            "x": 8,
+            "y": 0
+          },
+          {
+            "x": 9,
+            "y": 0
+          },
+          {
+            "x": 10,
+            "y": 0
+          },
+          {
+            "x": 11,
+            "y": 0
+          },
+          {
+            "x": 12,
+            "y": 0
+          },
+          {
+            "x": 13,
+            "y": 0
+          },
+          {
+            "x": 14,
+            "y": 0
+          },
+          {
+            "x": 15,
+            "y": 0
+          },
+          {
+            "x": 16,
+            "y": 0
+          }
+        ]
+      },
+      {
+        "clue": "example very very very very long clue",
+        "tile": {
+          "x": 0,
+          "y": 1
+        },
+        "id": "HORIZONTAL15",
+        "clueNumber": 15,
+        "highlights": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 1
+          },
+          {
+            "x": 2,
+            "y": 1
+          },
+          {
+            "x": 3,
+            "y": 1
+          },
+          {
+            "x": 4,
+            "y": 1
+          },
+          {
+            "x": 5,
+            "y": 1
+          },
+          {
+            "x": 6,
+            "y": 1
+          },
+          {
+            "x": 7,
+            "y": 1
+          },
+          {
+            "x": 8,
+            "y": 1
+          },
+          {
+            "x": 9,
+            "y": 1
+          },
+          {
+            "x": 10,
+            "y": 1
+          },
+          {
+            "x": 11,
+            "y": 1
+          },
+          {
+            "x": 12,
+            "y": 1
+          },
+          {
+            "x": 13,
+            "y": 1
+          },
+          {
+            "x": 14,
+            "y": 1
+          },
+          {
+            "x": 15,
+            "y": 1
+          },
+          {
+            "x": 16,
+            "y": 1
+          }
+        ]
+      },
+      {
+        "clue": "example very very very very very very very very very very very very very long clue",
+        "tile": {
+          "x": 0,
+          "y": 2
+        },
+        "id": "HORIZONTAL18",
+        "clueNumber": 18,
+        "highlights": [
+          {
+            "x": 0,
+            "y": 2
+          },
+          {
+            "x": 1,
+            "y": 2
+          },
+          {
+            "x": 2,
+            "y": 2
+          },
+          {
+            "x": 3,
+            "y": 2
+          },
+          {
+            "x": 4,
+            "y": 2
+          },
+          {
+            "x": 5,
+            "y": 2
+          },
+          {
+            "x": 6,
+            "y": 2
+          },
+          {
+            "x": 7,
+            "y": 2
+          },
+          {
+            "x": 8,
+            "y": 2
+          },
+          {
+            "x": 9,
+            "y": 2
+          },
+          {
+            "x": 10,
+            "y": 2
+          },
+          {
+            "x": 11,
+            "y": 2
+          },
+          {
+            "x": 12,
+            "y": 2
+          },
+          {
+            "x": 13,
+            "y": 2
+          },
+          {
+            "x": 14,
+            "y": 2
+          },
+          {
+            "x": 15,
+            "y": 2
+          },
+          {
+            "x": 16,
+            "y": 2
+          }
+        ]
+      },
+      {
+        "clue": "hclue 5",
+        "tile": {
+          "x": 0,
+          "y": 3
+        },
+        "id": "HORIZONTAL19",
+        "clueNumber": 19,
+        "highlights": [
+          {
+            "x": 0,
+            "y": 3
+          },
+          {
+            "x": 1,
+            "y": 3
+          }
+        ]
+      },
+      {
+        "clue": "hclue 6",
+        "theme": "yes",
+        "tile": {
+          "x": 3,
+          "y": 3
+        },
+        "id": "HORIZONTAL20",
+        "clueNumber": 20,
+        "highlights": [
+          {
+            "x": 3,
+            "y": 3
+          },
+          {
+            "x": 4,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 6,
+            "y": 3
+          },
+          {
+            "x": 7,
+            "y": 3
+          },
+          {
+            "x": 8,
+            "y": 3
+          },
+          {
+            "x": 9,
+            "y": 3
+          },
+          {
+            "x": 10,
+            "y": 3
+          },
+          {
+            "x": 11,
+            "y": 3
+          }
+        ]
+      },
+      {
+        "clue": "hclue 7",
+        "tile": {
+          "x": 13,
+          "y": 3
+        },
+        "id": "HORIZONTAL21",
+        "clueNumber": 21,
+        "highlights": [
+          {
+            "x": 13,
+            "y": 3
+          },
+          {
+            "x": 14,
+            "y": 3
+          },
+          {
+            "x": 15,
+            "y": 3
+          },
+          {
+            "x": 16,
+            "y": 3
+          }
+        ]
+      },
+      {
+        "clue": "hclue 8",
+        "theme": "yes",
+        "tile": {
+          "x": 1,
+          "y": 4
+        },
+        "id": "HORIZONTAL22",
+        "clueNumber": 22,
+        "highlights": [
+          {
+            "x": 1,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 4
+          },
+          {
+            "x": 3,
+            "y": 4
+          },
+          {
+            "x": 4,
+            "y": 4
+          }
+        ]
+      },
+      {
+        "clue": "hclue 9",
+        "tile": {
+          "x": 8,
+          "y": 4
+        },
+        "id": "HORIZONTAL24",
+        "clueNumber": 24,
+        "highlights": [
+          {
+            "x": 8,
+            "y": 4
+          },
+          {
+            "x": 9,
+            "y": 4
+          },
+          {
+            "x": 10,
+            "y": 4
+          },
+          {
+            "x": 11,
+            "y": 4
+          },
+          {
+            "x": 12,
+            "y": 4
+          },
+          {
+            "x": 13,
+            "y": 4
+          },
+          {
+            "x": 14,
+            "y": 4
+          },
+          {
+            "x": 15,
+            "y": 4
+          },
+          {
+            "x": 16,
+            "y": 4
+          }
+        ]
+      },
+      {
+        "clue": "example very very very very very very very very very very very very very long clue",
+        "tile": {
+          "x": 0,
+          "y": 5
+        },
+        "id": "HORIZONTAL26",
+        "clueNumber": 26,
+        "highlights": [
+          {
+            "x": 0,
+            "y": 5
+          },
+          {
+            "x": 1,
+            "y": 5
+          },
+          {
+            "x": 2,
+            "y": 5
+          },
+          {
+            "x": 3,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 6,
+            "y": 5
+          },
+          {
+            "x": 7,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 9,
+            "y": 5
+          }
+        ]
+      },
+      {
+        "clue": "hclue 11",
+        "tile": {
+          "x": 11,
+          "y": 5
+        },
+        "id": "HORIZONTAL30",
+        "clueNumber": 30,
+        "highlights": [
+          {
+            "x": 11,
+            "y": 5
+          },
+          {
+            "x": 12,
+            "y": 5
+          },
+          {
+            "x": 13,
+            "y": 5
+          },
+          {
+            "x": 14,
+            "y": 5
+          },
+          {
+            "x": 15,
+            "y": 5
+          },
+          {
+            "x": 16,
+            "y": 5
+          }
+        ]
+      },
+      {
+        "clue": "hclue 12",
+        "tile": {
+          "x": 0,
+          "y": 6
+        },
+        "id": "HORIZONTAL31",
+        "clueNumber": 31,
+        "highlights": [
+          {
+            "x": 0,
+            "y": 6
+          },
+          {
+            "x": 1,
+            "y": 6
+          },
+          {
+            "x": 2,
+            "y": 6
+          },
+          {
+            "x": 3,
+            "y": 6
+          },
+          {
+            "x": 4,
+            "y": 6
+          },
+          {
+            "x": 5,
+            "y": 6
+          },
+          {
+            "x": 6,
+            "y": 6
+          },
+          {
+            "x": 7,
+            "y": 6
+          },
+          {
+            "x": 8,
+            "y": 6
+          },
+          {
+            "x": 9,
+            "y": 6
+          },
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 11,
+            "y": 6
+          },
+          {
+            "x": 12,
+            "y": 6
+          },
+          {
+            "x": 13,
+            "y": 6
+          },
+          {
+            "x": 14,
+            "y": 6
+          },
+          {
+            "x": 15,
+            "y": 6
+          },
+          {
+            "x": 16,
+            "y": 6
+          }
+        ]
+      },
+      {
+        "clue": "hclue 13",
+        "tile": {
+          "x": 0,
+          "y": 7
+        },
+        "id": "HORIZONTAL33",
+        "clueNumber": 33,
+        "highlights": [
+          {
+            "x": 0,
+            "y": 7
+          },
+          {
+            "x": 1,
+            "y": 7
+          },
+          {
+            "x": 2,
+            "y": 7
+          },
+          {
+            "x": 3,
+            "y": 7
+          }
+        ]
+      },
+      {
+        "clue": "hclue 14",
+        "tile": {
+          "x": 9,
+          "y": 7
+        },
+        "id": "HORIZONTAL34",
+        "clueNumber": 34,
+        "highlights": [
+          {
+            "x": 9,
+            "y": 7
+          },
+          {
+            "x": 10,
+            "y": 7
+          },
+          {
+            "x": 11,
+            "y": 7
+          }
+        ]
+      },
+      {
+        "clue": "example very very very very very very very very very very very very very long clue",
+        "tile": {
+          "x": 15,
+          "y": 7
+        },
+        "id": "HORIZONTAL35",
+        "clueNumber": 35,
+        "highlights": [
+          {
+            "x": 15,
+            "y": 7
+          },
+          {
+            "x": 16,
+            "y": 7
+          }
+        ]
+      },
+      {
+        "clue": "hclue 16",
+        "tile": {
+          "x": 0,
+          "y": 8
+        },
+        "id": "HORIZONTAL36",
+        "clueNumber": 36,
+        "highlights": [
+          {
+            "x": 0,
+            "y": 8
+          },
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 8
+          }
+        ]
+      },
+      {
+        "clue": "hclue 17",
+        "tile": {
+          "x": 9,
+          "y": 8
+        },
+        "id": "HORIZONTAL37",
+        "clueNumber": 37,
+        "highlights": [
+          {
+            "x": 9,
+            "y": 8
+          },
+          {
+            "x": 10,
+            "y": 8
+          },
+          {
+            "x": 11,
+            "y": 8
+          },
+          {
+            "x": 12,
+            "y": 8
+          },
+          {
+            "x": 13,
+            "y": 8
+          },
+          {
+            "x": 14,
+            "y": 8
+          },
+          {
+            "x": 15,
+            "y": 8
+          },
+          {
+            "x": 16,
+            "y": 8
+          }
+        ]
+      },
+      {
+        "clue": "hclue 18",
+        "tile": {
+          "x": 1,
+          "y": 9
+        },
+        "id": "HORIZONTAL40",
+        "clueNumber": 40,
+        "highlights": [
+          {
+            "x": 1,
+            "y": 9
+          },
+          {
+            "x": 2,
+            "y": 9
+          },
+          {
+            "x": 3,
+            "y": 9
+          },
+          {
+            "x": 4,
+            "y": 9
+          },
+          {
+            "x": 5,
+            "y": 9
+          },
+          {
+            "x": 6,
+            "y": 9
+          },
+          {
+            "x": 7,
+            "y": 9
+          },
+          {
+            "x": 8,
+            "y": 9
+          },
+          {
+            "x": 9,
+            "y": 9
+          },
+          {
+            "x": 10,
+            "y": 9
+          },
+          {
+            "x": 11,
+            "y": 9
+          },
+          {
+            "x": 12,
+            "y": 9
+          },
+          {
+            "x": 13,
+            "y": 9
+          },
+          {
+            "x": 14,
+            "y": 9
+          },
+          {
+            "x": 15,
+            "y": 9
+          },
+          {
+            "x": 16,
+            "y": 9
+          }
+        ]
+      },
+      {
+        "clue": "hclue 19",
+        "tile": {
+          "x": 0,
+          "y": 10
+        },
+        "id": "HORIZONTAL45",
+        "clueNumber": 45,
+        "highlights": [
+          {
+            "x": 0,
+            "y": 10
+          },
+          {
+            "x": 1,
+            "y": 10
+          }
+        ]
+      },
+      {
+        "clue": "hclue 20",
+        "tile": {
+          "x": 3,
+          "y": 10
+        },
+        "id": "HORIZONTAL46",
+        "clueNumber": 46,
+        "highlights": [
+          {
+            "x": 3,
+            "y": 10
+          },
+          {
+            "x": 4,
+            "y": 10
+          },
+          {
+            "x": 5,
+            "y": 10
+          },
+          {
+            "x": 6,
+            "y": 10
+          },
+          {
+            "x": 7,
+            "y": 10
+          },
+          {
+            "x": 8,
+            "y": 10
+          },
+          {
+            "x": 9,
+            "y": 10
+          },
+          {
+            "x": 10,
+            "y": 10
+          },
+          {
+            "x": 11,
+            "y": 10
+          },
+          {
+            "x": 12,
+            "y": 10
+          },
+          {
+            "x": 13,
+            "y": 10
+          },
+          {
+            "x": 14,
+            "y": 10
+          },
+          {
+            "x": 15,
+            "y": 10
+          },
+          {
+            "x": 16,
+            "y": 10
+          }
+        ]
+      },
+      {
+        "clue": "hclue 21",
+        "tile": {
+          "x": 0,
+          "y": 11
+        },
+        "id": "HORIZONTAL47",
+        "clueNumber": 47,
+        "highlights": [
+          {
+            "x": 0,
+            "y": 11
+          },
+          {
+            "x": 1,
+            "y": 11
+          },
+          {
+            "x": 2,
+            "y": 11
+          },
+          {
+            "x": 3,
+            "y": 11
+          },
+          {
+            "x": 4,
+            "y": 11
+          }
+        ]
+      },
+      {
+        "clue": "example very very very very very very very very very very very very very long clue",
+        "tile": {
+          "x": 8,
+          "y": 11
+        },
+        "id": "HORIZONTAL48",
+        "clueNumber": 48,
+        "highlights": [
+          {
+            "x": 8,
+            "y": 11
+          },
+          {
+            "x": 9,
+            "y": 11
+          },
+          {
+            "x": 10,
+            "y": 11
+          }
+        ]
+      },
+      {
+        "clue": "hclue 23",
+        "tile": {
+          "x": 12,
+          "y": 11
+        },
+        "id": "HORIZONTAL49",
+        "clueNumber": 49,
+        "highlights": [
+          {
+            "x": 12,
+            "y": 11
+          },
+          {
+            "x": 13,
+            "y": 11
+          },
+          {
+            "x": 14,
+            "y": 11
+          },
+          {
+            "x": 15,
+            "y": 11
+          },
+          {
+            "x": 16,
+            "y": 11
+          }
+        ]
+      },
+      {
+        "clue": "hclue 24",
+        "tile": {
+          "x": 0,
+          "y": 12
+        },
+        "id": "HORIZONTAL50",
+        "clueNumber": 50,
+        "highlights": [
+          {
+            "x": 0,
+            "y": 12
+          },
+          {
+            "x": 1,
+            "y": 12
+          }
+        ]
+      },
+      {
+        "clue": "hclue 25",
+        "tile": {
+          "x": 3,
+          "y": 12
+        },
+        "id": "HORIZONTAL51",
+        "clueNumber": 51,
+        "highlights": [
+          {
+            "x": 3,
+            "y": 12
+          },
+          {
+            "x": 4,
+            "y": 12
+          },
+          {
+            "x": 5,
+            "y": 12
+          },
+          {
+            "x": 6,
+            "y": 12
+          },
+          {
+            "x": 7,
+            "y": 12
+          },
+          {
+            "x": 8,
+            "y": 12
+          },
+          {
+            "x": 9,
+            "y": 12
+          },
+          {
+            "x": 10,
+            "y": 12
+          },
+          {
+            "x": 11,
+            "y": 12
+          },
+          {
+            "x": 12,
+            "y": 12
+          },
+          {
+            "x": 13,
+            "y": 12
+          },
+          {
+            "x": 14,
+            "y": 12
+          },
+          {
+            "x": 15,
+            "y": 12
+          },
+          {
+            "x": 16,
+            "y": 12
+          }
+        ]
+      },
+      {
+        "clue": "hclue 26",
+        "tile": {
+          "x": 2,
+          "y": 13
+        },
+        "id": "HORIZONTAL56",
+        "clueNumber": 56,
+        "highlights": [
+          {
+            "x": 2,
+            "y": 13
+          },
+          {
+            "x": 3,
+            "y": 13
+          },
+          {
+            "x": 4,
+            "y": 13
+          },
+          {
+            "x": 5,
+            "y": 13
+          },
+          {
+            "x": 6,
+            "y": 13
+          },
+          {
+            "x": 7,
+            "y": 13
+          },
+          {
+            "x": 8,
+            "y": 13
+          },
+          {
+            "x": 9,
+            "y": 13
+          },
+          {
+            "x": 10,
+            "y": 13
+          },
+          {
+            "x": 11,
+            "y": 13
+          },
+          {
+            "x": 12,
+            "y": 13
+          },
+          {
+            "x": 13,
+            "y": 13
+          },
+          {
+            "x": 14,
+            "y": 13
+          },
+          {
+            "x": 15,
+            "y": 13
+          },
+          {
+            "x": 16,
+            "y": 13
+          }
+        ]
+      },
+      {
+        "clue": "hclue 27",
+        "tile": {
+          "x": 2,
+          "y": 14
+        },
+        "id": "HORIZONTAL57",
+        "clueNumber": 57,
+        "highlights": [
+          {
+            "x": 2,
+            "y": 14
+          },
+          {
+            "x": 3,
+            "y": 14
+          },
+          {
+            "x": 4,
+            "y": 14
+          },
+          {
+            "x": 5,
+            "y": 14
+          },
+          {
+            "x": 6,
+            "y": 14
+          },
+          {
+            "x": 7,
+            "y": 14
+          },
+          {
+            "x": 8,
+            "y": 14
+          },
+          {
+            "x": 9,
+            "y": 14
+          },
+          {
+            "x": 10,
+            "y": 14
+          },
+          {
+            "x": 11,
+            "y": 14
+          },
+          {
+            "x": 12,
+            "y": 14
+          },
+          {
+            "x": 13,
+            "y": 14
+          },
+          {
+            "x": 14,
+            "y": 14
+          },
+          {
+            "x": 15,
+            "y": 14
+          },
+          {
+            "x": 16,
+            "y": 14
+          }
+        ]
+      },
+      {
+        "clue": "hclue 28",
+        "tile": {
+          "x": 2,
+          "y": 15
+        },
+        "id": "HORIZONTAL58",
+        "clueNumber": 58,
+        "highlights": [
+          {
+            "x": 2,
+            "y": 15
+          },
+          {
+            "x": 3,
+            "y": 15
+          },
+          {
+            "x": 4,
+            "y": 15
+          },
+          {
+            "x": 5,
+            "y": 15
+          },
+          {
+            "x": 6,
+            "y": 15
+          },
+          {
+            "x": 7,
+            "y": 15
+          },
+          {
+            "x": 8,
+            "y": 15
+          },
+          {
+            "x": 9,
+            "y": 15
+          },
+          {
+            "x": 10,
+            "y": 15
+          },
+          {
+            "x": 11,
+            "y": 15
+          },
+          {
+            "x": 12,
+            "y": 15
+          },
+          {
+            "x": 13,
+            "y": 15
+          },
+          {
+            "x": 14,
+            "y": 15
+          },
+          {
+            "x": 15,
+            "y": 15
+          },
+          {
+            "x": 16,
+            "y": 15
+          }
+        ]
+      },
+      {
+        "clue": "hclue 29",
+        "tile": {
+          "x": 0,
+          "y": 16
+        },
+        "id": "HORIZONTAL59",
+        "clueNumber": 59,
+        "highlights": [
+          {
+            "x": 0,
+            "y": 16
+          },
+          {
+            "x": 1,
+            "y": 16
+          },
+          {
+            "x": 2,
+            "y": 16
+          },
+          {
+            "x": 3,
+            "y": 16
+          },
+          {
+            "x": 4,
+            "y": 16
+          },
+          {
+            "x": 5,
+            "y": 16
+          }
+        ]
+      },
+      {
+        "clue": "hclue 30",
+        "tile": {
+          "x": 8,
+          "y": 16
+        },
+        "id": "HORIZONTAL60",
+        "clueNumber": 60,
+        "highlights": [
+          {
+            "x": 8,
+            "y": 16
+          },
+          {
+            "x": 9,
+            "y": 16
+          },
+          {
+            "x": 10,
+            "y": 16
+          },
+          {
+            "x": 11,
+            "y": 16
+          },
+          {
+            "x": 12,
+            "y": 16
+          },
+          {
+            "x": 13,
+            "y": 16
+          }
+        ]
+      },
+      {
+        "clue": "hclue 31",
+        "tile": {
+          "x": 15,
+          "y": 16
+        },
+        "id": "HORIZONTAL61",
+        "clueNumber": 61,
+        "highlights": [
+          {
+            "x": 15,
+            "y": 16
+          },
+          {
+            "x": 16,
+            "y": 16
+          }
+        ]
+      }
     ],
-    "clues": {
-      "ACROSS": [
-        {"clue":"example very very very very very very very very long clue"},
-        {"clue":"example very very very very very very very long clue"},
-        {"clue":"example very very very very long clue"},
-        {"clue":"example very very very very very very very very very very very very very long clue"},
-        {"clue":"hclue 5"},
-        {"clue":"hclue 6", "theme": "yes"},
-        {"clue":"hclue 7"},
-        {"clue":"hclue 8", "theme": "yes"},
-        {"clue":"hclue 9"},
-        {"clue":"example very very very very very very very very very very very very very long clue"},
-        {"clue":"hclue 11"},
-        {"clue":"hclue 12"},
-        {"clue":"hclue 13"},
-        {"clue":"hclue 14"},
-        {"clue":"example very very very very very very very very very very very very very long clue"},
-        {"clue":"hclue 16"},
-        {"clue":"hclue 17"},
-        {"clue":"hclue 18"},
-        {"clue":"hclue 19"},
-        {"clue":"hclue 20"},
-        {"clue":"hclue 21"},
-        {"clue":"example very very very very very very very very very very very very very long clue"},
-        {"clue":"hclue 23"},
-        {"clue":"hclue 24"},
-        {"clue":"hclue 25"},
-        {"clue":"hclue 26"},
-        {"clue":"hclue 27"},
-        {"clue":"hclue 28"},
-        {"clue":"hclue 29"},
-        {"clue":"hclue 30"},
-        {"clue":"hclue 31"},
-        {"clue":"example very very very very very very very very very very very very very long clue"},
-        {"clue":"hclue 33"},
-        {"clue":"hclue 34"},
-        {"clue":"hclue 35"},
-        {"clue":"hclue 36"},
-        {"clue":"hclue 37"},
-        {"clue":"hclue 38"},
-        {"clue":"hclue 39"},
-        {"clue":"hclue 40"},
-        {"clue":"hclue 41"},
-        {"clue":"hclue 42"},
-        {"clue":"example very very very very very very very very very very very very very long clue"},
-        {"clue":"hclue 44"},
-        {"clue":"hclue 45"},
-        {"clue":"hclue 46"},
-        {"clue":"hclue 47"},
-        {"clue":"hclue 48"},
-        {"clue":"hclue 49"},
-        {"clue":"hclue 50"},
-        {"clue":"hclue 51"},
-        {"clue":"hclue 52"},
-        {"clue":"hclue 53"},
-        {"clue":"hclue 54"},
-        {"clue":"hclue 55"},
-        {"clue":"hclue 56"},
-        {"clue":"hclue 57"},
-        {"clue":"hclue 58"},
-        {"clue":"hclue 59"},
-        {"clue":"hclue 60"}
-      ],
-      "DOWN": [
-        {"clue":"v clue 1"},
-        {"clue":"v clue 2"},
-        {"clue":"v clue 3"},
-        {"clue":"v clue 4"},
-        {"clue":"v clue 5"},
-        {"clue":"v clue 6"},
-        {"clue":"example very very very very very very very very very very very very very long clue"},
-        {"clue":"v clue 8"},
-        {"clue":"v clue 9"},
-        {"clue":"v clue 10"},
-        {"clue":"v clue 11"},
-        {"clue":"v clue 12"},
-        {"clue":"example very very very very very very very very very very very very very long clue"},
-        {"clue":"v clue 14"},
-        {"clue":"v clue 15"},
-        {"clue":"v clue 16"},
-        {"clue":"v clue 17"},
-        {"clue":"v clue 18"},
-        {"clue":"v clue 19"},
-        {"clue":"v clue 20"},
-        {"clue":"v clue 21"},
-        {"clue":"example very very very very very very very very very very very very very long clue"},
-        {"clue":"v clue 23"},
-        {"clue":"v clue 24"},
-        {"clue":"v clue 25"},
-        {"clue":"v clue 26"},
-        {"clue":"v clue 27"},
-        {"clue":"v clue 28"},
-        {"clue":"v clue 29"},
-        {"clue":"v clue 30"},
-        {"clue":"v clue 31"},
-        {"clue":"v clue 32"},
-        {"clue":"v clue 33"},
-        {"clue":"v clue 34"},
-        {"clue":"v clue 35"},
-        {"clue":"v clue 36"},
-        {"clue":"v clue 37"},
-        {"clue":"example very very very very very very very very very very very very very long clue"},
-        {"clue":"v clue 39"},
-        {"clue":"v clue 40"},
-        {"clue":"v clue 41"},
-        {"clue":"v clue 42"},
-        {"clue":"v clue 43"},
-        {"clue":"v clue 44"},
-        {"clue":"v clue 45"},
-        {"clue":"v clue 46"},
-        {"clue":"v clue 47"},
-        {"clue":"v clue 48"},
-        {"clue":"v clue 49"},
-        {"clue":"v clue 50"},
-        {"clue":"v clue 51"},
-        {"clue":"v clue 52"},
-        {"clue":"v clue 53"},
-        {"clue":"v clue 54"},
-        {"clue":"v clue 55"},
-        {"clue":"v clue 56"},
-        {"clue":"example very very very very very very very very very very very very very long clue"},
-        {"clue":"v clue 58"},
-        {"clue":"v clue 59"},
-        {"clue":"v clue 60"}
-      ]
-    }
+    "VERTICAL": [
+      {
+        "clue": "v clue 1",
+        "tile": {
+          "x": 1,
+          "y": 0
+        },
+        "id": "VERTICAL1",
+        "clueNumber": 1,
+        "highlights": [
+          {
+            "x": 1,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 2
+          },
+          {
+            "x": 1,
+            "y": 3
+          },
+          {
+            "x": 1,
+            "y": 4
+          },
+          {
+            "x": 1,
+            "y": 5
+          },
+          {
+            "x": 1,
+            "y": 6
+          },
+          {
+            "x": 1,
+            "y": 7
+          },
+          {
+            "x": 1,
+            "y": 8
+          },
+          {
+            "x": 1,
+            "y": 9
+          },
+          {
+            "x": 1,
+            "y": 10
+          },
+          {
+            "x": 1,
+            "y": 11
+          },
+          {
+            "x": 1,
+            "y": 12
+          }
+        ]
+      },
+      {
+        "clue": "v clue 2",
+        "tile": {
+          "x": 2,
+          "y": 0
+        },
+        "id": "VERTICAL2",
+        "clueNumber": 2,
+        "highlights": [
+          {
+            "x": 2,
+            "y": 0
+          },
+          {
+            "x": 2,
+            "y": 1
+          },
+          {
+            "x": 2,
+            "y": 2
+          }
+        ]
+      },
+      {
+        "clue": "v clue 3",
+        "tile": {
+          "x": 3,
+          "y": 0
+        },
+        "id": "VERTICAL3",
+        "clueNumber": 3,
+        "highlights": [
+          {
+            "x": 3,
+            "y": 0
+          },
+          {
+            "x": 3,
+            "y": 1
+          },
+          {
+            "x": 3,
+            "y": 2
+          },
+          {
+            "x": 3,
+            "y": 3
+          },
+          {
+            "x": 3,
+            "y": 4
+          },
+          {
+            "x": 3,
+            "y": 5
+          },
+          {
+            "x": 3,
+            "y": 6
+          },
+          {
+            "x": 3,
+            "y": 7
+          },
+          {
+            "x": 3,
+            "y": 8
+          },
+          {
+            "x": 3,
+            "y": 9
+          },
+          {
+            "x": 3,
+            "y": 10
+          },
+          {
+            "x": 3,
+            "y": 11
+          },
+          {
+            "x": 3,
+            "y": 12
+          },
+          {
+            "x": 3,
+            "y": 13
+          },
+          {
+            "x": 3,
+            "y": 14
+          },
+          {
+            "x": 3,
+            "y": 15
+          },
+          {
+            "x": 3,
+            "y": 16
+          }
+        ]
+      },
+      {
+        "clue": "v clue 4",
+        "tile": {
+          "x": 4,
+          "y": 0
+        },
+        "id": "VERTICAL4",
+        "clueNumber": 4,
+        "highlights": [
+          {
+            "x": 4,
+            "y": 0
+          },
+          {
+            "x": 4,
+            "y": 1
+          },
+          {
+            "x": 4,
+            "y": 2
+          },
+          {
+            "x": 4,
+            "y": 3
+          },
+          {
+            "x": 4,
+            "y": 4
+          },
+          {
+            "x": 4,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ]
+      },
+      {
+        "clue": "v clue 5",
+        "tile": {
+          "x": 5,
+          "y": 0
+        },
+        "id": "VERTICAL5",
+        "clueNumber": 5,
+        "highlights": [
+          {
+            "x": 5,
+            "y": 0
+          },
+          {
+            "x": 5,
+            "y": 1
+          },
+          {
+            "x": 5,
+            "y": 2
+          },
+          {
+            "x": 5,
+            "y": 3
+          }
+        ]
+      },
+      {
+        "clue": "v clue 6",
+        "tile": {
+          "x": 8,
+          "y": 0
+        },
+        "id": "VERTICAL6",
+        "clueNumber": 6,
+        "highlights": [
+          {
+            "x": 8,
+            "y": 0
+          },
+          {
+            "x": 8,
+            "y": 1
+          },
+          {
+            "x": 8,
+            "y": 2
+          },
+          {
+            "x": 8,
+            "y": 3
+          },
+          {
+            "x": 8,
+            "y": 4
+          },
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 6
+          }
+        ]
+      },
+      {
+        "clue": "example very very very very very very very very very very very very very long clue",
+        "tile": {
+          "x": 9,
+          "y": 0
+        },
+        "id": "VERTICAL7",
+        "clueNumber": 7,
+        "highlights": [
+          {
+            "x": 9,
+            "y": 0
+          },
+          {
+            "x": 9,
+            "y": 1
+          },
+          {
+            "x": 9,
+            "y": 2
+          },
+          {
+            "x": 9,
+            "y": 3
+          },
+          {
+            "x": 9,
+            "y": 4
+          },
+          {
+            "x": 9,
+            "y": 5
+          },
+          {
+            "x": 9,
+            "y": 6
+          },
+          {
+            "x": 9,
+            "y": 7
+          },
+          {
+            "x": 9,
+            "y": 8
+          },
+          {
+            "x": 9,
+            "y": 9
+          },
+          {
+            "x": 9,
+            "y": 10
+          },
+          {
+            "x": 9,
+            "y": 11
+          },
+          {
+            "x": 9,
+            "y": 12
+          },
+          {
+            "x": 9,
+            "y": 13
+          },
+          {
+            "x": 9,
+            "y": 14
+          },
+          {
+            "x": 9,
+            "y": 15
+          },
+          {
+            "x": 9,
+            "y": 16
+          }
+        ]
+      },
+      {
+        "clue": "v clue 8",
+        "tile": {
+          "x": 10,
+          "y": 0
+        },
+        "id": "VERTICAL8",
+        "clueNumber": 8,
+        "highlights": [
+          {
+            "x": 10,
+            "y": 0
+          },
+          {
+            "x": 10,
+            "y": 1
+          },
+          {
+            "x": 10,
+            "y": 2
+          },
+          {
+            "x": 10,
+            "y": 3
+          },
+          {
+            "x": 10,
+            "y": 4
+          }
+        ]
+      },
+      {
+        "clue": "v clue 9",
+        "tile": {
+          "x": 11,
+          "y": 0
+        },
+        "id": "VERTICAL9",
+        "clueNumber": 9,
+        "highlights": [
+          {
+            "x": 11,
+            "y": 0
+          },
+          {
+            "x": 11,
+            "y": 1
+          },
+          {
+            "x": 11,
+            "y": 2
+          },
+          {
+            "x": 11,
+            "y": 3
+          },
+          {
+            "x": 11,
+            "y": 4
+          },
+          {
+            "x": 11,
+            "y": 5
+          },
+          {
+            "x": 11,
+            "y": 6
+          },
+          {
+            "x": 11,
+            "y": 7
+          },
+          {
+            "x": 11,
+            "y": 8
+          },
+          {
+            "x": 11,
+            "y": 9
+          },
+          {
+            "x": 11,
+            "y": 10
+          }
+        ]
+      },
+      {
+        "clue": "v clue 10",
+        "tile": {
+          "x": 12,
+          "y": 0
+        },
+        "id": "VERTICAL10",
+        "clueNumber": 10,
+        "highlights": [
+          {
+            "x": 12,
+            "y": 0
+          },
+          {
+            "x": 12,
+            "y": 1
+          },
+          {
+            "x": 12,
+            "y": 2
+          }
+        ]
+      },
+      {
+        "clue": "v clue 11",
+        "tile": {
+          "x": 13,
+          "y": 0
+        },
+        "id": "VERTICAL11",
+        "clueNumber": 11,
+        "highlights": [
+          {
+            "x": 13,
+            "y": 0
+          },
+          {
+            "x": 13,
+            "y": 1
+          },
+          {
+            "x": 13,
+            "y": 2
+          },
+          {
+            "x": 13,
+            "y": 3
+          },
+          {
+            "x": 13,
+            "y": 4
+          },
+          {
+            "x": 13,
+            "y": 5
+          },
+          {
+            "x": 13,
+            "y": 6
+          },
+          {
+            "x": 13,
+            "y": 7
+          },
+          {
+            "x": 13,
+            "y": 8
+          },
+          {
+            "x": 13,
+            "y": 9
+          },
+          {
+            "x": 13,
+            "y": 10
+          },
+          {
+            "x": 13,
+            "y": 11
+          },
+          {
+            "x": 13,
+            "y": 12
+          },
+          {
+            "x": 13,
+            "y": 13
+          },
+          {
+            "x": 13,
+            "y": 14
+          },
+          {
+            "x": 13,
+            "y": 15
+          },
+          {
+            "x": 13,
+            "y": 16
+          }
+        ]
+      },
+      {
+        "clue": "v clue 12",
+        "tile": {
+          "x": 14,
+          "y": 0
+        },
+        "id": "VERTICAL12",
+        "clueNumber": 12,
+        "highlights": [
+          {
+            "x": 14,
+            "y": 0
+          },
+          {
+            "x": 14,
+            "y": 1
+          },
+          {
+            "x": 14,
+            "y": 2
+          },
+          {
+            "x": 14,
+            "y": 3
+          },
+          {
+            "x": 14,
+            "y": 4
+          },
+          {
+            "x": 14,
+            "y": 5
+          },
+          {
+            "x": 14,
+            "y": 6
+          }
+        ]
+      },
+      {
+        "clue": "example very very very very very very very very very very very very very long clue",
+        "tile": {
+          "x": 15,
+          "y": 0
+        },
+        "id": "VERTICAL13",
+        "clueNumber": 13,
+        "highlights": [
+          {
+            "x": 15,
+            "y": 0
+          },
+          {
+            "x": 15,
+            "y": 1
+          },
+          {
+            "x": 15,
+            "y": 2
+          },
+          {
+            "x": 15,
+            "y": 3
+          },
+          {
+            "x": 15,
+            "y": 4
+          },
+          {
+            "x": 15,
+            "y": 5
+          },
+          {
+            "x": 15,
+            "y": 6
+          },
+          {
+            "x": 15,
+            "y": 7
+          },
+          {
+            "x": 15,
+            "y": 8
+          },
+          {
+            "x": 15,
+            "y": 9
+          },
+          {
+            "x": 15,
+            "y": 10
+          },
+          {
+            "x": 15,
+            "y": 11
+          },
+          {
+            "x": 15,
+            "y": 12
+          },
+          {
+            "x": 15,
+            "y": 13
+          },
+          {
+            "x": 15,
+            "y": 14
+          },
+          {
+            "x": 15,
+            "y": 15
+          },
+          {
+            "x": 15,
+            "y": 16
+          }
+        ]
+      },
+      {
+        "clue": "v clue 14",
+        "tile": {
+          "x": 16,
+          "y": 0
+        },
+        "id": "VERTICAL14",
+        "clueNumber": 14,
+        "highlights": [
+          {
+            "x": 16,
+            "y": 0
+          },
+          {
+            "x": 16,
+            "y": 1
+          },
+          {
+            "x": 16,
+            "y": 2
+          },
+          {
+            "x": 16,
+            "y": 3
+          },
+          {
+            "x": 16,
+            "y": 4
+          },
+          {
+            "x": 16,
+            "y": 5
+          },
+          {
+            "x": 16,
+            "y": 6
+          },
+          {
+            "x": 16,
+            "y": 7
+          },
+          {
+            "x": 16,
+            "y": 8
+          },
+          {
+            "x": 16,
+            "y": 9
+          },
+          {
+            "x": 16,
+            "y": 10
+          },
+          {
+            "x": 16,
+            "y": 11
+          },
+          {
+            "x": 16,
+            "y": 12
+          },
+          {
+            "x": 16,
+            "y": 13
+          },
+          {
+            "x": 16,
+            "y": 14
+          },
+          {
+            "x": 16,
+            "y": 15
+          },
+          {
+            "x": 16,
+            "y": 16
+          }
+        ]
+      },
+      {
+        "clue": "v clue 15",
+        "tile": {
+          "x": 0,
+          "y": 1
+        },
+        "id": "VERTICAL15",
+        "clueNumber": 15,
+        "highlights": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 2
+          },
+          {
+            "x": 0,
+            "y": 3
+          }
+        ]
+      },
+      {
+        "clue": "v clue 16",
+        "tile": {
+          "x": 6,
+          "y": 1
+        },
+        "id": "VERTICAL16",
+        "clueNumber": 16,
+        "highlights": [
+          {
+            "x": 6,
+            "y": 1
+          },
+          {
+            "x": 6,
+            "y": 2
+          },
+          {
+            "x": 6,
+            "y": 3
+          }
+        ]
+      },
+      {
+        "clue": "v clue 17",
+        "tile": {
+          "x": 7,
+          "y": 1
+        },
+        "id": "VERTICAL17",
+        "clueNumber": 17,
+        "highlights": [
+          {
+            "x": 7,
+            "y": 1
+          },
+          {
+            "x": 7,
+            "y": 2
+          },
+          {
+            "x": 7,
+            "y": 3
+          }
+        ]
+      },
+      {
+        "clue": "v clue 18",
+        "tile": {
+          "x": 2,
+          "y": 4
+        },
+        "id": "VERTICAL23",
+        "clueNumber": 23,
+        "highlights": [
+          {
+            "x": 2,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 5
+          },
+          {
+            "x": 2,
+            "y": 6
+          },
+          {
+            "x": 2,
+            "y": 7
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 2,
+            "y": 9
+          }
+        ]
+      },
+      {
+        "clue": "v clue 19",
+        "tile": {
+          "x": 12,
+          "y": 4
+        },
+        "id": "VERTICAL25",
+        "clueNumber": 25,
+        "highlights": [
+          {
+            "x": 12,
+            "y": 4
+          },
+          {
+            "x": 12,
+            "y": 5
+          },
+          {
+            "x": 12,
+            "y": 6
+          }
+        ]
+      },
+      {
+        "clue": "v clue 20",
+        "tile": {
+          "x": 0,
+          "y": 5
+        },
+        "id": "VERTICAL26",
+        "clueNumber": 26,
+        "highlights": [
+          {
+            "x": 0,
+            "y": 5
+          },
+          {
+            "x": 0,
+            "y": 6
+          },
+          {
+            "x": 0,
+            "y": 7
+          },
+          {
+            "x": 0,
+            "y": 8
+          }
+        ]
+      },
+      {
+        "clue": "v clue 21",
+        "tile": {
+          "x": 5,
+          "y": 5
+        },
+        "id": "VERTICAL27",
+        "clueNumber": 27,
+        "highlights": [
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ]
+      },
+      {
+        "clue": "example very very very very very very very very very very very very very long clue",
+        "tile": {
+          "x": 6,
+          "y": 5
+        },
+        "id": "VERTICAL28",
+        "clueNumber": 28,
+        "highlights": [
+          {
+            "x": 6,
+            "y": 5
+          },
+          {
+            "x": 6,
+            "y": 6
+          },
+          {
+            "x": 6,
+            "y": 7
+          },
+          {
+            "x": 6,
+            "y": 8
+          },
+          {
+            "x": 6,
+            "y": 9
+          },
+          {
+            "x": 6,
+            "y": 10
+          }
+        ]
+      },
+      {
+        "clue": "v clue 23",
+        "tile": {
+          "x": 7,
+          "y": 5
+        },
+        "id": "VERTICAL29",
+        "clueNumber": 29,
+        "highlights": [
+          {
+            "x": 7,
+            "y": 5
+          },
+          {
+            "x": 7,
+            "y": 6
+          }
+        ]
+      },
+      {
+        "clue": "v clue 24",
+        "tile": {
+          "x": 10,
+          "y": 6
+        },
+        "id": "VERTICAL32",
+        "clueNumber": 32,
+        "highlights": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 10,
+            "y": 7
+          },
+          {
+            "x": 10,
+            "y": 8
+          },
+          {
+            "x": 10,
+            "y": 9
+          },
+          {
+            "x": 10,
+            "y": 10
+          },
+          {
+            "x": 10,
+            "y": 11
+          },
+          {
+            "x": 10,
+            "y": 12
+          },
+          {
+            "x": 10,
+            "y": 13
+          },
+          {
+            "x": 10,
+            "y": 14
+          },
+          {
+            "x": 10,
+            "y": 15
+          },
+          {
+            "x": 10,
+            "y": 16
+          }
+        ]
+      },
+      {
+        "clue": "v clue 25",
+        "tile": {
+          "x": 12,
+          "y": 8
+        },
+        "id": "VERTICAL38",
+        "clueNumber": 38,
+        "highlights": [
+          {
+            "x": 12,
+            "y": 8
+          },
+          {
+            "x": 12,
+            "y": 9
+          },
+          {
+            "x": 12,
+            "y": 10
+          },
+          {
+            "x": 12,
+            "y": 11
+          },
+          {
+            "x": 12,
+            "y": 12
+          },
+          {
+            "x": 12,
+            "y": 13
+          },
+          {
+            "x": 12,
+            "y": 14
+          },
+          {
+            "x": 12,
+            "y": 15
+          },
+          {
+            "x": 12,
+            "y": 16
+          }
+        ]
+      },
+      {
+        "clue": "v clue 26",
+        "tile": {
+          "x": 14,
+          "y": 8
+        },
+        "id": "VERTICAL39",
+        "clueNumber": 39,
+        "highlights": [
+          {
+            "x": 14,
+            "y": 8
+          },
+          {
+            "x": 14,
+            "y": 9
+          },
+          {
+            "x": 14,
+            "y": 10
+          },
+          {
+            "x": 14,
+            "y": 11
+          },
+          {
+            "x": 14,
+            "y": 12
+          },
+          {
+            "x": 14,
+            "y": 13
+          },
+          {
+            "x": 14,
+            "y": 14
+          },
+          {
+            "x": 14,
+            "y": 15
+          }
+        ]
+      },
+      {
+        "clue": "v clue 27",
+        "tile": {
+          "x": 4,
+          "y": 9
+        },
+        "id": "VERTICAL41",
+        "clueNumber": 41,
+        "highlights": [
+          {
+            "x": 4,
+            "y": 9
+          },
+          {
+            "x": 4,
+            "y": 10
+          },
+          {
+            "x": 4,
+            "y": 11
+          },
+          {
+            "x": 4,
+            "y": 12
+          },
+          {
+            "x": 4,
+            "y": 13
+          },
+          {
+            "x": 4,
+            "y": 14
+          },
+          {
+            "x": 4,
+            "y": 15
+          },
+          {
+            "x": 4,
+            "y": 16
+          }
+        ]
+      },
+      {
+        "clue": "v clue 28",
+        "tile": {
+          "x": 5,
+          "y": 9
+        },
+        "id": "VERTICAL42",
+        "clueNumber": 42,
+        "highlights": [
+          {
+            "x": 5,
+            "y": 9
+          },
+          {
+            "x": 5,
+            "y": 10
+          }
+        ]
+      },
+      {
+        "clue": "v clue 29",
+        "tile": {
+          "x": 7,
+          "y": 9
+        },
+        "id": "VERTICAL43",
+        "clueNumber": 43,
+        "highlights": [
+          {
+            "x": 7,
+            "y": 9
+          },
+          {
+            "x": 7,
+            "y": 10
+          }
+        ]
+      },
+      {
+        "clue": "v clue 30",
+        "tile": {
+          "x": 8,
+          "y": 9
+        },
+        "id": "VERTICAL44",
+        "clueNumber": 44,
+        "highlights": [
+          {
+            "x": 8,
+            "y": 9
+          },
+          {
+            "x": 8,
+            "y": 10
+          },
+          {
+            "x": 8,
+            "y": 11
+          },
+          {
+            "x": 8,
+            "y": 12
+          },
+          {
+            "x": 8,
+            "y": 13
+          },
+          {
+            "x": 8,
+            "y": 14
+          },
+          {
+            "x": 8,
+            "y": 15
+          },
+          {
+            "x": 8,
+            "y": 16
+          }
+        ]
+      },
+      {
+        "clue": "v clue 31",
+        "tile": {
+          "x": 0,
+          "y": 10
+        },
+        "id": "VERTICAL45",
+        "clueNumber": 45,
+        "highlights": [
+          {
+            "x": 0,
+            "y": 10
+          },
+          {
+            "x": 0,
+            "y": 11
+          },
+          {
+            "x": 0,
+            "y": 12
+          },
+          {
+            "x": 0,
+            "y": 13
+          },
+          {
+            "x": 0,
+            "y": 14
+          },
+          {
+            "x": 0,
+            "y": 15
+          },
+          {
+            "x": 0,
+            "y": 16
+          }
+        ]
+      },
+      {
+        "clue": "v clue 32",
+        "tile": {
+          "x": 5,
+          "y": 12
+        },
+        "id": "VERTICAL52",
+        "clueNumber": 52,
+        "highlights": [
+          {
+            "x": 5,
+            "y": 12
+          },
+          {
+            "x": 5,
+            "y": 13
+          },
+          {
+            "x": 5,
+            "y": 14
+          },
+          {
+            "x": 5,
+            "y": 15
+          },
+          {
+            "x": 5,
+            "y": 16
+          }
+        ]
+      },
+      {
+        "clue": "v clue 33",
+        "tile": {
+          "x": 6,
+          "y": 12
+        },
+        "id": "VERTICAL53",
+        "clueNumber": 53,
+        "highlights": [
+          {
+            "x": 6,
+            "y": 12
+          },
+          {
+            "x": 6,
+            "y": 13
+          },
+          {
+            "x": 6,
+            "y": 14
+          },
+          {
+            "x": 6,
+            "y": 15
+          }
+        ]
+      },
+      {
+        "clue": "v clue 34",
+        "tile": {
+          "x": 7,
+          "y": 12
+        },
+        "id": "VERTICAL54",
+        "clueNumber": 54,
+        "highlights": [
+          {
+            "x": 7,
+            "y": 12
+          },
+          {
+            "x": 7,
+            "y": 13
+          },
+          {
+            "x": 7,
+            "y": 14
+          },
+          {
+            "x": 7,
+            "y": 15
+          }
+        ]
+      },
+      {
+        "clue": "v clue 35",
+        "tile": {
+          "x": 11,
+          "y": 12
+        },
+        "id": "VERTICAL55",
+        "clueNumber": 55,
+        "highlights": [
+          {
+            "x": 11,
+            "y": 12
+          },
+          {
+            "x": 11,
+            "y": 13
+          },
+          {
+            "x": 11,
+            "y": 14
+          },
+          {
+            "x": 11,
+            "y": 15
+          },
+          {
+            "x": 11,
+            "y": 16
+          }
+        ]
+      },
+      {
+        "clue": "v clue 36",
+        "tile": {
+          "x": 2,
+          "y": 13
+        },
+        "id": "VERTICAL56",
+        "clueNumber": 56,
+        "highlights": [
+          {
+            "x": 2,
+            "y": 13
+          },
+          {
+            "x": 2,
+            "y": 14
+          },
+          {
+            "x": 2,
+            "y": 15
+          },
+          {
+            "x": 2,
+            "y": 16
+          }
+        ]
+      }
+    ]
   },
-  "gameFinishedMessage": "You won, good job £","customGlyphs": [
-  {
-    "£": {
-      "offset": 0,
-      "pixels": [
-        [0,0,1,1,0],
-        [0,1,0,0,1],
-        [0,1,0,0,0],
-        [1,1,1,1,0],
-        [0,1,0,0,0],
-        [0,1,1,0,0],
-        [1,1,1,1,1]
-      ]
+  "board": [
+    [
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL1",
+          "VERTICAL": "VERTICAL1"
+        },
+        "clueNumber": 1
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL1",
+          "VERTICAL": "VERTICAL2"
+        },
+        "clueNumber": 2
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL1",
+          "VERTICAL": "VERTICAL3"
+        },
+        "clueNumber": 3
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL1",
+          "VERTICAL": "VERTICAL4"
+        },
+        "clueNumber": 4
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL1",
+          "VERTICAL": "VERTICAL5"
+        },
+        "clueNumber": 5
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL6",
+          "VERTICAL": "VERTICAL6"
+        },
+        "clueNumber": 6
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL6",
+          "VERTICAL": "VERTICAL7"
+        },
+        "clueNumber": 7
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL6",
+          "VERTICAL": "VERTICAL8"
+        },
+        "clueNumber": 8
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL6",
+          "VERTICAL": "VERTICAL9"
+        },
+        "clueNumber": 9
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL6",
+          "VERTICAL": "VERTICAL10"
+        },
+        "clueNumber": 10
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL6",
+          "VERTICAL": "VERTICAL11"
+        },
+        "clueNumber": 11
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL6",
+          "VERTICAL": "VERTICAL12"
+        },
+        "clueNumber": 12
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL6",
+          "VERTICAL": "VERTICAL13"
+        },
+        "clueNumber": 13
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL6",
+          "VERTICAL": "VERTICAL14"
+        },
+        "clueNumber": 14
+      }
+    ],
+    [
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL15"
+        },
+        "clueNumber": 15
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL1"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL2"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL3"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL4"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL5"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL16"
+        },
+        "clueNumber": 16
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL17"
+        },
+        "clueNumber": 17
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL6"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL7"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL8"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL9"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL10"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL11"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL12"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL13"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL15",
+          "VERTICAL": "VERTICAL14"
+        }
+      }
+    ],
+    [
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL15"
+        },
+        "clueNumber": 18
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL1"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL2"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL3"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL4"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL5"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL16"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL17"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL6"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL7"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL8"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL9"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL10"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL11"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL12"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL13"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL18",
+          "VERTICAL": "VERTICAL14"
+        }
+      }
+    ],
+    [
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL19",
+          "VERTICAL": "VERTICAL15"
+        },
+        "clueNumber": 19
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL19",
+          "VERTICAL": "VERTICAL1"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL20",
+          "VERTICAL": "VERTICAL3"
+        },
+        "clueNumber": 20
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL20",
+          "VERTICAL": "VERTICAL4"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL20",
+          "VERTICAL": "VERTICAL5"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL20",
+          "VERTICAL": "VERTICAL16"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL20",
+          "VERTICAL": "VERTICAL17"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL20",
+          "VERTICAL": "VERTICAL6"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL20",
+          "VERTICAL": "VERTICAL7"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL20",
+          "VERTICAL": "VERTICAL8"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL20",
+          "VERTICAL": "VERTICAL9"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL21",
+          "VERTICAL": "VERTICAL11"
+        },
+        "clueNumber": 21
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL21",
+          "VERTICAL": "VERTICAL12"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL21",
+          "VERTICAL": "VERTICAL13"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL21",
+          "VERTICAL": "VERTICAL14"
+        }
+      }
+    ],
+    [
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL22",
+          "VERTICAL": "VERTICAL1"
+        },
+        "clueNumber": 22
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL22",
+          "VERTICAL": "VERTICAL23"
+        },
+        "clueNumber": 23
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL22",
+          "VERTICAL": "VERTICAL3"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL22",
+          "VERTICAL": "VERTICAL4"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL24",
+          "VERTICAL": "VERTICAL6"
+        },
+        "clueNumber": 24
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL24",
+          "VERTICAL": "VERTICAL7"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL24",
+          "VERTICAL": "VERTICAL8"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL24",
+          "VERTICAL": "VERTICAL9"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL24",
+          "VERTICAL": "VERTICAL25"
+        },
+        "clueNumber": 25
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL24",
+          "VERTICAL": "VERTICAL11"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL24",
+          "VERTICAL": "VERTICAL12"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL24",
+          "VERTICAL": "VERTICAL13"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL24",
+          "VERTICAL": "VERTICAL14"
+        }
+      }
+    ],
+    [
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL26",
+          "VERTICAL": "VERTICAL26"
+        },
+        "clueNumber": 26
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL26",
+          "VERTICAL": "VERTICAL1"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL26",
+          "VERTICAL": "VERTICAL23"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL26",
+          "VERTICAL": "VERTICAL3"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL26",
+          "VERTICAL": "VERTICAL4"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL26",
+          "VERTICAL": "VERTICAL27"
+        },
+        "clueNumber": 27
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL26",
+          "VERTICAL": "VERTICAL28"
+        },
+        "clueNumber": 28
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL26",
+          "VERTICAL": "VERTICAL29"
+        },
+        "clueNumber": 29
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL26",
+          "VERTICAL": "VERTICAL6"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL26",
+          "VERTICAL": "VERTICAL7"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL30",
+          "VERTICAL": "VERTICAL9"
+        },
+        "clueNumber": 30
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL30",
+          "VERTICAL": "VERTICAL25"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL30",
+          "VERTICAL": "VERTICAL11"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL30",
+          "VERTICAL": "VERTICAL12"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL30",
+          "VERTICAL": "VERTICAL13"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL30",
+          "VERTICAL": "VERTICAL14"
+        }
+      }
+    ],
+    [
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL26"
+        },
+        "clueNumber": 31
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL1"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL23"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL3"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL4"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL27"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL28"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL29"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL6"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL7"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL32"
+        },
+        "clueNumber": 32
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL9"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL25"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL11"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL12"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL13"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL31",
+          "VERTICAL": "VERTICAL14"
+        }
+      }
+    ],
+    [
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL33",
+          "VERTICAL": "VERTICAL26"
+        },
+        "clueNumber": 33
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL33",
+          "VERTICAL": "VERTICAL1"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL33",
+          "VERTICAL": "VERTICAL23"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL33",
+          "VERTICAL": "VERTICAL3"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "VERTICAL": "VERTICAL28"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL34",
+          "VERTICAL": "VERTICAL7"
+        },
+        "clueNumber": 34
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL34",
+          "VERTICAL": "VERTICAL32"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL34",
+          "VERTICAL": "VERTICAL9"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "VERTICAL": "VERTICAL11"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL35",
+          "VERTICAL": "VERTICAL13"
+        },
+        "clueNumber": 35
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL35",
+          "VERTICAL": "VERTICAL14"
+        }
+      }
+    ],
+    [
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL36",
+          "VERTICAL": "VERTICAL26"
+        },
+        "clueNumber": 36
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL36",
+          "VERTICAL": "VERTICAL1"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL36",
+          "VERTICAL": "VERTICAL23"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL36",
+          "VERTICAL": "VERTICAL3"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "VERTICAL": "VERTICAL28"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL37",
+          "VERTICAL": "VERTICAL7"
+        },
+        "clueNumber": 37
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL37",
+          "VERTICAL": "VERTICAL32"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL37",
+          "VERTICAL": "VERTICAL9"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL37",
+          "VERTICAL": "VERTICAL38"
+        },
+        "clueNumber": 38
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL37",
+          "VERTICAL": "VERTICAL11"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL37",
+          "VERTICAL": "VERTICAL39"
+        },
+        "clueNumber": 39
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL37",
+          "VERTICAL": "VERTICAL13"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL37",
+          "VERTICAL": "VERTICAL14"
+        }
+      }
+    ],
+    [
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL40",
+          "VERTICAL": "VERTICAL1"
+        },
+        "clueNumber": 40
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL40",
+          "VERTICAL": "VERTICAL23"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL40",
+          "VERTICAL": "VERTICAL3"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL40",
+          "VERTICAL": "VERTICAL41"
+        },
+        "clueNumber": 41
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL40",
+          "VERTICAL": "VERTICAL42"
+        },
+        "clueNumber": 42
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL40",
+          "VERTICAL": "VERTICAL28"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL40",
+          "VERTICAL": "VERTICAL43"
+        },
+        "clueNumber": 43
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL40",
+          "VERTICAL": "VERTICAL44"
+        },
+        "clueNumber": 44
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL40",
+          "VERTICAL": "VERTICAL7"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL40",
+          "VERTICAL": "VERTICAL32"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL40",
+          "VERTICAL": "VERTICAL9"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL40",
+          "VERTICAL": "VERTICAL38"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL40",
+          "VERTICAL": "VERTICAL11"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL40",
+          "VERTICAL": "VERTICAL39"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL40",
+          "VERTICAL": "VERTICAL13"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL40",
+          "VERTICAL": "VERTICAL14"
+        }
+      }
+    ],
+    [
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL45",
+          "VERTICAL": "VERTICAL45"
+        },
+        "clueNumber": 45
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL45",
+          "VERTICAL": "VERTICAL1"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL46",
+          "VERTICAL": "VERTICAL3"
+        },
+        "clueNumber": 46
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL46",
+          "VERTICAL": "VERTICAL41"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL46",
+          "VERTICAL": "VERTICAL42"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL46",
+          "VERTICAL": "VERTICAL28"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL46",
+          "VERTICAL": "VERTICAL43"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL46",
+          "VERTICAL": "VERTICAL44"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL46",
+          "VERTICAL": "VERTICAL7"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL46",
+          "VERTICAL": "VERTICAL32"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL46",
+          "VERTICAL": "VERTICAL9"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL46",
+          "VERTICAL": "VERTICAL38"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL46",
+          "VERTICAL": "VERTICAL11"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL46",
+          "VERTICAL": "VERTICAL39"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL46",
+          "VERTICAL": "VERTICAL13"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL46",
+          "VERTICAL": "VERTICAL14"
+        }
+      }
+    ],
+    [
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL47",
+          "VERTICAL": "VERTICAL45"
+        },
+        "clueNumber": 47
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL47",
+          "VERTICAL": "VERTICAL1"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL47"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL47",
+          "VERTICAL": "VERTICAL3"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL47",
+          "VERTICAL": "VERTICAL41"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL48",
+          "VERTICAL": "VERTICAL44"
+        },
+        "clueNumber": 48
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL48",
+          "VERTICAL": "VERTICAL7"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL48",
+          "VERTICAL": "VERTICAL32"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL49",
+          "VERTICAL": "VERTICAL38"
+        },
+        "clueNumber": 49
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL49",
+          "VERTICAL": "VERTICAL11"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL49",
+          "VERTICAL": "VERTICAL39"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL49",
+          "VERTICAL": "VERTICAL13"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL49",
+          "VERTICAL": "VERTICAL14"
+        }
+      }
+    ],
+    [
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL50",
+          "VERTICAL": "VERTICAL45"
+        },
+        "clueNumber": 50
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL50",
+          "VERTICAL": "VERTICAL1"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL51",
+          "VERTICAL": "VERTICAL3"
+        },
+        "clueNumber": 51
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL51",
+          "VERTICAL": "VERTICAL41"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL51",
+          "VERTICAL": "VERTICAL52"
+        },
+        "clueNumber": 52
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL51",
+          "VERTICAL": "VERTICAL53"
+        },
+        "clueNumber": 53
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL51",
+          "VERTICAL": "VERTICAL54"
+        },
+        "clueNumber": 54
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL51",
+          "VERTICAL": "VERTICAL44"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL51",
+          "VERTICAL": "VERTICAL7"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL51",
+          "VERTICAL": "VERTICAL32"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL51",
+          "VERTICAL": "VERTICAL55"
+        },
+        "clueNumber": 55
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL51",
+          "VERTICAL": "VERTICAL38"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL51",
+          "VERTICAL": "VERTICAL11"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL51",
+          "VERTICAL": "VERTICAL39"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL51",
+          "VERTICAL": "VERTICAL13"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL51",
+          "VERTICAL": "VERTICAL14"
+        }
+      }
+    ],
+    [
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "VERTICAL": "VERTICAL45"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL56",
+          "VERTICAL": "VERTICAL56"
+        },
+        "clueNumber": 56
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL56",
+          "VERTICAL": "VERTICAL3"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL56",
+          "VERTICAL": "VERTICAL41"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL56",
+          "VERTICAL": "VERTICAL52"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL56",
+          "VERTICAL": "VERTICAL53"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL56",
+          "VERTICAL": "VERTICAL54"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL56",
+          "VERTICAL": "VERTICAL44"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL56",
+          "VERTICAL": "VERTICAL7"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL56",
+          "VERTICAL": "VERTICAL32"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL56",
+          "VERTICAL": "VERTICAL55"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL56",
+          "VERTICAL": "VERTICAL38"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL56",
+          "VERTICAL": "VERTICAL11"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL56",
+          "VERTICAL": "VERTICAL39"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL56",
+          "VERTICAL": "VERTICAL13"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL56",
+          "VERTICAL": "VERTICAL14"
+        }
+      }
+    ],
+    [
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "VERTICAL": "VERTICAL45"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL57",
+          "VERTICAL": "VERTICAL56"
+        },
+        "clueNumber": 57
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL57",
+          "VERTICAL": "VERTICAL3"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL57",
+          "VERTICAL": "VERTICAL41"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL57",
+          "VERTICAL": "VERTICAL52"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL57",
+          "VERTICAL": "VERTICAL53"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL57",
+          "VERTICAL": "VERTICAL54"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL57",
+          "VERTICAL": "VERTICAL44"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL57",
+          "VERTICAL": "VERTICAL7"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL57",
+          "VERTICAL": "VERTICAL32"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL57",
+          "VERTICAL": "VERTICAL55"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL57",
+          "VERTICAL": "VERTICAL38"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL57",
+          "VERTICAL": "VERTICAL11"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL57",
+          "VERTICAL": "VERTICAL39"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL57",
+          "VERTICAL": "VERTICAL13"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL57",
+          "VERTICAL": "VERTICAL14"
+        }
+      }
+    ],
+    [
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "VERTICAL": "VERTICAL45"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL58",
+          "VERTICAL": "VERTICAL56"
+        },
+        "clueNumber": 58
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL58",
+          "VERTICAL": "VERTICAL3"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL58",
+          "VERTICAL": "VERTICAL41"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL58",
+          "VERTICAL": "VERTICAL52"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL58",
+          "VERTICAL": "VERTICAL53"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL58",
+          "VERTICAL": "VERTICAL54"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL58",
+          "VERTICAL": "VERTICAL44"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL58",
+          "VERTICAL": "VERTICAL7"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL58",
+          "VERTICAL": "VERTICAL32"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL58",
+          "VERTICAL": "VERTICAL55"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL58",
+          "VERTICAL": "VERTICAL38"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL58",
+          "VERTICAL": "VERTICAL11"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL58",
+          "VERTICAL": "VERTICAL39"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL58",
+          "VERTICAL": "VERTICAL13"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL58",
+          "VERTICAL": "VERTICAL14"
+        }
+      }
+    ],
+    [
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL59",
+          "VERTICAL": "VERTICAL45"
+        },
+        "clueNumber": 59
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL59"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL59",
+          "VERTICAL": "VERTICAL56"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL59",
+          "VERTICAL": "VERTICAL3"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL59",
+          "VERTICAL": "VERTICAL41"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL59",
+          "VERTICAL": "VERTICAL52"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL60",
+          "VERTICAL": "VERTICAL44"
+        },
+        "clueNumber": 60
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL60",
+          "VERTICAL": "VERTICAL7"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL60",
+          "VERTICAL": "VERTICAL32"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL60",
+          "VERTICAL": "VERTICAL55"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL60",
+          "VERTICAL": "VERTICAL38"
+        }
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL60",
+          "VERTICAL": "VERTICAL11"
+        }
+      },
+      {
+        "blank": "yes"
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL61",
+          "VERTICAL": "VERTICAL13"
+        },
+        "clueNumber": 61
+      },
+      {
+        "answer": "a",
+        "guess": "",
+        "clueNumberLink": {
+          "HORIZONTAL": "HORIZONTAL61",
+          "VERTICAL": "VERTICAL14"
+        }
+      }
+    ]
+  ],
+  "totalNumberOfBoardLetters": 256,
+  "themeClues": {
+    "HORIZONTAL": {
+      "HORIZONTAL20": true,
+      "HORIZONTAL22": true
+    },
+    "VERTICAL": {},
+    "tiles": [
+      {
+        "x": 3,
+        "y": 3
+      },
+      {
+        "x": 4,
+        "y": 3
+      },
+      {
+        "x": 5,
+        "y": 3
+      },
+      {
+        "x": 6,
+        "y": 3
+      },
+      {
+        "x": 7,
+        "y": 3
+      },
+      {
+        "x": 8,
+        "y": 3
+      },
+      {
+        "x": 9,
+        "y": 3
+      },
+      {
+        "x": 10,
+        "y": 3
+      },
+      {
+        "x": 11,
+        "y": 3
+      },
+      {
+        "x": 1,
+        "y": 4
+      },
+      {
+        "x": 2,
+        "y": 4
+      },
+      {
+        "x": 3,
+        "y": 4
+      },
+      {
+        "x": 4,
+        "y": 4
+      }
+    ]
+  },
+  "selectedClue": null,
+  "secondaryClue": null,
+  "selectedTile": {
+    "x": 1,
+    "y": 0
+  },
+  "highlightedTiles": [
+    {
+      "x": 1,
+      "y": 0
+    },
+    {
+      "x": 2,
+      "y": 0
+    },
+    {
+      "x": 3,
+      "y": 0
+    },
+    {
+      "x": 4,
+      "y": 0
+    },
+    {
+      "x": 5,
+      "y": 0
     }
-  }
-]
+  ],
+  "direction": "HORIZONTAL",
+  "previousKeyWasDelete": false,
+  "gameFinishedMessage": "You won, good job £",
+  "gameBoardSize": 500,
+  "tileSize": 29.41176470588235
 }

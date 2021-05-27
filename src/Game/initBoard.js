@@ -1,22 +1,22 @@
-import clone from "lodash/clone";
-import { prepTileConfig } from "./utils";
+import cloneDeep from "lodash/cloneDeep";
+import {getOppositeDirection, prepTileConfig} from "./utils";
+import {DEFAULT_DIRECTION, HORIZONTAL, VERTICAL} from "./constants";
+import min from "lodash/min";
 
 const clueId = (direction, i) => `${direction}${i}`;
 
-export const initBoard = ({ crossword }) => {
-    const clues = {};
-    clues.HORIZONTAL = crossword.clues.ACROSS.map(clue => clue)
-    clues.VERTICAL = crossword.clues.DOWN.map(clue => clue)
+export const emptyTile = () => ({ answer: '' });
+export const block = () => ({ blank: 'yes' });
+export const emptyClue = () => ({ clue: '' });
 
-    const tileBoard = crossword.board.map(row => row.map(letter => {
-        return letter !== " " ? { answer: letter, guess: "" } : { blank: "yes" };
-    }));
+export const initDesignBoard = data => {
+    const board = data.board.map(row => row.map(cell => cell.blank ? cell : { guess: cell.guess }));
+    const clueList = cloneDeep(data.clues);
+    const gameFinishedMessage = data.gameFinishedMessage;
 
-    const themeClues = { HORIZONTAL: {}, VERTICAL: {}, tiles: [] };
-
-    const getTileBoardItem = ({x , y}) => tileBoard[y][x];
+    const getTileBoardItem = ({x , y}) => board[y][x];
     const _isLocationOnBoard = ({ x, y }) => isLocationOnBoard(x, y);
-    const isLocationOnBoard = (x, y) => x >= 0 && y >= 0 && x < tileBoard.length && y < tileBoard.length;
+    const isLocationOnBoard = (x, y) => x >= 0 && y >= 0 && x < board.length && y < board.length;
     const isTile = ({ x, y }) => isTileAtCoords(x, y);
     const isTileAtCoords = (x, y) => {
         if(!isLocationOnBoard(x, y)) {
@@ -26,68 +26,52 @@ export const initBoard = ({ crossword }) => {
     }
 
     let clueNumber = 0;
-    const cluesWithTileRef = {
+    const clues = {
         HORIZONTAL: [],
         VERTICAL: []
     }
 
     let totalNumberOfBoardLetters = 0;
 
-    if(!clues.HORIZONTAL || !clues.VERTICAL) {
+    if(!data.clues.HORIZONTAL || !data.clues.VERTICAL) {
+        console.log('Weird Error')
         return;
     }
 
-    const updateClueNumber = (newClueNumber, newTileBoard, tile) => {
+    const updateClueNumber = (newClueNumber, board, tile) => {
         if(clueNumber !== newClueNumber) {
             return;
         }
         clueNumber++;
-        newTileBoard[tile.y][tile.x].clueNumber = clueNumber;
+        board[tile.y][tile.x].clueNumber = clueNumber;
     }
-
-    const newTileBoard = clone(tileBoard);
 
     const prepareTile = ({ DIRECTION, NEXT_TILE, PREV_TILE }, tile, newClueNumber) => {
         const prevTileCoords = PREV_TILE(tile);
+        const isNextTile = isTile(NEXT_TILE(tile));
 
-        if(!isTile(prevTileCoords)) {
-            if(isTile(NEXT_TILE(tile))) {
-                updateClueNumber(newClueNumber, newTileBoard, tile);
-                const clue = clues[DIRECTION][cluesWithTileRef[DIRECTION].length];
+        if(!isTile(prevTileCoords)) { // is previous tile block?
+            if(isNextTile) { // is not single wide tile
+                updateClueNumber(newClueNumber, board, tile);
+                const clue = clueList[DIRECTION].length > 0 ? clueList[DIRECTION].shift() : emptyClue();
 
                 clue.tile = tile;
                 clue.id = clueId(DIRECTION, clueNumber);
                 clue.clueNumber = clueNumber;
-                clue.highlights = [];
-                if(clue.theme) {
-                    themeClues[DIRECTION][clue.id] = true;
-                    themeClues.tiles.push(tile);
-                }
 
-                clue.highlights.push(tile);
-                newTileBoard[tile.y][tile.x].clueNumberLink[DIRECTION] = clueId(DIRECTION, clueNumber);
-                cluesWithTileRef[DIRECTION].push(clue);
+                board[tile.y][tile.x].clueNumberLink[DIRECTION] = clueId(DIRECTION, clueNumber);
+                clues[DIRECTION].push(clue);
             }
         } else {
-            const prevTile = newTileBoard[prevTileCoords.y][prevTileCoords.x];
-            newTileBoard[tile.y][tile.x].clueNumberLink[DIRECTION] = prevTile.clueNumberLink[DIRECTION];
-            if(prevTile.theme) {
-                themeClues[DIRECTION][prevTile.id] = true;
-                themeClues.tiles.push(tile);
-            }
-            const previousClueHighlightChain = cluesWithTileRef[DIRECTION].find(clue => clue.highlights.find(
-                highlightedTile => highlightedTile.x === prevTileCoords.x &&
-                    highlightedTile.y === prevTileCoords.y
-            ))
-            previousClueHighlightChain.highlights.push(tile)
-            if(previousClueHighlightChain.theme) {
-                themeClues[DIRECTION][previousClueHighlightChain.id] = true;
-                themeClues.tiles.push(tile);
+            const prevTile = board[prevTileCoords.y][prevTileCoords.x];
+            board[tile.y][tile.x].clueNumberLink[DIRECTION] = prevTile.clueNumberLink[DIRECTION];
+            if(!isNextTile) {
+                clues[DIRECTION].find(clue => clue.id === prevTile.clueNumberLink[DIRECTION]).endTile = tile;
             }
         }
     }
 
-    tileBoard.forEach((row, y) => {
+    board.forEach((row, y) => {
         row.forEach((t, x) => {
             const newClueNumber = clueNumber;
             if(t.blank) {
@@ -97,22 +81,64 @@ export const initBoard = ({ crossword }) => {
             totalNumberOfBoardLetters++;
 
             const tile = {x, y}
-            newTileBoard[y][x].clueNumberLink = {};
+            board[y][x].clueNumberLink = {};
 
             prepareTile(prepTileConfig.HORIZONTAL, tile, newClueNumber)
             prepareTile(prepTileConfig.VERTICAL, tile, newClueNumber)
         })
     });
 
-    return {
-        board: tileBoard,
-        clues: cluesWithTileRef,
+    const selectedTile = isTile(data.selectedTile) ? data.selectedTile : clues[DEFAULT_DIRECTION][0].tile;
+    const direction =
+        isTile(data.selectedTile) ? // is selected tile a block now?
+            getTileBoardItem(data.selectedTile).clueNumberLink[data.direction] ? // does selected tile still have this direciton?
+                data.direction : getOppositeDirection(data.direction)
+        : DEFAULT_DIRECTION;
+
+    const game = {
+        board,
+        clues,
+        selectedTile,
+        direction,
+        customGlyphs: [],
         totalNumberOfBoardLetters,
         _isLocationOnBoard,
         isLocationOnBoard,
         isTile,
         isTileAtCoords,
         getTileBoardItem,
-        themeClues
+        gameFinishedMessage,
+        previousKeyWasDelete: false,
+        gameBoardSize: min([window.screen.height, window.screen.width, 500]),
+        tileSize: min([window.screen.height, window.screen.width, 500])/data.board.length,
+        getTileClue: (tile, direction) => game.getTileBoardItem(tile ? tile : game.selectedTile).clueNumberLink[direction ? direction: game.direction],
+        getSecondaryTileClue: (tile, direction) => game.getTileBoardItem(tile ? tile : game.selectedTile).clueNumberLink[getOppositeDirection(direction ? direction: game.direction)]
     }
+    return game;
 }
+
+export const emptyDesignBoard = initDesignBoard({
+    board: [
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()]
+    ],
+    clues: {
+        HORIZONTAL: [
+            emptyClue(),
+            emptyClue(),
+            emptyClue()
+        ],
+        VERTICAL: [
+            emptyClue(),
+            emptyClue(),
+            emptyClue()
+        ]
+    },
+    gameFinishedMessage: 'you win',
+    selectedTile: { x: 0, y: 0 },
+    direction: HORIZONTAL
+});

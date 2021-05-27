@@ -1,6 +1,6 @@
 import {pickerOpts} from "../Landing";
 import cloneDeep from "lodash/cloneDeep";
-import { initBoard } from "../Game/initBoard";
+import { initDesignBoard } from "../Game/initBoard";
 
 const loadFile = async setGameData => {
     let fileHandle;
@@ -11,11 +11,7 @@ const loadFile = async setGameData => {
 
     const data = cloneDeep(JSON.parse(jsonFile));
 
-    if(!data.init) {
-        data.init = initBoard(data);
-    }
-
-    setGameData(data);
+    setGameData(initDesignBoard(data));
 }
 
 export default loadFile;
