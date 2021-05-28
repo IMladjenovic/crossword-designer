@@ -115,11 +115,11 @@ export const clearLetterKey = (key, game, activateTile, setTimestamp) => {
     const { DIRECTION, NEXT_TILE, PREV_TILE } = prepTileConfig[game.direction];
     const tile = game.selectedTile;
     if(key === SPACE_KEY) {
-        if(game.previousKeyWasDelete) {
-            moveSelectorOneSpaceInDirection(game, activateTile)
-            game.previousKeyWasDelete = true;
-            return;
-        }
+        // if(game.previousKeyWasDelete) {
+        //     moveSelectorOneSpaceInDirection(game, activateTile)
+        //     game.previousKeyWasDelete = true;
+        //     return;
+        // }
         game.previousKeyWasDelete = true;
         removeGuessFromTile(tile, game, setTimestamp);
         if(game.isTile(NEXT_TILE(tile))) {

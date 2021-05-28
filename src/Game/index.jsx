@@ -126,7 +126,7 @@ const Block = (props) => {
     )
 }
 
-const GameBoard = ({ game, saveConfig, rightClick }) => {
+const GameBoard = ({ game, saveConfig, rightClick, child1, child2 }) => {
     const clueRefs = useRef([]).current;
     const boardRef = useRef();
 
@@ -257,6 +257,7 @@ const GameBoard = ({ game, saveConfig, rightClick }) => {
         <div className={classes.root}>
             <Grid container direction="row" justify="center" spacing={0}>
                 <Grid item xs={12} sm={6} className={gameWon ? 'gameWon' : ''} style={{ display: 'contents' }}>
+                    {child1}
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox={`-1 -1 ${game.gameBoardSize + 2}
@@ -276,6 +277,7 @@ const GameBoard = ({ game, saveConfig, rightClick }) => {
                             <path d={grid(game.board.length, game.tileSize)} className="grid" vectorEffect="non-scaling-stroke" />
                         </g>
                     </svg>
+                    {child2}
                 </Grid>
                 <Grid container direction='row' item xs={12} sm={6}>
                     <Grid item xs={12} sm={6}>
