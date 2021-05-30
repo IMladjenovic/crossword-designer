@@ -1,0 +1,11 @@
+.editIcon {
+    color: grey
+}
+
+.editIcon:hover {
+    color: black
+}
+
+.editIconSelected {
+    color: black
+}

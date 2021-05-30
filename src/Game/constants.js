@@ -10,6 +10,7 @@ export const ARROW_RIGHT = 'ArrowRight';
 export const ARROW_UP = 'ArrowUp';
 export const ARROW_DOWN = 'ArrowDown';
 export const TAB = 'Tab';
+export const ENTER = 'Enter';
 export const DEFAULT_DIRECTION = HORIZONTAL;
 export const HORIZONTAL_ARROW_KEYS = [ARROW_LEFT, ARROW_RIGHT];
 export const VERTICAL_ARROW_KEYS = [ARROW_UP, ARROW_DOWN];
