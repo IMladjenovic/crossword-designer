@@ -6,8 +6,6 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from '@material-ui/core/styles';
 import Landing from './Landing';
-import { saveGame, saveAndLeave } from "./SaveGame";
-import Button from "@material-ui/core/Button";
 import Design from "./Design";
 import Play from "./Play";
 
@@ -33,12 +31,7 @@ function App() {
     const [gameData, setGameData] = useState(null);
 
     const [designGame, setDesignGame] = useState(false);
-
-    const saveConfig = useRef({ save: () => console.log("Save error") }).current;
-
-    const leaveGame = () => {
-        setGameData(null);
-    }
+    const [playGame, setPlayGame] = useState(false);
 
     return (
         <div className="App" >
@@ -49,23 +42,9 @@ function App() {
                             <Grid container item justify="space-between" spacing={0}>
                                 <Grid item>
                                     <Typography variant="h4" component="div" >
-                                        { gameData === null ? 'Play a Crossword' : gameData.title }
+                                        { 'Play a Crossword' }
                                     </Typography>
                                 </Grid>
-                                {gameData && <Grid item>
-                                    <Button
-                                        style={{ backgroundColor: '#85dcb0', margin: '0 20px 0 20px' }}
-                                        variant="contained"
-                                        onClick={() => saveGame(saveConfig.save())}
-                                        tabIndex="-1"
-                                    >Save</Button>
-                                    <Button
-                                        style={{ backgroundColor: '#41b3ac', margin: '0 0 0 20px', color: 'white' }}
-                                        variant="contained"
-                                        onClick={() => saveAndLeave(saveConfig.save(), leaveGame)}
-                                        tabIndex="-1"
-                                    >Save & Leave</Button>
-                                </Grid>}
                             </Grid>
                         </Box>
                     </Box>
@@ -73,11 +52,11 @@ function App() {
                     </Box>
                 </Grid>
                 <Grid item xs={12} >
-                    {gameData ?
-                        <Play gameData={gameData} saveConfig={saveConfig} /> :
+                    {playGame ?
+                        <Play /> :
                      designGame ?
-                        <Design saveConfig={saveConfig} /> :
-                        <Landing setGameData={setGameData} setDesignGame={setDesignGame} />
+                        <Design /> :
+                        <Landing setPlayGame={setPlayGame} setDesignGame={setDesignGame} />
                     }
                 </Grid>
             </Grid>

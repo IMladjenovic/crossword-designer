@@ -119,23 +119,24 @@ export const initDesignBoard = data => {
 
 export const emptyDesignBoard = initDesignBoard({
     board: [
-        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
-        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
-        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
-        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
-        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
-        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()]
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()],
+        [emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile(), emptyTile()]
     ],
     clues: {
         HORIZONTAL: [
-            emptyClue(),
-            emptyClue(),
-            emptyClue()
         ],
         VERTICAL: [
-            emptyClue(),
-            emptyClue(),
-            emptyClue()
         ]
     },
     gameFinishedMessage: 'you win',

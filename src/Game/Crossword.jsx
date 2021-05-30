@@ -88,7 +88,7 @@ const Block = (props) => {
     )
 }
 
-const Crossword = ({ game, saveConfig, rightClick, activateTile, gameWon, checkBoardAnswersCorrect = () => {}, preventCrosswordTyping = false }) => {
+const Crossword = ({ game, rightClick, activateTile, gameWon, checkBoardAnswersCorrect = () => {}, preventCrosswordTyping = false }) => {
     const clueRefs = useRef([]).current;
     const boardRef = useRef();
 
@@ -105,7 +105,6 @@ const Crossword = ({ game, saveConfig, rightClick, activateTile, gameWon, checkB
 
     useEffect(() => {
         loadGlyphs();
-        saveConfig.save = () => game;
     }, []);
 
     const classes = useStyles();

@@ -2,8 +2,6 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 
-import loadFile from "../LoadGame";
-
 export const pickerOpts = {
     types: [
         {
@@ -17,7 +15,7 @@ export const pickerOpts = {
     multiple: false
 };
 
-const Landing = ({ setGameData, setDesignGame }) => {
+const Landing = ({ setPlayGame, setDesignGame }) => {
     return (
         <Grid container spacing={0} justify="center" direction="column"
               alignItems="center">
@@ -25,7 +23,7 @@ const Landing = ({ setGameData, setDesignGame }) => {
                 <Button
                     style={{ backgroundColor: '#85dcb0' }}
                     variant="contained"
-                    onClick={() => loadFile(setGameData)}
+                    onClick={() => setPlayGame(true)}
                 >Play</Button>
                 <Button
                     style={{ backgroundColor: '#85dcb0' }}

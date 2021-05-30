@@ -1,6 +1,12 @@
 import React, {useRef, useState} from 'react';
 import RemoveCircleSharpIcon from '@material-ui/icons/RemoveCircleSharp';
 import AddCircleSharpIcon from '@material-ui/icons/AddCircleSharp';
+import Tooltip from '@material-ui/core/Tooltip';
+import Grid from "@material-ui/core/Grid";
+import {makeStyles} from "@material-ui/core/styles";
+import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 
 import cloneDeep from "lodash/cloneDeep";
 import last from "lodash/last";
@@ -9,10 +15,10 @@ import pull from "lodash/pull";
 
 import {block, emptyDesignBoard, emptyTile, initDesignBoard} from "../Game/initBoard";
 import {CLUE_COLUMN_TITLE, HORIZONTAL, VERTICAL} from "../Game/constants";
-import Grid from "@material-ui/core/Grid";
 import Crossword from "../Game/Crossword";
-import {makeStyles} from "@material-ui/core/styles";
 import Clue from './Clue'
+import {saveGame} from "../SaveGame";
+import loadFile from "../LoadGame"
 
 const useStyles = makeStyles((theme) => ({
     root: { flexGrow: 1 },
@@ -36,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 const Design = () => {
     const [game, setGame] = useState(emptyDesignBoard);
     const clueRefs = useRef([]).current;
-    const activeClues = useRef([]).current
+    const activeClues = useRef([]).current;
 
     const [timestamp, setTimestamp] = useState(Date.now());
 
@@ -50,8 +56,6 @@ const Design = () => {
         }
         setTimestamp(Date.now())
     }
-
-    const saveConfig = useRef({ save: () => console.log("Save error") }).current;
 
     const toggleTileBlock = (event, tile, game) => {
         event.preventDefault();
@@ -88,8 +92,12 @@ const Design = () => {
     const ModifyGameBoardLengthStart = () => {
         return (
             <div>
-                <AddCircleSharpIcon onClick={() => modifyBoardLength(true, true)} style={{ color: "green", cursor: 'pointer' }} />
-                <RemoveCircleSharpIcon onClick={() => modifyBoardLength(true, false)} style={{ color: "red", cursor: 'pointer' }} />
+                <Tooltip title="Add Row & Column to top right of crossword">
+                    <AddCircleSharpIcon aria-label='Add Row & Column to top left of crossword' onClick={() => modifyBoardLength(true, true)} style={{ color: "green", cursor: 'pointer' }} />
+                </Tooltip>
+                <Tooltip title="Delete Row & Column from top left of crossword">
+                    <RemoveCircleSharpIcon onClick={() => modifyBoardLength(true, false)} style={{ color: "red", cursor: 'pointer' }} />
+                </Tooltip>
             </div>
         )
     }
@@ -98,10 +106,14 @@ const Design = () => {
         return (
             <div style={{ display: "flex", alignItems: "flex-end" }}>
                 <div onClick={() => modifyBoardLength(false, true)}>
-                    <AddCircleSharpIcon style={{ color: "green", cursor: 'pointer' }} />
+                    <Tooltip title="Add Row & Column to bottom right of crossword">
+                        <AddCircleSharpIcon style={{ color: "green", cursor: 'pointer' }} />
+                    </Tooltip>
                 </div>
                 <div onClick={() => modifyBoardLength(false, false)}>
-                    <RemoveCircleSharpIcon style={{ color: "red", cursor: 'pointer' }} />
+                    <Tooltip title="Delete Row & Column from bottom right of crossword">
+                        <RemoveCircleSharpIcon style={{ color: "red", cursor: 'pointer' }} />
+                    </Tooltip>
                 </div>
             </div>
         )
@@ -111,11 +123,39 @@ const Design = () => {
 
     return (
         <div className={classes.root}>
+            <Grid item xs={12} >
+                <Box my={4} className={classes.root}>
+                    <Box className={classes.test1}>
+                        <Grid container item justify="space-between" spacing={0}>
+                            <Grid item>
+                                <Typography variant="h4" component="div" >
+                                    { game.title }
+                                </Typography>
+                                <Grid item>
+                                    <Button
+                                        style={{ backgroundColor: '#85dcb0', margin: '0 20px 0 20px' }}
+                                        variant="contained"
+                                        onClick={() => saveGame(game)}
+                                        tabIndex="-1"
+                                    >Save</Button>
+                                    <Button
+                                        style={{ backgroundColor: '#41b3ac', margin: '0 0 0 20px', color: 'white' }}
+                                        variant="contained"
+                                        onClick={() => loadFile(setGame)}
+                                        tabIndex="-1"
+                                    >Load</Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Box>
+                <Box my={4} className={classes.borderGradient}>
+                </Box>
+            </Grid>
             <Grid container direction="row" justify="center" spacing={0}>
                 <Grid item xs={12} sm={6} style={{ display: 'contents' }}>
                     <ModifyGameBoardLengthStart />
-                    <Crossword game={game} saveConfig={saveConfig} rightClick={toggleTileBlock} activateTile={activateTile}
-                               preventCrosswordTyping={activeClues.length > 0} />
+                    <Crossword game={game} rightClick={toggleTileBlock} activateTile={activateTile} preventCrosswordTyping={activeClues.length > 0} />
                     <ModifyGameBoardLengthEnd />
                 </Grid>
                 <Grid container direction='row' item xs={12} sm={6}>
@@ -148,6 +188,9 @@ const Design = () => {
                                     selected={clue.id === game.getTileClue()}
                                     secondary={clue.id === game.getSecondaryTileClue()}
                                     setRef={elem => clueRefs[clue.id] = elem}
+                                    saveGameWithClue={saveGameWithClue}
+                                    registerClueActive={registerClueActive}
+                                    removeClueActive={removeClueActive}
                                 />
                             })}
                         </ol>
@@ -156,10 +199,6 @@ const Design = () => {
             </Grid>
         </div>
     )
-}
-
-const GameBoard = ({ game, saveConfig, rightClick, child1, child2 }) => {
-
 }
 
 export default Design;

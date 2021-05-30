@@ -9,6 +9,7 @@ import {arrowKeyPress, clearLetterKey, letterKeyPres, tabKeyPress} from "../Game
 const Clue = ({ clue, handleClueClick, selected, secondary, setRef, saveGameWithClue, registerClueActive, removeClueActive }) => {
     const [editMode, setEditMode] = useState(false);
     const [clueText, setClueText] = useState(clue.clue);
+    const lastBlurTime = useRef(Date.now());
     // pass in a method for updating the clue and saving the game
 
     useKeypress(ENTER, () => {
@@ -23,15 +24,14 @@ const Clue = ({ clue, handleClueClick, selected, secondary, setRef, saveGameWith
         saveGameWithClue(clue.id, clueText);
         setEditMode(false);
         removeClueActive(clue.id);
+        lastBlurTime.current = Date.now();
     }
 
     const handleClickToEdit = () => {
-        if(editMode) {
-            saveGameWithClue(clue.id, clueText);
-        } else {
+        if(!editMode && lastBlurTime.current + 500 < Date.now()) {
+            setEditMode(true)
             registerClueActive(clue.id);
         }
-        setEditMode(!editMode)
     }
 
     return <li
