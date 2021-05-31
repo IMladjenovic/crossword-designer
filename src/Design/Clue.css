@@ -1,11 +1,13 @@
 .editIcon {
-    color: grey
+    color: #808080
 }
 
 .editIcon:hover {
-    color: black
+    color: #3e3e3e;
+    transition: color 0.2s;
 }
 
 .editIconSelected {
-    color: black
+    color: black;
+    transition: color 0.2s;
 }

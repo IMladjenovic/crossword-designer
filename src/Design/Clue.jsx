@@ -4,7 +4,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import './Clue.css'
 import useKeypress from "react-use-keypress";
 import { ENTER } from "../Game/constants";
-import {arrowKeyPress, clearLetterKey, letterKeyPres, tabKeyPress} from "../Game/handleInput";
 
 const Clue = ({ clue, handleClueClick, selected, secondary, setRef, saveGameWithClue, registerClueActive, removeClueActive }) => {
     const [editMode, setEditMode] = useState(false);

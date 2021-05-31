@@ -55,6 +55,7 @@ const Cell = ({
               onClick,
               finishMessagePixel,
               tileSize,
+              numberOfTiles,
               ...other
           }) => {
     const x = _x * tileSize;
@@ -70,8 +71,8 @@ const Cell = ({
                 onClick={onClick}
                 {...other}
             />
-            <text x={x + 3} y={y + 10} fontSize='0.7em'  className='clueNumber' onClick={onClick}>{tileContent.clueNumber || ''}</text>
-            <text x={x + 8} y={y + tileSize - 3} fontSize='1.1em' className='guess' onClick={onClick}>{tileContent.guess}</text>
+            <text x={x + 2} y={y + 3} fontSize={`${9.75 / numberOfTiles}em`} alignmentBaseline="hanging" className='clueNumber' onClick={onClick}>{tileContent.clueNumber || ''}</text>
+            <text x={x + (tileSize/2)} y={y + tileSize - 4} fontSize={`${27 / numberOfTiles}em`} textAnchor="middle" className='guess' onClick={onClick}>{tileContent.guess}</text>
         </g>
     )
 }
@@ -153,7 +154,8 @@ const Crossword = ({ game, rightClick, activateTile, gameWon, checkBoardAnswersC
             y,
             x,
             finishMessagePixel: game.getTileBoardItem({ x, y }).finishMessagePixel === 1,
-            tileSize: game.tileSize
+            tileSize: game.tileSize,
+            numberOfTiles: game.board.length
         };
 
         const handleTileClick = () => {

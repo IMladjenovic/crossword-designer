@@ -92,10 +92,10 @@ const Design = () => {
     const ModifyGameBoardLengthStart = () => {
         return (
             <div>
-                <Tooltip title="Add Row & Column to top right of crossword">
+                <Tooltip title="Add Row & Column">
                     <AddCircleSharpIcon aria-label='Add Row & Column to top left of crossword' onClick={() => modifyBoardLength(true, true)} style={{ color: "green", cursor: 'pointer' }} />
                 </Tooltip>
-                <Tooltip title="Delete Row & Column from top left of crossword">
+                <Tooltip title="Delete Row & Column">
                     <RemoveCircleSharpIcon onClick={() => modifyBoardLength(true, false)} style={{ color: "red", cursor: 'pointer' }} />
                 </Tooltip>
             </div>
@@ -106,12 +106,12 @@ const Design = () => {
         return (
             <div style={{ display: "flex", alignItems: "flex-end" }}>
                 <div onClick={() => modifyBoardLength(false, true)}>
-                    <Tooltip title="Add Row & Column to bottom right of crossword">
+                    <Tooltip title="Add Row & Column">
                         <AddCircleSharpIcon style={{ color: "green", cursor: 'pointer' }} />
                     </Tooltip>
                 </div>
                 <div onClick={() => modifyBoardLength(false, false)}>
-                    <Tooltip title="Delete Row & Column from bottom right of crossword">
+                    <Tooltip title="Delete Row & Column">
                         <RemoveCircleSharpIcon style={{ color: "red", cursor: 'pointer' }} />
                     </Tooltip>
                 </div>

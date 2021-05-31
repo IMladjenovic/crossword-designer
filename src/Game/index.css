@@ -33,14 +33,6 @@
     fill: #85dcb0;
 }
 
-/*svg {*/
-/*    max-height: 600px;*/
-/*}*/
-
-.clueNumber {
-    font-size: 0.65em;
-}
-
 .selectedClue {
     background-color: #85dcb0;
 }
@@ -48,10 +40,6 @@
 .secondaryClue {
     background-color: #85dcb0;
     opacity: 10%;
-}
-
-.guess {
-    font-size: 1.8em;
 }
 
 .grid {
