@@ -1,11 +1,13 @@
 import React, {useRef, useState} from 'react';
+import Clue from './Clue'
+import Crossword from "../Game/Crossword";
+import { PageHeader } from "../App";
+
 import RemoveCircleSharpIcon from '@material-ui/icons/RemoveCircleSharp';
 import AddCircleSharpIcon from '@material-ui/icons/AddCircleSharp';
 import Tooltip from '@material-ui/core/Tooltip';
 import Grid from "@material-ui/core/Grid";
 import {makeStyles} from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
 import cloneDeep from "lodash/cloneDeep";
@@ -15,10 +17,8 @@ import pull from "lodash/pull";
 
 import {block, emptyDesignBoard, emptyTile, initDesignBoard} from "../Game/initBoard";
 import {CLUE_COLUMN_TITLE, HORIZONTAL, VERTICAL} from "../Game/constants";
-import Crossword from "../Game/Crossword";
-import Clue from './Clue'
 import {saveGame} from "../SaveGame";
-import loadFile from "../LoadGame"
+import loadFile from "../LoadGame";
 
 const useStyles = makeStyles((theme) => ({
     root: { flexGrow: 1 },
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     text: { cursor: 'default' }
 }));
 
-const Design = () => {
+const Design = ({ classesParent }) => {
     const [game, setGame] = useState(emptyDesignBoard);
     const clueRefs = useRef([]).current;
     const activeClues = useRef([]).current;
@@ -50,6 +50,7 @@ const Design = () => {
         tile,
         direction
     ) => {
+        console.log(game)
         game.selectedTile = tile;
         if(direction) {
             game.direction = direction;
@@ -123,35 +124,20 @@ const Design = () => {
 
     return (
         <div className={classes.root}>
-            <Grid item xs={12} >
-                <Box my={4} className={classes.root}>
-                    <Box className={classes.test1}>
-                        <Grid container item justify="space-between" spacing={0}>
-                            <Grid item>
-                                <Typography variant="h4" component="div" >
-                                    { game.title }
-                                </Typography>
-                                <Grid item>
-                                    <Button
-                                        style={{ backgroundColor: '#85dcb0', margin: '0 20px 0 20px' }}
-                                        variant="contained"
-                                        onClick={() => saveGame(game)}
-                                        tabIndex="-1"
-                                    >Save</Button>
-                                    <Button
-                                        style={{ backgroundColor: '#41b3ac', margin: '0 0 0 20px', color: 'white' }}
-                                        variant="contained"
-                                        onClick={() => loadFile(setGame)}
-                                        tabIndex="-1"
-                                    >Load</Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Box>
-                <Box my={4} className={classes.borderGradient}>
-                </Box>
-            </Grid>
+            <PageHeader title={game.title} classes={classesParent}>
+                <Button
+                    style={{ backgroundColor: '#85dcb0', margin: '0 20px 0 20px' }}
+                    variant="contained"
+                    onClick={() => saveGame(game)}
+                    tabIndex="-1"
+                >Save</Button>
+                <Button
+                    style={{ backgroundColor: '#41b3ac', margin: '0 0 0 20px', color: 'white' }}
+                    variant="contained"
+                    onClick={() => loadFile(setGame)}
+                    tabIndex="-1"
+                >Load</Button>
+            </PageHeader>
             <Grid container direction="row" justify="center" spacing={0}>
                 <Grid item xs={12} sm={6} style={{ display: 'contents' }}>
                     <ModifyGameBoardLengthStart />

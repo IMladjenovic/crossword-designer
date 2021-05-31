@@ -97,6 +97,7 @@ export const initDesignBoard = data => {
 
     const game = {
         board,
+        title: data.title,
         clues,
         selectedTile,
         direction,
@@ -139,6 +140,7 @@ export const emptyDesignBoard = initDesignBoard({
         VERTICAL: [
         ]
     },
+    title: 'Name your crossword',
     gameFinishedMessage: 'you win',
     selectedTile: { x: 0, y: 0 },
     direction: HORIZONTAL
