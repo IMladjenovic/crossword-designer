@@ -33,6 +33,11 @@
     fill: #85dcb0;
 }
 
+.linkHighlighted {
+    fill: #e8a87c;
+    opacity: 50%;
+}
+
 .selectedClue {
     background-color: #85dcb0;
 }

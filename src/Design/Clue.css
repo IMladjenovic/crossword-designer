@@ -11,3 +11,16 @@
     color: black;
     transition: color 0.2s;
 }
+
+.secondaryClueBorder {
+    border-left: 12px solid rgba(133,220,176,0.6);
+}
+
+.clueBorder {
+    border-left: 12px solid rgba(0,0,0,0);
+}
+
+.highlightLinkOnHover:hover {
+    background-color: #e8a87c;
+    opacity: 30%;
+}

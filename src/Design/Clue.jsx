@@ -1,15 +1,27 @@
 import React, {useState, useRef} from "react";
 import EditIcon from '@material-ui/icons/Edit';
+import LinkIcon from '@material-ui/icons/Link';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import './Clue.css'
 import useKeypress from "react-use-keypress";
 import { ENTER } from "../Game/constants";
 
-const Clue = ({ clue, handleClueClick, selected, secondary, setRef, saveGameWithClue, registerClueActive, removeClueActive }) => {
-    const [editMode, setEditMode] = useState(false);
+export const EDIT_TEXT = '-EDIT-TEXT';
+export const EDIT_LINK = '-EDIT-LINK';
+
+const prep = (clue, activeItem) => {
+    const editText = `${clue.id}${EDIT_TEXT}`;
+    const editLink = `${clue.id}${EDIT_LINK}`;
+    const editMode = activeItem === editText;
+    const linkMode = activeItem === editLink;
+    return { editText, editLink, editMode, linkMode };
+};
+
+const Clue = ({ clue, handleClueClick, selected, secondary, linked, setRef, registerActiveItem, activeItem, endClueEdit, endClueLink }) => {
     const [clueText, setClueText] = useState(clue.clue);
     const lastBlurTime = useRef(Date.now());
-    // pass in a method for updating the clue and saving the game
+    const { editText, editLink, editMode, linkMode } = prep(clue, activeItem);
 
     useKeypress(ENTER, () => {
         if(editMode) {
@@ -20,49 +32,62 @@ const Clue = ({ clue, handleClueClick, selected, secondary, setRef, saveGameWith
     const handleChange = event => setClueText(event.target.value);
 
     const handleBlur = () => {
-        saveGameWithClue(clue.id, clueText);
-        setEditMode(false);
-        removeClueActive(clue.id);
+        endClueEdit(clue.id, clueText);
         lastBlurTime.current = Date.now();
     }
 
-    const handleClickToEdit = () => {
+    const handleClickToLink = event => {
+        event.stopPropagation();
+        if(!linkMode && lastBlurTime.current + 500 < Date.now()) {
+            handleClueClick(clue);
+            registerActiveItem(editLink);
+        } else {
+            endClueLink();
+        }
+    }
+
+    const handleClickToEditText = () => {
         if(!editMode && lastBlurTime.current + 500 < Date.now()) {
-            setEditMode(true)
-            registerClueActive(clue.id);
+            registerActiveItem(editText);
         }
     }
 
     return <li
     style={{
         ...(selected ? { backgroundColor: '#85dcb0' } :
-            secondary ? { backgroundColor: '#85dcb0', opacity: '50%' } : {}),
+            linked ? { backgroundColor: '#e8a87c', opacity: '60%' } : {}),
         cursor: 'pointer',
         outline: 'none',
         display: 'flex',
         padding: '5px 10px 5px 1px'
     }}
+    className={`${secondary ? 'secondaryClueBorder' : 'clueBorder'} ${activeItem && activeItem !== editLink ? 'highlightLinkOnHover' : ''}`}
     key={clue.id}
     id={clue.id}
     selected={selected}
-    onClick={() => handleClueClick(clue.tile)}
+    onClick={() => handleClueClick(clue)}
     ref={setRef}
     tabIndex='-1'>
         <span style={{ fontWeight: 'bold',
             textAlign: 'right',
-            minWidth: '24px',
-            width: '24px'
+            minWidth: '12px',
+            width: '12px'
         }}>{clue.clueNumber}</span>
         <span style={{
             marginLeft: '10px'
         }}>{ editMode ?
-            <input autoFocus type="text" value={clueText} onChange={handleChange} onBlur={handleBlur}></input> :
+            <input autoFocus type="text" value={clueText} onChange={handleChange} onBlur={handleBlur} /> :
             clue.clue }
         </span>
+        <Tooltip title={"Link Clue"}>
+            <LinkIcon
+                className={linkMode ? 'editIconSelected' : 'editIcon'}
+                style={{ marginLeft: 'auto' }}
+                onClick={handleClickToLink} />
+        </Tooltip>
         <EditIcon
             className={editMode ? 'editIconSelected' : 'editIcon'}
-            style={{ marginLeft: 'auto' }}
-            onClick={handleClickToEdit} />
+            onClick={handleClickToEditText} />
     </li>
 }
 

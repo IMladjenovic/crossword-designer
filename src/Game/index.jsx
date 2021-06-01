@@ -158,11 +158,11 @@ const GameBoard = ({ game, saveConfig, rightClick, child1, child2 }) => {
     }, []);
 
     useEffect(() => {
-        const secondaryClueId = game.getTileClue(game.selectedTile, getOppositeDirection(game.direction));
+        const secondaryClueId = game.getClueIdFromTile(game.selectedTile, getOppositeDirection(game.direction));
         if(secondaryClueId) {
             clueRefs[secondaryClueId].focus()
         }
-        const primaryClueId = game.getTileClue(game.selectedTile, game.direction);
+        const primaryClueId = game.getClueIdFromTile(game.selectedTile, game.direction);
         if(primaryClueId) {
             clueRefs[primaryClueId].focus()
         }
@@ -233,9 +233,9 @@ const GameBoard = ({ game, saveConfig, rightClick, child1, child2 }) => {
             let oppositeDirection = getOppositeDirection(game.direction);
             const updateDirection =
                 // clicking on already selected tile should change direction
-                (game.selectedTile.x === x && game.selectedTile.y === y && game.getTileClue(tileProps, oppositeDirection)) ||
+                (game.selectedTile.x === x && game.selectedTile.y === y && game.getClueIdFromTile(tileProps, oppositeDirection)) ||
                 // moving to tile which does not have current direction should change direction
-                !game.getTileClue(tileProps, game.direction) ?
+                !game.getClueIdFromTile(tileProps, game.direction) ?
                     oppositeDirection : game.direction;
 
             activateTile(tileProps, updateDirection)
@@ -246,7 +246,7 @@ const GameBoard = ({ game, saveConfig, rightClick, child1, child2 }) => {
                 <Tile
                     {...tileProps}
                     selected={game.selectedTile.x === x && game.selectedTile.y === y}
-                    highlighted={game.getTileClue() === tileContent.clueNumberLink[game.direction]}
+                    highlighted={game.getClueIdFromTile() === tileContent.clueNumberLink[game.direction]}
                     onClick={handleTileClick}
                     onContextMenu={event => { rightClick(event, tileProps, game) } }
                 /> : <Block {...tileProps} onContextMenu={event => rightClick(event, tileProps, game)} />
@@ -288,8 +288,8 @@ const GameBoard = ({ game, saveConfig, rightClick, child1, child2 }) => {
                                     key={clue.id}
                                     clue={clue}
                                     handleClueClick={tile => activateTile(tile, HORIZONTAL)}
-                                    selected={clue.id === game.getTileClue()}
-                                    secondary={clue.id === game.getSecondaryTileClue()}
+                                    selected={clue.id === game.getClueIdFromTile()}
+                                    secondary={clue.id === game.getSecondaryClueIdFromTile()}
                                     setRef={elem => clueRefs[clue.id] = elem}
                                 />
                             })}
@@ -303,8 +303,8 @@ const GameBoard = ({ game, saveConfig, rightClick, child1, child2 }) => {
                                     key={clue.id}
                                     clue={clue}
                                     handleClueClick={tile => activateTile(tile, VERTICAL)}
-                                    selected={clue.id === game.getTileClue()}
-                                    secondary={clue.id === game.getSecondaryTileClue()}
+                                    selected={clue.id === game.getClueIdFromTile()}
+                                    secondary={clue.id === game.getSecondaryClueIdFromTile()}
                                     setRef={elem => clueRefs[clue.id] = elem}
                                 />
                             })}

@@ -1,16 +1,16 @@
 import cloneDeep from "lodash/cloneDeep";
-import {getOppositeDirection, prepTileConfig} from "./utils";
-import {DEFAULT_DIRECTION, HORIZONTAL, VERTICAL} from "./constants";
+import {directionFromClueId, indexFromClueId, getOppositeDirection, prepTileConfig} from "./utils";
+import {DEFAULT_DIRECTION, HORIZONTAL} from "./constants";
 import min from "lodash/min";
 
 const clueId = (direction, i) => `${direction}${i}`;
 
-export const emptyTile = () => ({ answer: '' });
+export const emptyTile = () => ({ answer: '', guess: '' });
 export const block = () => ({ blank: 'yes' });
 export const emptyClue = () => ({ clue: '' });
 
-export const initDesignBoard = data => {
-    const board = data.board.map(row => row.map(cell => cell.blank ? cell : { guess: cell.guess }));
+export const initDesignBoard = (data, newTilesAtStart = false) => {
+    const board = data.board.map(row => row.map(cell => cell.blank ? cell : { guess: cell.guess, answer: cell.answer }));
     const clueList = cloneDeep(data.clues);
     const gameFinishedMessage = data.gameFinishedMessage;
 
@@ -56,10 +56,11 @@ export const initDesignBoard = data => {
                 const clue = clueList[DIRECTION].length > 0 ? clueList[DIRECTION].shift() : emptyClue();
 
                 clue.tile = tile;
-                clue.id = clueId(DIRECTION, clueNumber);
+                clue.id = clueId(DIRECTION, clues[DIRECTION].length);
                 clue.clueNumber = clueNumber;
+                clue.linkClues = [];
 
-                board[tile.y][tile.x].clueNumberLink[DIRECTION] = clueId(DIRECTION, clueNumber);
+                board[tile.y][tile.x].clueNumberLink[DIRECTION] = clue.id;
                 clues[DIRECTION].push(clue);
             }
         } else {
@@ -69,6 +70,41 @@ export const initDesignBoard = data => {
                 clues[DIRECTION].find(clue => clue.id === prevTile.clueNumberLink[DIRECTION]).endTile = tile;
             }
         }
+    }
+
+    const isTileOnNewBoard = tile => {
+        return isTile(tile) && !!getTileBoardItem(tile).clueNumberLink[direction];
+    }
+
+    const isTileOnOldBoard = tile => {
+        return data.isTile(tile) && !!data.getTileBoardItem(tile).clueNumberLink[direction];
+    }
+
+    const lookupClueOnOldBoard = (clue, DIRECTION, NEXT_TILE, NEW_BOARD_ADJUSTER) => {
+        for(let i = 0; i < 2; i++) {
+            const tile = NEXT_TILE(clue.tile, i);
+            if(isTileOnNewBoard(NEW_BOARD_ADJUSTER(tile)) && isTileOnOldBoard(tile)) { // who are we attaching links to
+                return getTileBoardItem(NEW_BOARD_ADJUSTER(tile)).clueNumberLink[DIRECTION];
+            }
+        }
+        return null;
+    }
+
+    const copyClueLinksAcross = ({ DIRECTION, NEXT_TILE }) => {
+        const adjustment = newTilesAtStart ? board.length - data.board.length : 0; // account for board shifting with new tiles
+        const NEW_BOARD_ADJUSTER = ({ x, y }) => ({ x: x + adjustment, y: y + adjustment});
+        data.clues[DIRECTION].forEach(clue => {
+            if(clue.linkClues.length > 0) {
+                const newClueId = lookupClueOnOldBoard(clue, DIRECTION, NEXT_TILE, NEW_BOARD_ADJUSTER); // who are we attaching links to
+                if(newClueId) {
+                    const newClueLinks = clue.links.map(oldLinkId => {
+                        const oldLink = data.clues[DIRECTION][indexFromClueId(oldLinkId)];
+                        return lookupClueOnOldBoard(oldLink, DIRECTION, NEXT_TILE, NEW_BOARD_ADJUSTER);
+                    })
+                    clues[DIRECTION][indexFromClueId(newClueId)].linkClues.push(newClueLinks)
+                }
+            }
+        })
     }
 
     board.forEach((row, y) => {
@@ -83,10 +119,13 @@ export const initDesignBoard = data => {
             const tile = {x, y}
             board[y][x].clueNumberLink = {};
 
-            prepareTile(prepTileConfig.HORIZONTAL, tile, newClueNumber)
-            prepareTile(prepTileConfig.VERTICAL, tile, newClueNumber)
+            prepareTile(prepTileConfig.HORIZONTAL, tile, newClueNumber);
+            prepareTile(prepTileConfig.VERTICAL, tile, newClueNumber);
         })
     });
+
+    copyClueLinksAcross(prepTileConfig.HORIZONTAL);
+    copyClueLinksAcross(prepTileConfig.VERTICAL);
 
     const selectedTile = isTile(data.selectedTile) ? data.selectedTile : clues[DEFAULT_DIRECTION][0].tile;
     const direction =
@@ -112,9 +151,13 @@ export const initDesignBoard = data => {
         previousKeyWasDelete: false,
         gameBoardSize: min([window.screen.height, window.screen.width, 500]),
         tileSize: min([window.screen.height, window.screen.width, 500])/data.board.length,
-        getTileClue: (tile, direction) => game.getTileBoardItem(tile ? tile : game.selectedTile).clueNumberLink[direction ? direction: game.direction],
-        getSecondaryTileClue: (tile, direction) => game.getTileBoardItem(tile ? tile : game.selectedTile).clueNumberLink[getOppositeDirection(direction ? direction: game.direction)]
+        getClue: clueId => clues[directionFromClueId(clueId)][indexFromClueId(clueId)],
+        getClueIdFromTile: (tile, direction) => game.getTileBoardItem(tile ? tile : game.selectedTile).clueNumberLink[direction ? direction: game.direction],
+        getSecondaryClueIdFromTile: (tile, direction) => game.getTileBoardItem(tile ? tile : game.selectedTile).clueNumberLink[getOppositeDirection(direction ? direction: game.direction)]
     }
+    // game.getClue = clueId => {
+    //     return game.clues[directionFromClueId(clueId)][indexFromClueId(clueId)];
+    // }
     return game;
 }
 

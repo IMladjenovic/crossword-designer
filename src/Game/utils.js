@@ -21,3 +21,6 @@ export const prepTileConfig = {
         PREV_TILE: TILE_LEFT
     }
 }
+
+export const indexFromClueId = clueId => clueId.replace(/[A-Z]/g, '');
+export const directionFromClueId = clueId => clueId.replace(/[0-9]/g, '');

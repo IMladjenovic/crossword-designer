@@ -6,6 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { getOppositeDirection } from "./utils";
 import { arrowKeyPress, clearLetterKey, letterKeyPres,tabKeyPress } from "./handleInput";
 
+import intersection from 'lodash/intersection';
+
 import { fonts } from 'js-pixel-fonts';
 
 import {
@@ -48,18 +50,14 @@ const grid = (nTiles, tileSize) => {
 }
 
 const Cell = ({
-              tileContent,
-              x: _x,
-              y: _y,
-              className,
-              onClick,
-              finishMessagePixel,
-              tileSize,
-              numberOfTiles,
-              ...other
+        className,
+        onClick,
+        finishMessagePixel,
+        tileSize,
+        onContextMenu,
+        children,
+        x, y
           }) => {
-    const x = _x * tileSize;
-    const y = _y * tileSize;
     return (
         <g>
             <rect
@@ -69,25 +67,28 @@ const Cell = ({
                 width={tileSize}
                 className={finishMessagePixel ? "finishMessagePixel" : className}
                 onClick={onClick}
-                {...other}
+                onContextMenu={onContextMenu}
             />
-            <text x={x + 2} y={y + 3} fontSize={`${9.75 / numberOfTiles}em`} alignmentBaseline="hanging" className='clueNumber' onClick={onClick}>{tileContent.clueNumber || ''}</text>
-            <text x={x + (tileSize/2)} y={y + tileSize - 4} fontSize={`${27 / numberOfTiles}em`} textAnchor="middle" className='guess' onClick={onClick}>{tileContent.guess}</text>
+            {children}
         </g>
     )
 }
 
-const Tile = ({ selected, highlighted, ...other }) => {
+const Tile = props => {
+    const {x, y, tileSize, numberOfTiles, onContextMenu, onClick, tileContent, highlighted, selected, linkHighlight} = props;
     return (
-        <Cell className={`tile ${selected ? 'selected' : highlighted ? 'highlighted' : ''}`} {...other} />
+        <Cell
+            className={`tile ${selected ? 'selected' : highlighted ? 'highlighted' : linkHighlight ? 'linkHighlighted' : ''}`}
+            {...props}>
+            <text x={x + 2} y={y + 3} fontSize={`${9.75 / numberOfTiles}em`} alignmentBaseline="hanging"
+                  className='clueNumber' onContextMenu={onContextMenu} onClick={onClick}>{tileContent.clueNumber || ''}</text>
+            <text x={x + (tileSize / 2)} y={y + tileSize - 4} fontSize={`${27 / numberOfTiles}em`}
+                  textAnchor="middle" className='guess' onContextMenu={onContextMenu} onClick={onClick}>{tileContent.guess}</text>
+        </Cell>
     )
 }
 
-const Block = (props) => {
-    return (
-        <Cell className={`block`} {...props} />
-    )
-}
+const Block = props => <Cell className={`block`} {...props} />
 
 const Crossword = ({ game, rightClick, activateTile, gameWon, checkBoardAnswersCorrect = () => {}, preventCrosswordTyping = false }) => {
     const clueRefs = useRef([]).current;
@@ -148,11 +149,12 @@ const Crossword = ({ game, rightClick, activateTile, gameWon, checkBoardAnswersC
     });
 
     const placeTile = (tileContent, x, y) => {
+        const tile = { x, y };
         const tileProps = {
             key: `${x}${y}`,
             tileContent,
-            y,
-            x,
+            y: y * game.tileSize,
+            x: x * game.tileSize,
             finishMessagePixel: game.getTileBoardItem({ x, y }).finishMessagePixel === 1,
             tileSize: game.tileSize,
             numberOfTiles: game.board.length
@@ -162,29 +164,32 @@ const Crossword = ({ game, rightClick, activateTile, gameWon, checkBoardAnswersC
             let oppositeDirection = getOppositeDirection(game.direction);
             const updateDirection =
                 // clicking on already selected tile should change direction
-                (game.selectedTile.x === x && game.selectedTile.y === y && game.getTileClue(tileProps, oppositeDirection)) ||
+                (game.selectedTile.x === x && game.selectedTile.y === y && game.getClueIdFromTile(tile, oppositeDirection)) ||
                 // moving to tile which does not have current direction should change direction
-                !game.getTileClue(tileProps, game.direction) ?
+                !game.getClueIdFromTile(tile, game.direction) ?
                     oppositeDirection : game.direction;
 
-            activateTile(tileProps, updateDirection)
+            activateTile(tile, updateDirection)
         }
+
+        const selectedClueId = game.getClueIdFromTile();
 
         return (
             !tileContent.blank ?
                 <Tile
                     {...tileProps}
                     selected={game.selectedTile.x === x && game.selectedTile.y === y}
-                    highlighted={game.getTileClue() === tileContent.clueNumberLink[game.direction]}
+                    highlighted={selectedClueId === tileContent.clueNumberLink[game.direction]}
+                    linkHighlight={intersection(game.getClue(selectedClueId).linkClues, Object.values(tileContent.clueNumberLink)).length > 0} // TODO move clues over to an object with keys
                     onClick={handleTileClick}
-                    onContextMenu={event => { rightClick(event, tileProps, game) } }
-                /> : <Block {...tileProps} onContextMenu={event => rightClick(event, tileProps, game)} />
+                    onContextMenu={event => { rightClick(event, tile, game) }}
+                /> : <Block {...tileProps} onContextMenu={event => rightClick(event, tile, game)} />
         )
     }
 
     return (
         <div className={classes.root}>
-            <div item xs={12} sm={6} className={gameWon ? 'gameWon' : ''} style={{ display: 'contents' }}>
+            <div className={gameWon ? 'gameWon' : ''} style={{ display: 'contents' }}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox={`-1 -1 ${game.gameBoardSize + 2}

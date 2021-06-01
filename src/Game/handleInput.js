@@ -18,11 +18,11 @@ const arrowKeyPressInDirection = (pressedDirection, key, game, activateTile) => 
 
     if(game.direction !== pressedDirection) {
         let nextTile = arrowKeyMapping(game.selectedTile)
-        if(!game.getTileClue(game.selectedTile, pressedDirection)) {
+        if(!game.getClueIdFromTile(game.selectedTile, pressedDirection)) {
             for(let i = 1; game._isLocationOnBoard(nextTile); i++, nextTile = arrowKeyMapping(game.selectedTile, i)) {
                 if(game.isTile(nextTile)) {
                     let tileDirection = pressedDirection;
-                    if(!game.getTileClue(nextTile, tileDirection)) {
+                    if(!game.getClueIdFromTile(nextTile, tileDirection)) {
                         tileDirection = getOppositeDirection(pressedDirection);
                     }
                     game.direction = tileDirection;
@@ -41,7 +41,7 @@ const arrowKeyPressInDirection = (pressedDirection, key, game, activateTile) => 
                 nextTile = arrowKeyMapping(game.selectedTile, i);
                 if(game.isTile(nextTile)) {
                     if(i !== 1) {
-                        if(!game.getTileClue(nextTile, pressedDirection)) {
+                        if(!game.getClueIdFromTile(nextTile, pressedDirection)) {
                             pressedDirection = Object.keys(game.board[nextTile.y][nextTile.x].clueNumberLink)[0];
                         }
                         game.direction = pressedDirection;
@@ -79,8 +79,8 @@ export const letterKeyPres = (key, game, activateTile, setTimestamp, checkBoardA
 const moveSelectorOneSpaceInDirection = (game, activateTile) => {
     const NEXT_TILE = prepTileConfig[game.direction].NEXT_TILE;
 
-    const clueId = game.getTileClue(game.selectedTile, game.direction);
-    const clue = game.clues[game.direction].find(c => c.id === clueId);
+    const clueId = game.getClueIdFromTile(game.selectedTile, game.direction);
+    const clue = game.getClue(clueId);
     const wordLength = (game.direction === HORIZONTAL ? clue.endTile.x - clue.tile.x : clue.endTile.y - clue.tile.y) + 1;
     let keepSearching = true;
     let reachedEnd = false;
@@ -125,8 +125,8 @@ export const clearLetterKey = (key, game, activateTile, setTimestamp) => {
         if(game.isTile(NEXT_TILE(tile))) {
             activateTile(NEXT_TILE(tile))
         } else {
-            const clueId = game.getTileClue(tile, DIRECTION);
-            const clue = game.clues[DIRECTION].find(c => c.id === clueId);
+            const clueId = game.getClueIdFromTile(tile, DIRECTION);
+            const clue = game.getClue(clueId);
             activateTile(clue.tile)
         }
     } else if(key === BACKSPACE_KEY) {
@@ -145,7 +145,7 @@ export const clearLetterKey = (key, game, activateTile, setTimestamp) => {
 export const tabKeyPress = (shiftKey, game, activateTile) => {
     const indexModifier = shiftKey ? -1 : 1;
     let direction = game.direction;
-    let clueIndex = game.clues[direction].findIndex(item => item.id === game.getTileClue()) + indexModifier;
+    let clueIndex = game.clues[direction].findIndex(item => item.id === game.getClueIdFromTile()) + indexModifier;
 
     if (!game.clues[direction][clueIndex]) {
         direction = getOppositeDirection(direction)

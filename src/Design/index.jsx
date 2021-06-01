@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
-import Clue from './Clue'
+import Clue, {EDIT_LINK} from './Clue'
 import Crossword from "../Game/Crossword";
-import { PageHeader } from "../App";
+import EditablePageHeader from "./EditablePageHeader";
 
 import RemoveCircleSharpIcon from '@material-ui/icons/RemoveCircleSharp';
 import AddCircleSharpIcon from '@material-ui/icons/AddCircleSharp';
@@ -11,11 +11,9 @@ import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 
 import cloneDeep from "lodash/cloneDeep";
-import last from "lodash/last";
-import first from "lodash/first";
 import pull from "lodash/pull";
 
-import {block, emptyDesignBoard, emptyTile, initDesignBoard} from "../Game/initBoard";
+import {emptyDesignBoard, emptyTile, initDesignBoard} from "../Game/initBoard";
 import {CLUE_COLUMN_TITLE, HORIZONTAL, VERTICAL} from "../Game/constants";
 import {saveGame} from "../SaveGame";
 import loadFile from "../LoadGame";
@@ -42,7 +40,8 @@ const useStyles = makeStyles((theme) => ({
 const Design = ({ classesParent }) => {
     const [game, setGame] = useState(emptyDesignBoard);
     const clueRefs = useRef([]).current;
-    const activeClues = useRef([]).current;
+
+    const activeItem = useRef('');
 
     const [timestamp, setTimestamp] = useState(Date.now());
 
@@ -50,7 +49,6 @@ const Design = ({ classesParent }) => {
         tile,
         direction
     ) => {
-        console.log(game)
         game.selectedTile = tile;
         if(direction) {
             game.direction = direction;
@@ -61,34 +59,70 @@ const Design = ({ classesParent }) => {
     const toggleTileBlock = (event, tile, game) => {
         event.preventDefault();
         const gameC = cloneDeep(game);
-        gameC.board[tile.y][tile.x] = gameC.isTile(tile) ? block() : emptyTile();
+        const t = gameC.board[tile.y][tile.x];
+        gameC.isTile(tile) ? t.blank = 'yes' : delete t.blank; // change this to simply adding the .block property
         setGame(initDesignBoard(gameC));
     }
 
-    const saveGameWithClue = (clueId, clueText) => {
-        const gameC = cloneDeep(game);
-        const direction = clueId.replace(/[0-9]/g, ''); // strip numbers from string
-        console.log(gameC.clues[direction].find(clue => clue.id === clueId));
-        gameC.clues[direction].find(clue => clue.id === clueId).clue = clueText;
-        console.log(gameC.clues[direction].find(clue => clue.id === clueId));
-        setGame(initDesignBoard(gameC));
+    const saveGameWithTitle = title => {
+        const gameC = cloneDeep(game) // TODO do we need these clone deeps?
+        gameC.title = title;
+        activeItem.current = '';
+
+        setGame(initDesignBoard(gameC))
     }
 
     const modifyBoardLength = (start, add) => {
-        let method;
+        let method = (a, b) => console.log('Error in modifyBoardLength');
+        const gameC = cloneDeep(game);
+        let newRow;
         if(add) {
-            method = array => start ? array.unshift(first(array)) : array.push(last(array))
+            const newArrayLength = game.board.length + 1
+            newRow = new Array(newArrayLength);
+            for (let i = 0; i < newArrayLength; i++) { // faster than .forEach or .fill().map(...)
+                newRow[i] = emptyTile();
+            }
+            method = (array, value) => start ? array.unshift(value) : array.push(value)
         } else {
             method = array => start ? array.shift() : array.pop();
         }
+        gameC.board.forEach(row => method(row, emptyTile()));
+        method(gameC.board, newRow);
+        setGame(initDesignBoard(gameC, start));
+    }
+
+    const registerActiveItem = editId => { activeItem.current = editId; setTimestamp(Date.now()) } // TODO rename to generic item active
+    const unregisterActiveItem = () => {
+        activeItem.current = '';
+        setTimestamp(Date.now());
+    }
+
+    const endClueEdit = (clueId, clueText) => {
         const gameC = cloneDeep(game);
-        gameC.board.forEach(row => method(row));
-        method(gameC.board);
+        gameC.getClue(clueId).clue = clueText;
+        activeItem.current = '';
         setGame(initDesignBoard(gameC));
     }
 
-    const registerClueActive = clueId => activeClues.push(clueId);
-    const removeClueActive = clueId => pull(activeClues, clueId);
+    const handleClueClick = direction => clue => {
+        if(activeItem.current && activeItem.current.includes(EDIT_LINK)) {
+            if(activeItem.current.includes(clue.id)) {
+                return;
+            }
+
+            const selectedClue = game.getClue(game.getClueIdFromTile());
+            const indexOfClueAlreadyLinked = selectedClue.linkClues.findIndex(clueId => clueId === clue.id);
+            if(indexOfClueAlreadyLinked >= 0) {
+                pull(selectedClue.linkClues, clue.id);
+            } else {
+                selectedClue.linkClues.push(clue.id);
+            }
+            setTimestamp(Date.now());
+
+        } else {
+            activateTile(clue.tile, direction);
+        }
+    }
 
     const ModifyGameBoardLengthStart = () => {
         return (
@@ -124,7 +158,9 @@ const Design = ({ classesParent }) => {
 
     return (
         <div className={classes.root}>
-            <PageHeader title={game.title} classes={classesParent}>
+            <EditablePageHeader
+                title={game.title} classes={classesParent} saveGameWithTitle={saveGameWithTitle}
+                registerActiveItem={registerActiveItem}>
                 <Button
                     style={{ backgroundColor: '#85dcb0', margin: '0 20px 0 20px' }}
                     variant="contained"
@@ -137,11 +173,11 @@ const Design = ({ classesParent }) => {
                     onClick={() => loadFile(setGame)}
                     tabIndex="-1"
                 >Load</Button>
-            </PageHeader>
+            </EditablePageHeader>
             <Grid container direction="row" justify="center" spacing={0}>
                 <Grid item xs={12} sm={6} style={{ display: 'contents' }}>
                     <ModifyGameBoardLengthStart />
-                    <Crossword game={game} rightClick={toggleTileBlock} activateTile={activateTile} preventCrosswordTyping={activeClues.length > 0} />
+                    <Crossword game={game} rightClick={toggleTileBlock} activateTile={activateTile} preventCrosswordTyping={activeItem.current !== ''} />
                     <ModifyGameBoardLengthEnd />
                 </Grid>
                 <Grid container direction='row' item xs={12} sm={6}>
@@ -152,13 +188,15 @@ const Design = ({ classesParent }) => {
                                 return <Clue
                                     key={clue.id}
                                     clue={clue}
-                                    handleClueClick={tile => activateTile(tile, HORIZONTAL)}
-                                    selected={clue.id === game.getTileClue()}
-                                    secondary={clue.id === game.getSecondaryTileClue()}
+                                    handleClueClick={handleClueClick(HORIZONTAL)}
+                                    selected={clue.id === game.getClueIdFromTile()}
+                                    secondary={clue.id === game.getSecondaryClueIdFromTile()}
                                     setRef={elem => clueRefs[clue.id] = elem}
-                                    saveGameWithClue={saveGameWithClue}
-                                    registerClueActive={registerClueActive}
-                                    removeClueActive={removeClueActive}
+                                    registerActiveItem={registerActiveItem}
+                                    activeItem={activeItem.current}
+                                    endClueEdit={endClueEdit}
+                                    linked={game.getClue(game.getClueIdFromTile()).linkClues.find(clueId => clueId === clue.id)}
+                                    endClueLink={unregisterActiveItem}
                                 />
                             })}
                         </ol>
@@ -170,13 +208,15 @@ const Design = ({ classesParent }) => {
                                 return <Clue
                                     key={clue.id}
                                     clue={clue}
-                                    handleClueClick={tile => activateTile(tile, VERTICAL)}
-                                    selected={clue.id === game.getTileClue()}
-                                    secondary={clue.id === game.getSecondaryTileClue()}
+                                    handleClueClick={handleClueClick(VERTICAL)}
+                                    selected={clue.id === game.getClueIdFromTile()}
+                                    secondary={clue.id === game.getSecondaryClueIdFromTile()}
                                     setRef={elem => clueRefs[clue.id] = elem}
-                                    saveGameWithClue={saveGameWithClue}
-                                    registerClueActive={registerClueActive}
-                                    removeClueActive={removeClueActive}
+                                    registerActiveItem={registerActiveItem}
+                                    activeItem={activeItem.current}
+                                    endClueEdit={endClueEdit}
+                                    linked={game.getClue(game.getClueIdFromTile()).linkClues.find(clueId => clueId === clue.id)}
+                                    endClueLink={unregisterActiveItem}
                                 />
                             })}
                         </ol>
