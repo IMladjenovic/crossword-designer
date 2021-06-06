@@ -1,19 +1,19 @@
-.block {
-    /*fill: #e27d60;*/
-    fill: #e8a87c;
-}
+/*.block {*/
+/*    !*fill: #e27d60;*!*/
+/*    fill: #e8a87c;*/
+/*}*/
 
-.tile {
-    fill: none;
-    stroke: none;
-    pointer-events: visible;
-}
+/*.tile {*/
+/*    fill: none;*/
+/*    stroke: none;*/
+/*    pointer-events: visible;*/
+/*}*/
 
-.gameBoardBackground {
-    z-index: -100;
-    fill: #fafafa;
-    stroke: none;
-}
+/*.gameBoardBackground {*/
+/*    z-index: -100;*/
+/*    fill: #fafafa;*/
+/*    stroke: none;*/
+/*}*/
 
 .gameWon .gameBoardBackground, .gameWon .selected {
     fill: #85dcb0;
@@ -25,9 +25,9 @@
     fill: #c38d9e;
 }
 
-.selected {
-    fill: #c38d9e;
-}
+/*.selected {*/
+/*    fill: #c38d9e;*/
+/*}*/
 
 .highlighted {
     fill: #85dcb0;
@@ -36,6 +36,10 @@
 .linkHighlighted {
     fill: #e8a87c;
     opacity: 50%;
+}
+
+.defaultFill {
+    fill: #fafafa
 }
 
 .selectedClue {
@@ -75,21 +79,4 @@ text {
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
-
-/*!* Track *!*/
-/*::-webkit-scrollbar-track {*/
-/*    background: #bfebd5;*/
-/*}*/
-
-/*!* Handle *!*/
-/*::-webkit-scrollbar-thumb {*/
-/*    background: #85dcb0;*/
-/*    !*background: #e8a87c;*!*/
-/*    !*background: #41b3ac;*!*/
-/*}*/
-
-/*!* Handle on hover *!*/
-/*::-webkit-scrollbar-thumb:hover {*/
-/*    background: #555;*/
-/*}*/
 

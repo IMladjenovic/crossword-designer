@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 
 const TITLE_ID = 'TITLE_EDIT'
 
-export const PageHeader = ({ title, children, classes, saveGameWithTitle, registerActiveItem, unregisterActiveItem }) => {
+export const PageHeader = ({ title, children, classes, saveGameWithTitle, registerActiveItem }) => {
     const [editMode, setEditMode] = useState(false);
     const [titleText, setTitleText] = useState(title);
     const lastBlurTime = useRef(Date.now());
@@ -44,7 +44,7 @@ export const PageHeader = ({ title, children, classes, saveGameWithTitle, regist
                         <Grid item>
                             <Typography variant="h4" component="div" >{editMode ?
                                 <input autoFocus type="text" value={titleText} onChange={handleChange} onBlur={handleBlur} /> :
-                                <span style ={{ cursor: 'default' }}>{title}</span>}
+                                <span onClick={handleClickToEdit} style ={{ cursor: 'pointer' }}>{title}</span>}
                                 <EditIcon
                                 className={editMode ? 'editIconSelected' : 'editIcon'}
                                 style={{ marginLeft: '10px', cursor: 'pointer' }}

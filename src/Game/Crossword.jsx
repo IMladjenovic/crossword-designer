@@ -20,24 +20,25 @@ import {
     TAB
 } from './constants'
 
-const useStyles = makeStyles((theme) => ({
-    root: { flexGrow: 1 },
-    selectedClue: { backgroundColor: '#85dcb0' },
-    snackbar: { backgroundColor: '#41b3ac' },
-    block: { /*fill: #e27d60;*/ fill: '#e8a87c' },
+const useStyles = makeStyles(() => ({ root: { flexGrow: 1 }}));
+const useCrosswordStyles = makeStyles(() => ({
+    block: { fill: '#e8a87c' },
     tile: { fill: 'none', stroke: 'none', pointerEvents: 'visible' },
-    gameBoardBackground: { fill: '#fafafa', stroke: 'none' },
-    // gameWon .gameBoardBackground, .gameWon .selected {
-    gameWon: { fill: '#85dcb0', transition: 'fill 3s' },
+    gameBoardBackground: { zIndex: '-100', fill: '#fafafa', stroke: 'none' },
     finishMessagePixel: { fill: '#c38d9e' },
-    selected: { fill: '#c38d9e' },
+    selectedTile: { fill: '#c38d9e' },
+    gameWon: { fill: '#85dcb0' },
     highlighted: { fill: '#85dcb0' },
-    svg: { maxHeight: '600px '},
-    clueNumber: { fontSize: '0.8em' },
-    guess: { fontSize: '1.8em' },
+    linkHighlighted: { fill: '#e8a87c', opacity: '50%' },
+    selectedClue: { backgroundColor: '#85dcb0', },
+    secondaryClue: { backgroundColor: '#85dcb0', opacity: '10%' },
     grid: { stroke: '#e27d60' },
-    text: { cursor: 'default' }
-}));
+    text: { cursor: 'default' },
+    '*::-webkit-scrollbar': { width: '10px' },
+    '*::-webkit-scrollbar-track': { background: '#f1f1f1' },
+    '*::-webkit-scrollbar-thumb': { background: '#41b3ac' },
+    '*::-webkit-scrollbar-thumb:hover': { background: '#555' }
+}))
 
 const grid = (nTiles, tileSize) => {
     let grid = '';
@@ -50,9 +51,8 @@ const grid = (nTiles, tileSize) => {
 }
 
 const Cell = ({
-        className,
+        classes,
         onClick,
-        finishMessagePixel,
         tileSize,
         onContextMenu,
         children,
@@ -65,7 +65,7 @@ const Cell = ({
                 y={y}
                 height={tileSize}
                 width={tileSize}
-                className={finishMessagePixel ? "finishMessagePixel" : className}
+                className={classes}
                 onClick={onClick}
                 onContextMenu={onContextMenu}
             />
@@ -75,24 +75,35 @@ const Cell = ({
 }
 
 const Tile = props => {
-    const {x, y, tileSize, numberOfTiles, onContextMenu, onClick, tileContent, highlighted, selected, linkHighlight} = props;
+    const {x, y, tileSize, numberOfTiles, onContextMenu, onClick, tileContent, classes} = props;
     return (
         <Cell
-            className={`tile ${selected ? 'selected' : highlighted ? 'highlighted' : linkHighlight ? 'linkHighlighted' : ''}`}
+            classes={classes}
             {...props}>
-            <text x={x + 2} y={y + 3} fontSize={`${9.75 / numberOfTiles}em`} alignmentBaseline="hanging"
+            {tileContent.circle && <circle cx={x + tileSize / 2} cy={y + tileSize / 2} r={(tileSize / 2) - 1.3} stroke="black" stroke-width="1" fill="none" />}
+            {tileContent.circle && tileContent.clueNumber && <rect x={x} y={y} width={(tileSize / 6) * 2} height={tileSize / 3.3} />}
+            <text x={x + 1} y={y + 1.7} fontSize={`${9.75 / numberOfTiles}em`} alignmentBaseline="hanging" style={{ letterSpacing: '-1px'}}
                   className='clueNumber' onContextMenu={onContextMenu} onClick={onClick}>{tileContent.clueNumber || ''}</text>
-            <text x={x + (tileSize / 2)} y={y + tileSize - 4} fontSize={`${27 / numberOfTiles}em`}
+            <text x={x + (tileSize / 2)} y={y + (tileSize/7 * 6)} fontSize={`${27 / numberOfTiles}em`}
                   textAnchor="middle" className='guess' onContextMenu={onContextMenu} onClick={onClick}>{tileContent.guess}</text>
         </Cell>
     )
 }
 
-const Block = props => <Cell className={`block`} {...props} />
+const Block = props => <Cell className={props.classes} {...props} />
 
-const Crossword = ({ game, rightClick, activateTile, gameWon, checkBoardAnswersCorrect = () => {}, preventCrosswordTyping = false }) => {
-    const clueRefs = useRef([]).current;
+const Crossword = ({
+    game,
+    rightClick = null,
+    activateTile,
+    gameWon,
+    preTileClick = () => {},
+    postKeyPress = () => {},
+    preventCrosswordTyping = false
+}) => {
     const boardRef = useRef();
+    const classes = useStyles();
+    const crosswordClasses = useCrosswordStyles();
 
     const [timestamp, setTimestamp] = useState(Date.now());
 
@@ -109,7 +120,6 @@ const Crossword = ({ game, rightClick, activateTile, gameWon, checkBoardAnswersC
         loadGlyphs();
     }, []);
 
-    const classes = useStyles();
 
     useKeypress([
         ...VERTICAL_ARROW_KEYS,
@@ -133,8 +143,8 @@ const Crossword = ({ game, rightClick, activateTile, gameWon, checkBoardAnswersC
                 return;
             }
             if (key.length === 1 && key.match(/[a-z]/i)) {
-                letterKeyPres(key, game, activateTile, setTimestamp,
-                    checkBoardAnswersCorrect);
+                letterKeyPres(key, game, activateTile, setTimestamp);
+                postKeyPress();
                 game.previousKeyWasDelete = false;
                 return;
             }
@@ -155,12 +165,12 @@ const Crossword = ({ game, rightClick, activateTile, gameWon, checkBoardAnswersC
             tileContent,
             y: y * game.tileSize,
             x: x * game.tileSize,
-            finishMessagePixel: game.getTileBoardItem({ x, y }).finishMessagePixel === 1,
             tileSize: game.tileSize,
             numberOfTiles: game.board.length
         };
 
         const handleTileClick = () => {
+            preTileClick();
             let oppositeDirection = getOppositeDirection(game.direction);
             const updateDirection =
                 // clicking on already selected tile should change direction
@@ -174,32 +184,48 @@ const Crossword = ({ game, rightClick, activateTile, gameWon, checkBoardAnswersC
 
         const selectedClueId = game.getClueIdFromTile();
 
+        let classes;
+        if(gameWon) {
+            classes = game.board[y][x].finishMessagePixel === 1 ? // using y/x because end message sequence does not use initBoard
+                crosswordClasses.finishMessagePixel : crosswordClasses.gameWon;
+        } else if(tileContent.blank) {
+            classes = crosswordClasses.block;
+        } else if(game.selectedTile.x === x && game.selectedTile.y === y) {
+            classes = crosswordClasses.selectedTile;
+        } else if (selectedClueId === tileContent.clueNumberLink[game.direction]) {
+            classes = crosswordClasses.highlighted;
+        } else if (intersection(game.getClue(selectedClueId).linkClues, Object.values(tileContent.clueNumberLink)).length > 0) {
+            classes = crosswordClasses.linkHighlighted;
+        }
+
         return (
             !tileContent.blank ?
                 <Tile
                     {...tileProps}
-                    selected={game.selectedTile.x === x && game.selectedTile.y === y}
-                    highlighted={selectedClueId === tileContent.clueNumberLink[game.direction]}
-                    linkHighlight={intersection(game.getClue(selectedClueId).linkClues, Object.values(tileContent.clueNumberLink)).length > 0} // TODO move clues over to an object with keys
+                    classes={`${crosswordClasses.tile} ${classes}`}
                     onClick={handleTileClick}
-                    onContextMenu={event => { rightClick(event, tile, game) }}
-                /> : <Block {...tileProps} onContextMenu={event => rightClick(event, tile, game)} />
+                    onContextMenu={event => { rightClick ? rightClick(event, tile, game) : handleTileClick() }}
+                /> : <Block
+                    {...tileProps} classes={classes}
+                    onContextMenu={event => rightClick ? rightClick(event, tile, game) : handleTileClick()}
+                />
         )
     }
 
     return (
-        <div className={classes.root}>
-            <div className={gameWon ? 'gameWon' : ''} style={{ display: 'contents' }}>
+        <div className={classes.root} style={{ maxWidth: game.gameBoardSize, maxHeight: game.gameBoardSize }}>
+            <div style={{ display: 'contents' }}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox={`-1 -1 ${game.gameBoardSize + 2}
                     ${game.gameBoardSize + 2}`}
-                    style={{ maxWidth: game.gameBoardSize, maxHeight: game.gameBoardSize, marginTop: '40px', float: 'middle', outline: 'none', userSelect: 'none' }}
+                    style={{ marginTop: '20px', float: 'middle', outline: 'none', userSelect: 'none' }}
                     tabIndex="0"
+                    width='100%'
                     onContextMenu={event => { event.preventDefault() }}
                     ref={elem => boardRef.current = elem}
                 >
-                    <rect className='gameBoardBackground' x='-1' y='-1' width={game.gameBoardSize + 2} height={game.gameBoardSize + 2} />
+                    <rect className={crosswordClasses.gameBoardBackground} x='-1' y='-1' width={game.gameBoardSize + 2} height={game.gameBoardSize + 2} />
                     <g>
                         {game.board.map((row, y) =>
                             row.map((tile, x) => placeTile(tile, x, y))

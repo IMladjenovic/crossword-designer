@@ -62,18 +62,12 @@ export const arrowKeyPress = (key, game, activateTile) => {
     }
 }
 
-export const letterKeyPres = (key, game, activateTile, setTimestamp, checkBoardAnswersCorrect) => {
+export const letterKeyPres = (key, game, activateTile, setTimestamp) => {
     if(!game.isTile(game.selectedTile)) {
         return;
     }
     game.getTileBoardItem(game.selectedTile).guess = key.toUpperCase();
     moveSelectorOneSpaceInDirection(game, activateTile);
-
-    let numberOfGuesses = 0;
-    game.board.forEach(row => row.forEach(tile => tile.guess && numberOfGuesses++));
-    if(numberOfGuesses === game.totalNumberOfBoardLetters) {
-        checkBoardAnswersCorrect();
-    }
 }
 
 const moveSelectorOneSpaceInDirection = (game, activateTile) => {

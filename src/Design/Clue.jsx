@@ -1,6 +1,6 @@
 import React, {useState, useRef} from "react";
 import EditIcon from '@material-ui/icons/Edit';
-import LinkIcon from '@material-ui/icons/Link';
+import CompareArrowsRoundedIcon from '@material-ui/icons/CompareArrowsRounded';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import './Clue.css'
@@ -18,7 +18,19 @@ const prep = (clue, activeItem) => {
     return { editText, editLink, editMode, linkMode };
 };
 
-const Clue = ({ clue, handleClueClick, selected, secondary, linked, setRef, registerActiveItem, activeItem, endClueEdit, endClueLink }) => {
+const Clue = ({
+    clue,
+    handleClueClick,
+    selected,
+    secondary,
+    linked,
+    setRef,
+    registerActiveItem,
+    activeItem,
+    endClueEdit,
+    endClueLink,
+    activateTile
+}) => {
     const [clueText, setClueText] = useState(clue.clue);
     const lastBlurTime = useRef(Date.now());
     const { editText, editLink, editMode, linkMode } = prep(clue, activeItem);
@@ -39,7 +51,7 @@ const Clue = ({ clue, handleClueClick, selected, secondary, linked, setRef, regi
     const handleClickToLink = event => {
         event.stopPropagation();
         if(!linkMode && lastBlurTime.current + 500 < Date.now()) {
-            handleClueClick(clue);
+            activateTile(clue.tile);
             registerActiveItem(editLink);
         } else {
             endClueLink();
@@ -61,7 +73,7 @@ const Clue = ({ clue, handleClueClick, selected, secondary, linked, setRef, regi
         display: 'flex',
         padding: '5px 10px 5px 1px'
     }}
-    className={`${secondary ? 'secondaryClueBorder' : 'clueBorder'} ${activeItem && activeItem !== editLink ? 'highlightLinkOnHover' : ''}`}
+    className={`${secondary ? 'secondaryClueBorder' : 'clueBorder'} ${activeItem.includes(EDIT_LINK) && activeItem !== editLink ? 'highlightLinkOnHover' : ''}`}
     key={clue.id}
     id={clue.id}
     selected={selected}
@@ -79,15 +91,15 @@ const Clue = ({ clue, handleClueClick, selected, secondary, linked, setRef, regi
             <input autoFocus type="text" value={clueText} onChange={handleChange} onBlur={handleBlur} /> :
             clue.clue }
         </span>
-        <Tooltip title={"Link Clue"}>
-            <LinkIcon
-                className={linkMode ? 'editIconSelected' : 'editIcon'}
-                style={{ marginLeft: 'auto' }}
-                onClick={handleClickToLink} />
-        </Tooltip>
         <EditIcon
             className={editMode ? 'editIconSelected' : 'editIcon'}
             onClick={handleClickToEditText} />
+        {(!activeItem.includes(EDIT_LINK) || activeItem === editLink) && <Tooltip title={"Link related clues"}>
+            <CompareArrowsRoundedIcon
+                className={linkMode ? 'editIconSelected' : 'editIcon'}
+                style={{ marginLeft: 'auto' }}
+                onClick={handleClickToLink} />
+        </Tooltip>}
     </li>
 }
 

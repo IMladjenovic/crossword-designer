@@ -53,7 +53,7 @@ function App() {
             <Grid container spacing={0} style={{ minHeight: '100vh', marginBottom: '-20px' }} >
                 <Grid item xs={12} >
                     {playGame ?
-                        <Play /> :
+                        <Play classesParent={classes} setPlayGame={setPlayGame} /> :
                      designGame ?
                         <Design classesParent={classes} /> :
                         <Landing classesParent={classes} title="Play and Design Crosswords"

@@ -5,6 +5,7 @@ import { initDesignBoard } from "../Game/initBoard";
 const loadFile = async setGameData => {
     let fileHandle;
     // open file picker, destructure the one element returned array
+
     [fileHandle] = await window.showOpenFilePicker(pickerOpts);
     const fileData = await fileHandle.getFile();
     const jsonFile = await fileData.text();
