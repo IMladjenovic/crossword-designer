@@ -31,6 +31,7 @@ import loadFile from "../LoadGame";
 import {publish, verifyPublish} from "./publishGame";
 import Snackbar from "@material-ui/core/Snackbar";
 import EditableGameCompleteMessage from "./EditableGameCompleteMessage";
+import {activateEndGameMessage} from "../Play/endGame";
 
 const useStyles = makeStyles((theme) => ({
     root: { flexGrow: 1 },
@@ -62,6 +63,7 @@ const Design = ({ classesParent }) => {
     const [howTo, setHowTo] = useState(false);
     const [rotationalSymmetry, setRotationalSymmetry] = useState(false);
     const clueRefs = useRef([]).current;
+    const [demoGame, setDemoGame] = useState(false);
 
     const activeItem = useRef('');
 
@@ -101,7 +103,6 @@ const Design = ({ classesParent }) => {
 
         setGame(initDesignBoard(gameC))
     }
-
 
     const saveGameWithFinishMessage = message => {
         const gameC = cloneDeep(game) // TODO do we need these clone deeps?
@@ -145,6 +146,11 @@ const Design = ({ classesParent }) => {
         } else {
             activateTile(clue.tile, direction);
         }
+    }
+
+    const demoEndGameMessage = () => {
+        setDemoGame(true);
+        activateEndGameMessage(game, setDemoGame, setTimestamp);
     }
 
     const ModifyGameBoardLengthStart = () => {
@@ -239,14 +245,15 @@ const Design = ({ classesParent }) => {
             <Grid container direction="row" justify="center" spacing={0}>
                 <Grid container item direction="row" justify="center" spacing={0} xs={12} sm={6} style={{ margin: 'auto' }}>
                     <ModifyGameBoardLengthStart />
-                    <div style={{ flexGrow: 1 }}>
+                    <div style={{ flexGrow: 1, maxWidth: `${game.gameBoardSize}px` }}>
                         <EditableGameCompleteMessage
                             message={game.gameFinishedMessage} classes={classesParent} saveGameWithFinishMessage={saveGameWithFinishMessage}
-                            registerActiveItem={registerActiveItem} />
+                            registerActiveItem={registerActiveItem} demoEndGameMessage={demoEndGameMessage} />
                         <Crossword game={game}
+                                   gameWon={demoGame}
                                    rightClick={toggleTileBlock}
                                    activateTile={activateTile}
-                                   preventCrosswordTyping={activeItem.current !== ''}
+                                   preventCrosswordTyping={activeItem.current !== '' || demoGame}
                                    preTileClick={preTileClick}
                         />
                     </div>

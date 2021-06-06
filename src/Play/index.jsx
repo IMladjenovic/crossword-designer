@@ -90,7 +90,7 @@ const Play = ({ classesParent, setPlayGame }) => {
                 <Button
                     style={{ backgroundColor: '#41b3ac', margin: '0 0 0 20px', color: 'white' }}
                     variant="contained"
-                    onClick={() => loadFile(setGame).catch(() => setPlayGame(false))}
+                    onClick={() => loadFile(setGame)}
                     tabIndex="-1"
                 >Load</Button>
             </PageHeader>

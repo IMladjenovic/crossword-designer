@@ -23,7 +23,7 @@ import {
 const useStyles = makeStyles(() => ({ root: { flexGrow: 1 }}));
 const useCrosswordStyles = makeStyles(() => ({
     block: { fill: '#e8a87c' },
-    tile: { fill: 'none', stroke: 'none', pointerEvents: 'visible' },
+    tile: { fill: '#fafafa', stroke: 'none', pointerEvents: 'visible' },
     gameBoardBackground: { zIndex: '-100', fill: '#fafafa', stroke: 'none' },
     finishMessagePixel: { fill: '#c38d9e' },
     selectedTile: { fill: '#c38d9e' },
@@ -81,7 +81,7 @@ const Tile = props => {
             classes={classes}
             {...props}>
             {tileContent.circle && <circle cx={x + tileSize / 2} cy={y + tileSize / 2} r={(tileSize / 2) - 1.3} stroke="black" stroke-width="1" fill="none" />}
-            {tileContent.circle && tileContent.clueNumber && <rect x={x} y={y} width={(tileSize / 6) * 2} height={tileSize / 3.3} />}
+            {tileContent.circle && tileContent.clueNumber && <rect x={x} y={y} width={(tileSize / 6) * 2} height={tileSize / 3.3} className={classes} />}
             <text x={x + 1} y={y + 1.7} fontSize={`${9.75 / numberOfTiles}em`} alignmentBaseline="hanging" style={{ letterSpacing: '-1px'}}
                   className='clueNumber' onContextMenu={onContextMenu} onClick={onClick}>{tileContent.clueNumber || ''}</text>
             <text x={x + (tileSize / 2)} y={y + (tileSize/7 * 6)} fontSize={`${27 / numberOfTiles}em`}

@@ -1,11 +1,15 @@
 import React, {useRef, useState} from "react";
-import EditIcon from "@material-ui/icons/Edit";
 import useKeypress from "react-use-keypress";
+
 import {ENTER} from "../Game/constants";
+
+import EditIcon from "@material-ui/icons/Edit";
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import Tooltip from "@material-ui/core/Tooltip";
 
 const GAME_FINISH_MESSAGE_ID = 'GAME_FINISH_MESSAGE_ID';
 
-const EditableGameCompleteMessage = ({ message, saveGameWithFinishMessage, registerActiveItem }) => {
+const EditableGameCompleteMessage = ({ message, saveGameWithFinishMessage, registerActiveItem, demoEndGameMessage }) => {
     const [messageText, setMessage] = useState(message);
     const [editMode, setEditMode] = useState(false);
     const lastBlurTime = useRef(Date.now());
@@ -33,7 +37,7 @@ const EditableGameCompleteMessage = ({ message, saveGameWithFinishMessage, regis
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <span style={{ marginRight: '20px' }}>End game message:</span>
+            <span style={{ marginRight: '20px' }}>Game completed message:</span>
             {editMode ?
                 <input autoFocus type="text" value={messageText} onChange={handleChange} onBlur={handleBlur}/> :
                 <span onClick={handleClickToEdit} style={{cursor: 'pointer'}}>{messageText}</span>
@@ -42,6 +46,12 @@ const EditableGameCompleteMessage = ({ message, saveGameWithFinishMessage, regis
                 className={editMode ? 'editIconSelected' : 'editIcon'}
                 style={{ marginLeft: '10px', cursor: 'pointer' }}
                 onClick={handleClickToEdit} />
+            <Tooltip title={"Demo message"}>
+                <PlayCircleOutlineIcon
+                    className={editMode ? 'editIconSelected' : 'editIcon'}
+                    style={{ marginLeft: '10px', cursor: 'pointer' }}
+                    onClick={demoEndGameMessage} />
+            </Tooltip>
         </div>
     )
 }

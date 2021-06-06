@@ -24,7 +24,7 @@ export const activateEndGameMessage = (game, setGameWon, setTimestamp) => {
     const pixelDisplayHeight = finishMessagePixels.length;
     const numberOfPixelRenders = finishMessagePixels[0].length;
 
-    const yStart = (boardWidth - pixelDisplayHeight) / 2;
+    const yStart = Math.ceil((boardWidth - pixelDisplayHeight) / 2);
     for(let i = 0; i < numberOfPixelRenders; i++) {
         for(let y = 0; y < pixelDisplayHeight; y++) {
             for(let x = 0; x < boardWidth; x ++) {
