@@ -1,7 +1,7 @@
 import React, {useRef, useState} from "react";
 import useKeypress from "react-use-keypress";
 
-import {ENTER} from "../Game/constants";
+import {ENTER} from "../Crossword/constants";
 
 import Grid from "@material-ui/core/Grid";
 import EditIcon from "@material-ui/icons/Edit";

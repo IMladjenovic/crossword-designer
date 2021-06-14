@@ -62,7 +62,7 @@ export const arrowKeyPress = (key, game, activateTile) => {
     }
 }
 
-export const letterKeyPres = (key, game, activateTile, setTimestamp) => {
+export const letterKeyPres = (key, game, activateTile) => {
     if(!game.isTile(game.selectedTile)) {
         return;
     }

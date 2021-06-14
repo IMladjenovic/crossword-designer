@@ -1,16 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import Crossword from "../Game/Crossword";
+import React, {useEffect, useState, useRef} from 'react';
+import Crossword from "../Crossword";
 import PageHeader from "./PageHeader";
 import Clue from "./Clue";
 
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import {makeStyles} from "@material-ui/core/styles";
 
-import {CLUE_COLUMN_TITLE, HORIZONTAL, VERTICAL} from "../Game/constants";
+import {CLUE_COLUMN_TITLE, HORIZONTAL, VERTICAL} from "../Crossword/constants";
+import {focusClues} from './utils'
 import {saveGame} from "../SaveGame";
 import loadFile from "../LoadGame";
-import {makeStyles} from "@material-ui/core/styles";
 import { activateEndGameMessage } from './endGame';
+import {directionFromClueId} from "../Crossword/utils";
 
 const useStyles = makeStyles((theme) => ({
     root: { flexGrow: 1 },
@@ -34,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 const Play = ({ classesParent, setPlayGame }) => {
     const [game, setGame] = useState(null);
     const [gameWon, setGameWon] = useState(false);
+    const clueRefs = useRef([]).current;
     const classes = useStyles();
     const [timestamp, setTimestamp] = useState(Date.now());
 
@@ -43,20 +46,25 @@ const Play = ({ classesParent, setPlayGame }) => {
         }
     }, []);
 
-    const activateTile = (
-        tile,
-        direction
-    ) => {
+    const activateTile = (tile, direction) => {
         game.selectedTile = tile;
         if(direction) {
             game.direction = direction;
         }
+        focusClues(game, clueRefs);
         setTimestamp(Date.now())
+    }
+
+    const handleClueClick = (clue, direction) => {
+        if(game.getClueIdFromTile() === clue.id || game.getSecondaryClueIdFromTile() === clue.id) {
+            activateTile(game.selectedTile, direction);
+        } else {
+            activateTile(clue.tile, direction);
+        }
     }
 
     const postKeyPress = () => {
         let incorrectGuess = false;
-        console.log("postKeyPress")
         for (let y = 0; y < game.board.length; y++) {
             for(let x = 0; x < game.board.length; x++) {
                 const tile = game.getTileBoardItem({ x, y });
@@ -70,9 +78,7 @@ const Play = ({ classesParent, setPlayGame }) => {
                 }
             }
         }
-        console.log("incorrectGuess", incorrectGuess)
         if(!incorrectGuess) {
-            console.log("setGameWon true")
             setGameWon(true);
             activateEndGameMessage(game, setGameWon, setTimestamp);
         }
@@ -111,10 +117,11 @@ const Play = ({ classesParent, setPlayGame }) => {
                                 return <Clue
                                     key={clue.id}
                                     clue={clue}
-                                    handleClueClick={() => activateTile(clue.tile, HORIZONTAL)}
+                                    handleClueClick={() => handleClueClick(clue.tile, HORIZONTAL)}
                                     selected={clue.id === game.getClueIdFromTile()}
                                     secondary={clue.id === game.getSecondaryClueIdFromTile()}
                                     linked={game.getClue(game.getClueIdFromTile()).linkClues.find(clueId => clueId === clue.id)}
+                                    innerRef={elem => clueRefs[clue.id] = elem}
                                 />
                             })}
                         </ol>
@@ -126,10 +133,11 @@ const Play = ({ classesParent, setPlayGame }) => {
                                 return <Clue
                                     key={clue.id}
                                     clue={clue}
-                                    handleClueClick={() => activateTile(clue.tile, VERTICAL)}
+                                    handleClueClick={() => handleClueClick(clue.tile, VERTICAL)}
                                     selected={clue.id === game.getClueIdFromTile()}
                                     secondary={clue.id === game.getSecondaryClueIdFromTile()}
                                     linked={game.getClue(game.getClueIdFromTile()).linkClues.find(clueId => clueId === clue.id)}
+                                    innerRef={elem => clueRefs[clue.id] = elem}
                                 />
                             })}
                         </ol>

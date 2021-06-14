@@ -1,6 +1,6 @@
 import cloneDeep from "lodash/cloneDeep";
 import {directionFromClueId, indexFromClueId, getOppositeDirection, prepTileConfig} from "./utils";
-import {DEFAULT_DIRECTION, HORIZONTAL, VERTICAL} from "./constants";
+import {HORIZONTAL, VERTICAL} from "./constants";
 import min from "lodash/min";
 import compact from "lodash/compact";
 
@@ -52,10 +52,28 @@ const modifyBoardLength = (game, modificationType) => {
     return gameC;
 }
 
+const addBoardFunctions = game => {
+    const getTileBoardItem = ({x , y}) => game.board[y][x];
+    const _isLocationOnBoard = ({ x, y }) => isLocationOnBoard(x, y);
+    const isLocationOnBoard = (x, y) => x >= 0 && y >= 0 && x < game.board.length && y < game.board.length;
+    const isTile = ({ x, y }) => isTileAtCoords(x, y);
+    const isTileAtCoords = (x, y) => {
+        if(!isLocationOnBoard(x, y)) {
+            return false;
+        }
+        return !getTileBoardItem({ x, y}).blank;
+    }
+    game.getTileBoardItem = getTileBoardItem;
+    game._isLocationOnBoard = _isLocationOnBoard;
+    game.isLocationOnBoard = isLocationOnBoard;
+    game.isTile = isTile;
+    game.isTileAtCoords = isTileAtCoords;
+}
+
 export const initDesignBoard = (oldGame, modificationType = '') => {
+    addBoardFunctions(oldGame);
     const modifyBoard = modificationType ? game => modifyBoardLength(game, modificationType) : game => game;
     const board = modifyBoard(oldGame).board.map(row => row.map(cell => cell.blank ? cell : { guess: cell.guess, answer: cell.answer, circle: cell.circle }));
-    const clueList = cloneDeep(oldGame.clues);
     const gameFinishedMessage = oldGame.gameFinishedMessage;
 
     const NEW_BOARD_ADJUSTER = modificationType ? modifyBoardLengthConfig[modificationType].adjust : tile => tile;
@@ -99,7 +117,7 @@ export const initDesignBoard = (oldGame, modificationType = '') => {
         if(!isTile(prevTileCoords)) { // is previous tile block?
             if(isNextTile) { // is not single wide tile
                 updateClueNumber(newClueNumber, board, tile);
-                const clue = clueList[DIRECTION].length > 0 ? clueList[DIRECTION].shift() : emptyClue();
+                const clue = emptyClue();
 
                 clue.tile = tile;
                 clue.id = clueId(DIRECTION, clues[DIRECTION].length);
@@ -140,7 +158,7 @@ export const initDesignBoard = (oldGame, modificationType = '') => {
     }
 
     const isTileOnOldBoard = (tile, direction) => {
-        return oldGame.hasOwnProperty("isTile") && oldGame.isTile(tile) && !!oldGame.getTileBoardItem(tile).clueNumberLink[direction];
+        return oldGame.isTile(tile) && oldGame.getTileBoardItem(tile).clueNumberLink && !!oldGame.getTileBoardItem(tile).clueNumberLink[direction];
     }
 
     const lookupClueOnNewBoard = (clue, { DIRECTION, NEXT_TILE }) => {
@@ -155,7 +173,7 @@ export const initDesignBoard = (oldGame, modificationType = '') => {
 
     oldGame.clues[HORIZONTAL].concat(oldGame.clues[VERTICAL]).forEach(clue => {
         const direction = directionFromClueId(clue.id);
-        if(clue.linkClues.length > 0) {
+        if(clue.linkClues.length > 0 || clue.clue) {
             const newClueId = lookupClueOnNewBoard(clue, prepTileConfig[direction]); // who are we attaching links to
             if(newClueId) {
                 const newClueLinks = compact(clue.linkClues.map(oldLinkId => {
@@ -163,16 +181,20 @@ export const initDesignBoard = (oldGame, modificationType = '') => {
                     const oldLink = oldGame.clues[linkDirection][indexFromClueId(oldLinkId)]; // TODO what direction is the old link going in?
                     return lookupClueOnNewBoard(oldLink, prepTileConfig[linkDirection]);
                 }));
-                clues[direction][indexFromClueId(newClueId)].linkClues.push(...newClueLinks)
+                clues[direction][indexFromClueId(newClueId)].linkClues.push(...newClueLinks);
+                clues[direction][indexFromClueId(newClueId)].clue = clue.clue;
             }
         }
     })
 
-    const nearestSelectedClueId = lookupClueOnNewBoard({ tile: NEW_BOARD_ADJUSTER(oldGame.selectedTile) }, prepTileConfig[oldGame.direction]);
+
+    const newTile = NEW_BOARD_ADJUSTER(oldGame.selectedTile);
+    const nearestSelectedClueId = lookupClueOnNewBoard({ tile: oldGame.selectedTile }, prepTileConfig[oldGame.direction]);
     const direction = oldGame.direction;
     const selectedTile = nearestSelectedClueId ?
-        clues[directionFromClueId(nearestSelectedClueId)][indexFromClueId(nearestSelectedClueId)].tile :
-        clues[direction][0].tile;
+        nearestSelectedClueId === getTileBoardItem(newTile).clueNumberLink[direction] ?
+            newTile : clues[directionFromClueId(nearestSelectedClueId)][indexFromClueId(nearestSelectedClueId)].tile
+        : clues[direction][0].tile;
 
     const gameBoardSize =  min([window.screen.height, window.screen.width, 500]);
 

@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
-import Clue, {EDIT_LINK} from './Clue'
-import Crossword from "../Game/Crossword";
+import EditableClue, {EDIT_LINK} from './EditableClue'
+import Crossword from "../Crossword";
 import EditablePageHeader from "./EditablePageHeader";
 import HowTo from "./HowTo";
 
@@ -24,14 +24,15 @@ import {
     DELETE_START,
     emptyDesignBoard,
     initDesignBoard
-} from "../Game/initBoard";
-import {CLUE_COLUMN_TITLE, HORIZONTAL, VERTICAL} from "../Game/constants";
+} from "../Crossword/initBoard";
+import {CLUE_COLUMN_TITLE, HORIZONTAL, VERTICAL} from "../Crossword/constants";
 import {saveGame} from "../SaveGame";
 import loadFile from "../LoadGame";
 import {publish, verifyPublish} from "./publishGame";
 import Snackbar from "@material-ui/core/Snackbar";
 import EditableGameCompleteMessage from "./EditableGameCompleteMessage";
 import {activateEndGameMessage} from "../Play/endGame";
+import {focusClues} from "../Play/utils";
 
 const useStyles = makeStyles((theme) => ({
     root: { flexGrow: 1 },
@@ -63,6 +64,7 @@ const Design = ({ classesParent }) => {
     const [howTo, setHowTo] = useState(false);
     const [rotationalSymmetry, setRotationalSymmetry] = useState(false);
     const clueRefs = useRef([]).current;
+    const crosswordRef = useRef(null).current;
     const [demoGame, setDemoGame] = useState(false);
 
     const activeItem = useRef('');
@@ -77,6 +79,7 @@ const Design = ({ classesParent }) => {
         if(direction) {
             game.direction = direction;
         }
+        focusClues(game, clueRefs, crosswordRef);
         setTimestamp(Date.now())
     }
 
@@ -122,6 +125,7 @@ const Design = ({ classesParent }) => {
 
     const endClueEdit = (clueId, clueText) => {
         game.getClue(clueId).clue = clueText;
+        console.log("editing clue", game.getClue(clueId).clue)
         activeItem.current = '';
         setGame(initDesignBoard(game));
     }
@@ -144,7 +148,11 @@ const Design = ({ classesParent }) => {
             setTimestamp(Date.now());
 
         } else {
-            activateTile(clue.tile, direction);
+            if(game.getClueIdFromTile() === clue.id || game.getSecondaryClueIdFromTile() === clue.id) {
+                activateTile(game.selectedTile, direction);
+            } else {
+                activateTile(clue.tile, direction);
+            }
         }
     }
 
@@ -254,8 +262,7 @@ const Design = ({ classesParent }) => {
                                    rightClick={toggleTileBlock}
                                    activateTile={activateTile}
                                    preventCrosswordTyping={activeItem.current !== '' || demoGame}
-                                   preTileClick={preTileClick}
-                        />
+                                   preTileClick={preTileClick}/>
                     </div>
                     <ModifyGameBoardLengthEnd />
                 </Grid>
@@ -264,13 +271,13 @@ const Design = ({ classesParent }) => {
                         <span style={{ fontSize: '1.5em', height: '40px', display: 'block' }}>{CLUE_COLUMN_TITLE[HORIZONTAL]}</span>
                         <ol style={{ height: `${game.gameBoardSize}px`, overflowY: 'scroll', margin: '0 10px 0 0', listStyle: 'none', paddingLeft: '10px' }}>
                             {game.clues[HORIZONTAL].map(clue => {
-                                return <Clue
+                                return <EditableClue
                                     key={clue.id}
                                     clue={clue}
                                     handleClueClick={handleClueClick(HORIZONTAL)}
                                     selected={clue.id === game.getClueIdFromTile()}
                                     secondary={clue.id === game.getSecondaryClueIdFromTile()}
-                                    setRef={elem => clueRefs[clue.id] = elem}
+                                    innerRef={elem => clueRefs[clue.id] = elem}
                                     registerActiveItem={registerActiveItem}
                                     activeItem={activeItem.current}
                                     endClueEdit={endClueEdit}
@@ -285,13 +292,13 @@ const Design = ({ classesParent }) => {
                         <span style={{ fontSize: '1.5em', height: '40px', display: 'block' }}>{CLUE_COLUMN_TITLE[VERTICAL]}</span>
                         <ol style={{ height: `${game.gameBoardSize}px`, overflowY: 'scroll', margin: '0 10px 0 0', listStyle: 'none', paddingLeft: '10px' }}>
                             {game.clues[VERTICAL].map(clue => {
-                                return <Clue
+                                return <EditableClue
                                     key={clue.id}
                                     clue={clue}
                                     handleClueClick={handleClueClick(VERTICAL)}
                                     selected={clue.id === game.getClueIdFromTile()}
                                     secondary={clue.id === game.getSecondaryClueIdFromTile()}
-                                    setRef={elem => clueRefs[clue.id] = elem}
+                                    innerRef={elem => clueRefs[clue.id] = elem}
                                     registerActiveItem={registerActiveItem}
                                     activeItem={activeItem.current}
                                     endClueEdit={endClueEdit}

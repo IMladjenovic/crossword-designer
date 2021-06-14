@@ -1,11 +1,11 @@
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import EditIcon from '@material-ui/icons/Edit';
 import CompareArrowsRoundedIcon from '@material-ui/icons/CompareArrowsRounded';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import './Clue.css'
 import useKeypress from "react-use-keypress";
-import { ENTER } from "../Game/constants";
+import { ENTER } from "../Crossword/constants";
 
 export const EDIT_TEXT = '-EDIT-TEXT';
 export const EDIT_LINK = '-EDIT-LINK';
@@ -18,13 +18,13 @@ const prep = (clue, activeItem) => {
     return { editText, editLink, editMode, linkMode };
 };
 
-const Clue = ({
+const EditableClue = ({
     clue,
     handleClueClick,
     selected,
     secondary,
     linked,
-    setRef,
+    innerRef,
     registerActiveItem,
     activeItem,
     endClueEdit,
@@ -40,6 +40,10 @@ const Clue = ({
             handleBlur();
         }
     });
+
+    useEffect(() => {
+        setClueText(clue.clue)
+    }, [clue.clue])
 
     const handleChange = event => setClueText(event.target.value);
 
@@ -78,7 +82,7 @@ const Clue = ({
     id={clue.id}
     selected={selected}
     onClick={() => handleClueClick(clue)}
-    ref={setRef}
+    ref={innerRef}
     tabIndex='-1'>
         <span style={{ fontWeight: 'bold',
             textAlign: 'right',
@@ -88,7 +92,7 @@ const Clue = ({
         <span style={{
             marginLeft: '10px'
         }}>{ editMode ?
-            <input autoFocus type="text" value={clueText} onChange={handleChange} onBlur={handleBlur} /> :
+            <input autoFocus type="text" value={clueText} onClick={event => event.stopPropagation()} onChange={handleChange} onBlur={handleBlur} /> :
             clue.clue }
         </span>
         <EditIcon
@@ -103,4 +107,4 @@ const Clue = ({
     </li>
 }
 
-export default Clue;
+export default EditableClue;

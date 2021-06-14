@@ -7,7 +7,8 @@ const Clue = ({
   handleClueClick,
   selected,
   secondary,
-  linked
+  linked,
+  innerRef
 }) => {
     return <li
         style={{
@@ -23,6 +24,7 @@ const Clue = ({
         id={clue.id}
         selected={selected}
         onClick={() => handleClueClick(clue)}
+        ref={innerRef}
         tabIndex='-1'>
         <span style={{ fontWeight: 'bold',
             textAlign: 'right',

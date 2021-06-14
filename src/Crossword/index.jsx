@@ -4,7 +4,7 @@ import useKeypress from 'react-use-keypress'
 import './index.css';
 import { makeStyles } from '@material-ui/core/styles';
 import { getOppositeDirection } from "./utils";
-import { arrowKeyPress, clearLetterKey, letterKeyPres,tabKeyPress } from "./handleInput";
+import { arrowKeyPress, clearLetterKey, letterKeyPres, tabKeyPress } from "./handleInput";
 
 import intersection from 'lodash/intersection';
 
@@ -101,7 +101,6 @@ const Crossword = ({
     postKeyPress = () => {},
     preventCrosswordTyping = false
 }) => {
-    const boardRef = useRef();
     const classes = useStyles();
     const crosswordClasses = useCrosswordStyles();
 
@@ -143,7 +142,7 @@ const Crossword = ({
                 return;
             }
             if (key.length === 1 && key.match(/[a-z]/i)) {
-                letterKeyPres(key, game, activateTile, setTimestamp);
+                letterKeyPres(key, game, activateTile);
                 postKeyPress();
                 game.previousKeyWasDelete = false;
                 return;
@@ -223,7 +222,6 @@ const Crossword = ({
                     tabIndex="0"
                     width='100%'
                     onContextMenu={event => { event.preventDefault() }}
-                    ref={elem => boardRef.current = elem}
                 >
                     <rect className={crosswordClasses.gameBoardBackground} x='-1' y='-1' width={game.gameBoardSize + 2} height={game.gameBoardSize + 2} />
                     <g>

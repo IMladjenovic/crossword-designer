@@ -1,6 +1,6 @@
 import {pickerOpts} from "../Landing";
 import cloneDeep from "lodash/cloneDeep";
-import { initDesignBoard } from "../Game/initBoard";
+import { initDesignBoard } from "../Crossword/initBoard";
 
 const loadFile = async setGameData => {
     let fileHandle;

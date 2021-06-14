@@ -1,5 +1,5 @@
-import { block } from "../Game/initBoard";
-import {HORIZONTAL} from "../Game/constants";
+import { block } from "../Crossword/initBoard";
+import {HORIZONTAL} from "../Crossword/constants";
 
 export const verifyPublish = game => {
     let issue = '';
