@@ -187,7 +187,6 @@ export const initDesignBoard = (oldGame, modificationType = '') => {
         }
     })
 
-
     const newTile = NEW_BOARD_ADJUSTER(oldGame.selectedTile);
     const nearestSelectedClueId = lookupClueOnNewBoard({ tile: oldGame.selectedTile }, prepTileConfig[oldGame.direction]);
     const direction = oldGame.direction;

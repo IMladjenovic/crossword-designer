@@ -11,7 +11,6 @@ const loadFile = async setGameData => {
     const jsonFile = await fileData.text();
 
     const data = cloneDeep(JSON.parse(jsonFile));
-
     setGameData(initDesignBoard(data));
 }
 

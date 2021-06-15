@@ -12,7 +12,7 @@ export const verifyPublish = game => {
 }
 
 export const publish = ({ board, clues, gameFinishedMessage, title }) => ({
-    board: board.map(row => row.map(cell => cell.blank ? block() : { answer: cell.guess, guess: '' })),
+    board: board.map(row => row.map(cell => cell.blank ? block() : { ...cell, answer: cell.guess, guess: '' })),
     clues,
     gameFinishedMessage,
     title,

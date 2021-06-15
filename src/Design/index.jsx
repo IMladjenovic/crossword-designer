@@ -87,7 +87,7 @@ const Design = ({ classesParent }) => {
         event.preventDefault();
         const t = game.getTileBoardItem(tile);
         if(event.shiftKey) {
-            t.circle = 'yes';
+            t.circle ? delete t.circle : t.circle = 'yes';
         } else {
             const isTile = game.isTile(tile);
             isTile ? t.blank = 'yes' : delete t.blank;
@@ -125,7 +125,6 @@ const Design = ({ classesParent }) => {
 
     const endClueEdit = (clueId, clueText) => {
         game.getClue(clueId).clue = clueText;
-        console.log("editing clue", game.getClue(clueId).clue)
         activeItem.current = '';
         setGame(initDesignBoard(game));
     }
