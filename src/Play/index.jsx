@@ -56,6 +56,8 @@ const Play = ({ classesParent, setPlayGame }) => {
     }
 
     const handleClueClick = (clue, direction) => {
+        console.log(clue);
+        console.log(game);
         if(game.getClueIdFromTile() === clue.id || game.getSecondaryClueIdFromTile() === clue.id) {
             activateTile(game.selectedTile, direction);
         } else {
@@ -117,7 +119,7 @@ const Play = ({ classesParent, setPlayGame }) => {
                                 return <Clue
                                     key={clue.id}
                                     clue={clue}
-                                    handleClueClick={() => handleClueClick(clue.tile, HORIZONTAL)}
+                                    handleClueClick={() => handleClueClick(clue, HORIZONTAL)}
                                     selected={clue.id === game.getClueIdFromTile()}
                                     secondary={clue.id === game.getSecondaryClueIdFromTile()}
                                     linked={game.getClue(game.getClueIdFromTile()).linkClues.find(clueId => clueId === clue.id)}
@@ -133,7 +135,7 @@ const Play = ({ classesParent, setPlayGame }) => {
                                 return <Clue
                                     key={clue.id}
                                     clue={clue}
-                                    handleClueClick={() => handleClueClick(clue.tile, VERTICAL)}
+                                    handleClueClick={() => handleClueClick(clue, VERTICAL)}
                                     selected={clue.id === game.getClueIdFromTile()}
                                     secondary={clue.id === game.getSecondaryClueIdFromTile()}
                                     linked={game.getClue(game.getClueIdFromTile()).linkClues.find(clueId => clueId === clue.id)}
