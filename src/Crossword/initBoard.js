@@ -74,6 +74,7 @@ export const initDesignBoard = (oldGame, modificationType = '') => {
     addBoardFunctions(oldGame);
     const modifyBoard = modificationType ? game => modifyBoardLength(game, modificationType) : game => game;
     const board = modifyBoard(oldGame).board.map(row => row.map(cell => cell.blank ? cell : { guess: cell.guess, answer: cell.answer, circle: cell.circle }));
+    console.log(oldGame.gameFinishedMessage);
     const gameFinishedMessage = oldGame.gameFinishedMessage;
 
     const NEW_BOARD_ADJUSTER = modificationType ? modifyBoardLengthConfig[modificationType].adjust : tile => tile;
@@ -120,6 +121,7 @@ export const initDesignBoard = (oldGame, modificationType = '') => {
                 const clue = emptyClue();
 
                 clue.tile = tile;
+                clue.tileList = [tile];
                 clue.id = clueId(DIRECTION, clues[DIRECTION].length);
                 clue.clueNumber = clueNumber;
                 clue.linkClues = [];
@@ -130,8 +132,10 @@ export const initDesignBoard = (oldGame, modificationType = '') => {
         } else {
             const prevTile = board[prevTileCoords.y][prevTileCoords.x];
             board[tile.y][tile.x].clueNumberLink[DIRECTION] = prevTile.clueNumberLink[DIRECTION];
+            const relatedClue = clues[DIRECTION].find(clue => clue.id === prevTile.clueNumberLink[DIRECTION]);
+            relatedClue.tileList.push(tile);
             if(!isNextTile) {
-                clues[DIRECTION].find(clue => clue.id === prevTile.clueNumberLink[DIRECTION]).endTile = tile;
+                relatedClue.endTile = tile;
             }
         }
     }

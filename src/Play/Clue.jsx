@@ -8,12 +8,14 @@ const Clue = ({
   selected,
   secondary,
   linked,
-  innerRef
+  innerRef,
+  filled
 }) => {
     return <li
         style={{
             ...(selected ? { backgroundColor: '#85dcb0' } :
                 linked ? { backgroundColor: '#e8a87c', opacity: '60%' } : {}),
+            color: filled ? 'grey' : 'black',
             cursor: 'pointer',
             outline: 'none',
             display: 'flex',

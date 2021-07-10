@@ -41,9 +41,7 @@ const EditableClue = ({
         }
     });
 
-    useEffect(() => {
-        setClueText(clue.clue)
-    }, [clue.clue])
+    useEffect(() => { setClueText(clue.clue) }, [clue.clue]);
 
     const handleChange = event => setClueText(event.target.value);
 

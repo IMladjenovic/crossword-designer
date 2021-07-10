@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import useKeypress from "react-use-keypress";
 
 import {ENTER} from "../Crossword/constants";
@@ -19,6 +19,8 @@ const EditableGameCompleteMessage = ({ message, saveGameWithFinishMessage, regis
             handleBlur();
         }
     });
+
+    useEffect(() => { setMessage(message) }, [message]);
 
     const handleChange = event => setMessage(event.target.value);
 

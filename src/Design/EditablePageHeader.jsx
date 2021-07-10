@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import useKeypress from "react-use-keypress";
 
 import {ENTER} from "../Crossword/constants";
@@ -11,8 +11,8 @@ import Typography from "@material-ui/core/Typography";
 const TITLE_ID = 'TITLE_EDIT'
 
 export const PageHeader = ({ title, children, classes, saveGameWithTitle, registerActiveItem }) => {
-    const [editMode, setEditMode] = useState(false);
     const [titleText, setTitleText] = useState(title);
+    const [editMode, setEditMode] = useState(false);
     const lastBlurTime = useRef(Date.now());
 
     useKeypress(ENTER, () => {
@@ -20,6 +20,8 @@ export const PageHeader = ({ title, children, classes, saveGameWithTitle, regist
             handleBlur();
         }
     });
+
+    useEffect(() => { setTitleText(title) }, [title]);
 
     const handleChange = event => setTitleText(event.target.value);
 

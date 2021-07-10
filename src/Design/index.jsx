@@ -64,7 +64,7 @@ const Design = ({ classesParent }) => {
     const [howTo, setHowTo] = useState(false);
     const [rotationalSymmetry, setRotationalSymmetry] = useState(false);
     const clueRefs = useRef([]).current;
-    const crosswordRef = useRef(null).current;
+    const crosswordRef = useRef({ focus: () => console.log("set focus failed") });
     const [demoGame, setDemoGame] = useState(false);
 
     const activeItem = useRef('');
@@ -79,7 +79,8 @@ const Design = ({ classesParent }) => {
         if(direction) {
             game.direction = direction;
         }
-        focusClues(game, clueRefs, crosswordRef);
+        focusClues(game, clueRefs);
+        crosswordRef.current.focus();
         setTimestamp(Date.now())
     }
 
@@ -246,28 +247,29 @@ const Design = ({ classesParent }) => {
                     style={{ backgroundColor: '#41b3ac', margin: '0 0 0 20px', color: 'white' }}
                     variant="contained"
                     onClick={() => loadFile(setGame)}
-                    tabIndex="-1"
+                    tabIndex="1"
                 >Load</Button>
             </EditablePageHeader>
             <Grid container direction="row" justify="center" spacing={0}>
                 <Grid container item direction="row" justify="center" spacing={0} xs={12} sm={6} style={{ margin: 'auto' }}>
                     <ModifyGameBoardLengthStart />
                     <div style={{ flexGrow: 1, maxWidth: `${game.gameBoardSize}px` }}>
-                        <EditableGameCompleteMessage
-                            message={game.gameFinishedMessage} classes={classesParent} saveGameWithFinishMessage={saveGameWithFinishMessage}
-                            registerActiveItem={registerActiveItem} demoEndGameMessage={demoEndGameMessage} />
                         <Crossword game={game}
                                    gameWon={demoGame}
                                    rightClick={toggleTileBlock}
                                    activateTile={activateTile}
                                    preventCrosswordTyping={activeItem.current !== '' || demoGame}
-                                   preTileClick={preTileClick}/>
+                                   preTileClick={preTileClick}
+                                   innerRef={elem => crosswordRef.current = elem}/>
+                        <EditableGameCompleteMessage
+                            message={game.gameFinishedMessage} classes={classesParent} saveGameWithFinishMessage={saveGameWithFinishMessage}
+                            registerActiveItem={registerActiveItem} demoEndGameMessage={demoEndGameMessage} />
                     </div>
                     <ModifyGameBoardLengthEnd />
                 </Grid>
                 <Grid container direction='row' item xs={12} sm={6}>
                     <Grid item xs={12} sm={6}>
-                        <span style={{ fontSize: '1.5em', height: '40px', display: 'block' }}>{CLUE_COLUMN_TITLE[HORIZONTAL]}</span>
+                        <span style={{ fontSize: '1.5em', height: '40px', display: 'block' }}>{CLUE_COLUMN_TITLE[HORIZONTAL]} ({game.clues[HORIZONTAL].length})</span>
                         <ol style={{ height: `${game.gameBoardSize}px`, overflowY: 'scroll', margin: '0 10px 0 0', listStyle: 'none', paddingLeft: '10px' }}>
                             {game.clues[HORIZONTAL].map(clue => {
                                 return <EditableClue
@@ -288,7 +290,7 @@ const Design = ({ classesParent }) => {
                         </ol>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <span style={{ fontSize: '1.5em', height: '40px', display: 'block' }}>{CLUE_COLUMN_TITLE[VERTICAL]}</span>
+                        <span style={{ fontSize: '1.5em', height: '40px', display: 'block' }}>{CLUE_COLUMN_TITLE[VERTICAL]} ({game.clues[VERTICAL].length})</span>
                         <ol style={{ height: `${game.gameBoardSize}px`, overflowY: 'scroll', margin: '0 10px 0 0', listStyle: 'none', paddingLeft: '10px' }}>
                             {game.clues[VERTICAL].map(clue => {
                                 return <EditableClue

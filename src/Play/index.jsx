@@ -37,6 +37,7 @@ const Play = ({ classesParent, setPlayGame }) => {
     const [game, setGame] = useState(null);
     const [gameWon, setGameWon] = useState(false);
     const clueRefs = useRef([]).current;
+    const crosswordRef = useRef({ focus: () => {} });
     const classes = useStyles();
     const [timestamp, setTimestamp] = useState(Date.now());
 
@@ -52,12 +53,11 @@ const Play = ({ classesParent, setPlayGame }) => {
             game.direction = direction;
         }
         focusClues(game, clueRefs);
+        crosswordRef.current.focus();
         setTimestamp(Date.now())
     }
 
     const handleClueClick = (clue, direction) => {
-        console.log(clue);
-        console.log(game);
         if(game.getClueIdFromTile() === clue.id || game.getSecondaryClueIdFromTile() === clue.id) {
             activateTile(game.selectedTile, direction);
         } else {
@@ -86,6 +86,10 @@ const Play = ({ classesParent, setPlayGame }) => {
         }
     }
 
+    const isClueFilled = clue => {
+        return clue.tileList.every(tile => game.getTileBoardItem(tile).guess !== "");
+    }
+
     return game ? (
         <div className={classes.root}>
             <PageHeader title={game.title} classes={classesParent}>
@@ -103,12 +107,13 @@ const Play = ({ classesParent, setPlayGame }) => {
                 >Load</Button>
             </PageHeader>
             <Grid container direction="row" justify="center" spacing={0}>
-                <Grid item xs={12} sm={6} style={{ display: 'contents' }} className={gameWon ? 'gameWon' : ''} >
+                <Grid item xs={12} sm={6} style={{ display: 'contents', marginRight: '15px' }} className={gameWon ? 'gameWon' : ''} >
                     <Crossword game={game}
                                activateTile={activateTile}
                                preventCrosswordTyping={gameWon}
                                postKeyPress={postKeyPress}
                                gameWon={gameWon}
+                               innerRef={elem => crosswordRef.current = elem}
                     />
                 </Grid>
                 <Grid container direction='row' item xs={12} sm={6}>
@@ -124,6 +129,7 @@ const Play = ({ classesParent, setPlayGame }) => {
                                     secondary={clue.id === game.getSecondaryClueIdFromTile()}
                                     linked={game.getClue(game.getClueIdFromTile()).linkClues.find(clueId => clueId === clue.id)}
                                     innerRef={elem => clueRefs[clue.id] = elem}
+                                    filled={isClueFilled(clue)}
                                 />
                             })}
                         </ol>
@@ -140,6 +146,7 @@ const Play = ({ classesParent, setPlayGame }) => {
                                     secondary={clue.id === game.getSecondaryClueIdFromTile()}
                                     linked={game.getClue(game.getClueIdFromTile()).linkClues.find(clueId => clueId === clue.id)}
                                     innerRef={elem => clueRefs[clue.id] = elem}
+                                    filled={isClueFilled(clue)}
                                 />
                             })}
                         </ol>

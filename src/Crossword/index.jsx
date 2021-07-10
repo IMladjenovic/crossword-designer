@@ -99,7 +99,8 @@ const Crossword = ({
     gameWon,
     preTileClick = () => {},
     postKeyPress = () => {},
-    preventCrosswordTyping = false
+    preventCrosswordTyping = false,
+    innerRef
 }) => {
     const classes = useStyles();
     const crosswordClasses = useCrosswordStyles();
@@ -212,16 +213,18 @@ const Crossword = ({
     }
 
     return (
-        <div className={classes.root} style={{ maxWidth: game.gameBoardSize, maxHeight: game.gameBoardSize }}>
+        <div className={classes.root} style={{ maxWidth: game.gameBoardSize, maxHeight: game.gameBoardSize, marginTop: '41px', padding: '0 15px', }}>
             <div style={{ display: 'contents' }}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox={`-1 -1 ${game.gameBoardSize + 2}
                     ${game.gameBoardSize + 2}`}
-                    style={{ marginTop: '20px', float: 'middle', outline: 'none', userSelect: 'none' }}
-                    tabIndex="0"
+                    style={{ float: 'middle', outline: 'none', userSelect: 'none' }}
                     width='100%'
                     onContextMenu={event => { event.preventDefault() }}
+                    tabIndex='1'
+                    onKeyDown={event => event.key === TAB && event.preventDefault() }
+                    ref={innerRef}
                 >
                     <rect className={crosswordClasses.gameBoardBackground} x='-1' y='-1' width={game.gameBoardSize + 2} height={game.gameBoardSize + 2} />
                     <g>
